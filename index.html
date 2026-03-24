@@ -3,441 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제한통제구역 출입자 명부 | 보안 관리 시스템</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>제한통제구역 출입자 명부</title>
     <style>
         :root {
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --success: #10b981;
-            --success-hover: #059669;
-            --danger: #ef4444;
-            --danger-hover: #dc2626;
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary-color: #263238;
+            --secondary-color: #37474f;
+            --accent-color: #2196f3;
+            --bg-color: #eceff1;
+            --card-bg: #ffffff;
+            --text-color: #263238;
+            --border-color: #cfd8dc;
+            --hover-color: #f5f7f8;
+            --header-bg: #455a64;
+            --white: #ffffff;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
         }
 
         body {
-            font-family: 'Inter', 'Noto Sans KR', sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
-            padding: 40px 20px;
-            line-height: 1.6;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            width: 100%;
+            max-width: 1200px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 30px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 8px;
         }
 
-        .subtitle {
-            color: var(--text-dim);
-            font-size: 0.95rem;
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        /* Glassmorphism Card */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
+        .export-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .export-btn:hover {
+            background-color: #1976d2;
+        }
+
+        /* 입력 폼 */
+        .form-section {
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #fafbfc;
         }
 
-        .input-grid {
+        .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .input-field {
+        .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 5px;
         }
 
-        .input-field label {
+        .form-group label {
             font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: var(--secondary-color);
         }
 
-        input {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: white;
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             font-size: 0.95rem;
-            transition: var(--transition);
-        }
-
-        input:focus {
             outline: none;
-            border-color: var(--primary);
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            transition: border-color 0.2s;
         }
 
-        /* Button Styles */
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-bottom: 40px;
+        .form-group input:focus {
+            border-color: var(--accent-color);
         }
 
-        button {
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
+        .submit-btn {
+            grid-column: span 1;
+            background-color: var(--secondary-color);
+            color: white;
             border: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            align-self: flex-end;
+            margin-top: 5px;
+            transition: background 0.3s;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
+        .submit-btn:hover {
+            background-color: var(--primary-color);
         }
 
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: var(--success-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Table Styles */
-        .table-container {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
+        /* 테이블 섹션 */
+        .table-section {
+            flex: 1;
+            overflow: auto;
+            max-height: 600px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: var(--header-bg);
+            color: white;
+            z-index: 10;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         th {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 16px;
-            text-align: left;
-            color: var(--text-dim);
             font-weight: 600;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
         }
 
-        td {
-            padding: 16px;
-            border-top: 1px solid var(--glass-border);
+        tbody tr:hover {
+            background-color: var(--hover-color);
         }
 
-        tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .btn-delete {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            padding: 6px 12px;
-            border-radius: 6px;
+        .delete-btn {
+            background-color: #ef5350;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
             font-size: 0.8rem;
         }
 
-        .btn-delete:hover {
-            background: var(--danger);
-            color: white;
+        .delete-btn:hover {
+            background-color: #d32f2f;
         }
 
-        /* Empty state */
-        .empty-state {
-            padding: 60px;
-            text-align: center;
-            color: var(--text-dim);
-        }
-
-        /* Tooltip-like effect for status */
-        .status-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-        }
-
+        /* 반응형 모바일 */
         @media (max-width: 768px) {
-            .input-grid {
+            .form-grid {
                 grid-template-columns: 1fr 1fr;
             }
-            .actions {
-                flex-direction: column;
+            .submit-btn {
+                grid-column: span 2;
             }
-            button {
-                width: 100%;
-                justify-content: center;
+            table {
+                font-size: 0.85rem;
+            }
+            th, td {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .submit-btn {
+                grid-column: span 1;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>🔒 제한통제구역 출입자 명부</h1>
-        <p class="subtitle">보안 구역 출입 기록을 실시간으로 관리하고 보고서를 생성합니다.</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>🔒 제한통제구역 출입자 명부</h1>
+            <button class="export-btn" onclick="exportToCSV()">Excel 저장 (CSV)</button>
+        </header>
 
-    <div class="card">
-        <div class="input-grid">
-            <div class="input-field">
-                <label for="date">출입 날짜</label>
-                <input type="date" id="date">
+        <section class="form-section">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="date">날짜</label>
+                    <input type="date" id="date">
+                </div>
+                <div class="form-group">
+                    <label for="purpose">용무</label>
+                    <input type="text" id="purpose" placeholder="예: 점검, 방문 등">
+                </div>
+                <div class="form-group">
+                    <label for="empId">사번</label>
+                    <input type="text" id="empId" placeholder="사번 입력">
+                </div>
+                <div class="form-group">
+                    <label for="affiliation">소속</label>
+                    <input type="text" id="affiliation" placeholder="소속 부서">
+                </div>
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" placeholder="이름 입력">
+                </div>
+                <div class="form-group">
+                    <label for="entryTime">입실시간</label>
+                    <input type="time" id="entryTime">
+                </div>
+                <div class="form-group">
+                    <label for="exitTime">퇴실시간</label>
+                    <input type="time" id="exitTime">
+                </div>
+                <button class="submit-btn" onclick="addData()">등록</button>
             </div>
-            <div class="input-field">
-                <label for="empId">사원 번호</label>
-                <input type="text" id="empId" placeholder="예: 12345">
-            </div>
-            <div class="input-field">
-                <label for="name">성명</label>
-                <input type="text" id="name" placeholder="예: 홍길동">
-            </div>
-            <div class="input-field">
-                <label for="dept">소속 부서</label>
-                <input type="text" id="dept" placeholder="예: 보안운영팀">
-            </div>
-            <div class="input-field">
-                <label for="purpose">출입 용무</label>
-                <input type="text" id="purpose" placeholder="예: 정기점검">
-            </div>
-            <div class="input-field">
-                <label for="inTime">입실 시간</label>
-                <input type="time" id="inTime">
-            </div>
-            <div class="input-field">
-                <label for="outTime">퇴실 시간</label>
-                <input type="time" id="outTime">
-            </div>
-        </div>
+        </section>
 
-        <div class="actions">
-            <button class="btn-primary" onclick="addRecord()">
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                출입 기록 등록
-            </button>
-            <button class="btn-success" onclick="exportToExcel()">
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                엑셀 데이터 추출
-            </button>
-        </div>
-
-        <div class="table-container">
+        <section class="table-section">
             <table id="logTable">
                 <thead>
                     <tr>
                         <th>날짜</th>
-                        <th>사번/성명</th>
-                        <th>소속</th>
                         <th>용무</th>
-                        <th>입실</th>
-                        <th>퇴실</th>
-                        <th>상태</th>
+                        <th>사번</th>
+                        <th>소속</th>
+                        <th>이름</th>
+                        <th>입실시간</th>
+                        <th>퇴실시간</th>
                         <th>관리</th>
                     </tr>
                 </thead>
                 <tbody id="logBody">
-                    <!-- Data rows injected here -->
+                    <!-- 데이터가 여기에 추가됩니다 -->
                 </tbody>
             </table>
-            <div id="emptyMessage" class="empty-state" style="display: none;">
-                등록된 출입 기록이 없습니다.
-            </div>
-        </div>
+        </section>
     </div>
-</div>
 
-<script>
-    // Initialize fields on load
-    window.addEventListener('load', () => {
-        const now = new Date();
-        document.getElementById('date').value = now.toISOString().split('T')[0];
-        document.getElementById('inTime').value = now.toTimeString().substring(0, 5);
-        renderTable();
-    });
-
-    // Add Record
-    function addRecord() {
-        const fields = ['date', 'empId', 'name', 'dept', 'purpose', 'inTime', 'outTime'];
-        const values = {};
-        
-        fields.forEach(f => values[f] = document.getElementById(f).value);
-
-        if(!values.empId || !values.name) {
-            alert("⚠️ 사번과 성명은 필수 입력 사항입니다.");
-            return;
-        }
-
-        const records = JSON.parse(localStorage.getItem('accessLogs') || '[]');
-        const newRecord = { ...values, id: Date.now() };
-        
-        records.unshift(newRecord); // Add to beginning
-        localStorage.setItem('accessLogs', JSON.stringify(records));
-        
-        renderTable();
-        clearInputs();
-        
-        // Success animation trigger (could be a toast)
-        console.log('Record added successfully');
-    }
-
-    // Render Table
-    function renderTable() {
-        const records = JSON.parse(localStorage.getItem('accessLogs') || '[]');
-        const tbody = document.getElementById('logBody');
-        const emptyMsg = document.getElementById('emptyMessage');
-        
-        if (records.length === 0) {
-            tbody.innerHTML = '';
-            emptyMsg.style.display = 'block';
-            return;
-        }
-
-        emptyMsg.style.display = 'none';
-        tbody.innerHTML = records.map(record => `
-            <tr>
-                <td>${record.date}</td>
-                <td>
-                    <div style="font-weight: 600;">${record.name}</div>
-                    <div style="font-size: 0.75rem; color: var(--text-dim);">${record.empId}</div>
-                </td>
-                <td>${record.dept}</td>
-                <td>${record.purpose}</td>
-                <td>${record.inTime}</td>
-                <td>${record.outTime || '-'}</td>
-                <td><span class="status-badge">${record.outTime ? '완료' : '진행중'}</span></td>
-                <td>
-                    <button class="btn-delete" onclick="deleteRecord(${record.id})">삭제</button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    // Delete Record
-    function deleteRecord(id) {
-        if(confirm("정말로 이 기록을 삭제하시겠습니까?")) {
-            let records = JSON.parse(localStorage.getItem('accessLogs') || '[]');
-            records = records.filter(r => r.id !== id);
-            localStorage.setItem('accessLogs', JSON.stringify(records));
-            renderTable();
-        }
-    }
-
-    // Clear Inputs (except date/time)
-    function clearInputs() {
-        const fieldsToClear = ['empId', 'name', 'dept', 'purpose', 'outTime'];
-        fieldsToClear.forEach(id => document.getElementById(id).value = '');
-    }
-
-    // Export to Excel (CSV with BOM)
-    function exportToExcel() {
-        const records = JSON.parse(localStorage.getItem('accessLogs') || '[]');
-        if(records.length === 0) {
-            alert("내보낼 데이터가 없습니다.");
-            return;
-        }
-
-        const headers = ["날짜", "사번", "성명", "소속", "용무", "입실시간", "퇴실시간"];
-        const csvRows = [headers.join(',')];
-        
-        records.forEach(r => {
-            const row = [
-                r.date,
-                r.empId,
-                r.name,
-                r.dept,
-                r.purpose,
-                r.inTime,
-                r.outTime
-            ];
-            csvRows.push(row.map(val => `"${val}"`).join(','));
+    <script>
+        // 초기 로드 시 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            initInputs();
+            loadData();
         });
 
-        const csvContent = "\uFEFF" + csvRows.join("\n");
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        
-        const timestamp = new Date().toISOString().substring(0, 10).replace(/-/g, '');
-        link.setAttribute("href", url);
-        link.setAttribute("download", `출입자명부_${timestamp}.csv`);
-        link.style.display = 'none';
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-</script>
+        // 날짜 및 입실시간 자동 설정
+        function initInputs() {
+            const now = new Date();
+            const dateInput = document.getElementById('date');
+            const entryTimeInput = document.getElementById('entryTime');
 
+            // KST 기준 날짜 (YYYY-MM-DD)
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
+
+            // KST 기준 시간 (HH:MM)
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            entryTimeInput.value = `${hours}:${minutes}`;
+        }
+
+        // 데이터 로드
+        function loadData() {
+            const data = JSON.parse(localStorage.getItem('accessLogs') || '[]');
+            renderTable(data);
+        }
+
+        // 테이블 렌더링
+        function renderTable(data) {
+            const tbody = document.getElementById('logBody');
+            tbody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.date}</td>
+                    <td>${item.purpose}</td>
+                    <td>${item.empId}</td>
+                    <td>${item.affiliation}</td>
+                    <td>${item.name}</td>
+                    <td>${item.entryTime}</td>
+                    <td>${item.exitTime || '-'}</td>
+                    <td><button class="delete-btn" onclick="deleteData(${index})">삭제</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 데이터 추가
+        function addData() {
+            const date = document.getElementById('date').value;
+            const purpose = document.getElementById('purpose').value;
+            const empId = document.getElementById('empId').value;
+            const affiliation = document.getElementById('affiliation').value;
+            const name = document.getElementById('name').value;
+            const entryTime = document.getElementById('entryTime').value;
+            const exitTime = document.getElementById('exitTime').value;
+
+            if (!date || !name || !empId) {
+                alert('날짜, 사번, 이름은 필수 입력 항목입니다.');
+                return;
+            }
+
+            const newItem = { date, purpose, empId, affiliation, name, entryTime, exitTime };
+            const data = JSON.parse(localStorage.getItem('accessLogs') || '[]');
+            data.push(newItem);
+            localStorage.setItem('accessLogs', JSON.stringify(data));
+
+            renderTable(data);
+            clearForm();
+        }
+
+        // 폼 초기화 (날짜/시간은 유지 또는 자동 갱신)
+        function clearForm() {
+            document.getElementById('purpose').value = '';
+            document.getElementById('empId').value = '';
+            document.getElementById('affiliation').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('exitTime').value = '';
+            initInputs();
+        }
+
+        // 데이터 삭제
+        function deleteData(index) {
+            if (!confirm('해당 기록을 삭제하시겠습니까?')) return;
+            
+            const data = JSON.parse(localStorage.getItem('accessLogs') || '[]');
+            data.splice(index, 1);
+            localStorage.setItem('accessLogs', JSON.stringify(data));
+            renderTable(data);
+        }
+
+        // CSV 내보내기
+        function exportToCSV() {
+            const data = JSON.parse(localStorage.getItem('accessLogs') || '[]');
+            if (data.length === 0) {
+                alert('내보낼 데이터가 없습니다.');
+                return;
+            }
+
+            let csvContent = "\uFEFF"; // Excel 한글 깨짐 방지 BOM
+            csvContent += "날짜,용무,사번,소속,이름,입실시간,퇴실시간\n";
+
+            data.forEach(item => {
+                const row = [
+                    item.date,
+                    item.purpose,
+                    item.empId,
+                    item.affiliation,
+                    item.name,
+                    item.entryTime,
+                    item.exitTime || ''
+                ].map(v => `"${v}"`).join(",");
+                csvContent += row + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            
+            const timestamp = new Date().toISOString().slice(0, 10);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `출입자명부_${timestamp}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>
