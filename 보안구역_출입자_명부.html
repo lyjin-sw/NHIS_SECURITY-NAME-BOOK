@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -44,7 +45,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .logo-box {
@@ -54,7 +55,8 @@
         }
 
         .logo-img {
-            height: 40px; /* 로고 크기 조절 */
+            height: 40px;
+            /* 로고 크기 조절 */
             object-fit: contain;
         }
 
@@ -72,7 +74,8 @@
         /* 메인 영역 */
         .container {
             width: 100%;
-            max-width: 600px; /* 모바일 폭에 맞춤 */
+            max-width: 600px;
+            /* 모바일 폭에 맞춤 */
             margin: 0 auto;
             padding: 20px 15px 40px;
         }
@@ -91,8 +94,8 @@
             background: var(--card-bg);
             border-radius: 24px;
             padding: 30px 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
-            border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.02);
         }
 
         .form-group {
@@ -212,7 +215,7 @@
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         table {
@@ -221,13 +224,18 @@
             font-size: 0.85rem;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px 10px;
             text-align: left;
             border-bottom: 1px solid #eee;
         }
 
-        th { background: #f9fafb; font-weight: 700; color: #666; }
+        th {
+            background: #f9fafb;
+            font-weight: 700;
+            color: #666;
+        }
 
         .btn-export {
             background-color: #333;
@@ -251,17 +259,27 @@
 
         /* 모바일 대응 레이아웃 */
         @media (max-width: 480px) {
-            .time-check-row { grid-template-columns: 1fr; }
-            h2 { font-size: 1.2rem; }
-            .card { padding: 25px 15px; }
+            .time-check-row {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .card {
+                padding: 25px 15px;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <header>
         <div class="logo-box">
-            <img src="logo.png" alt="국민건강보험 로고" class="logo-img" id="logoImg" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+            <img src="logo.png" alt="국민건강보험 로고" class="logo-img" id="logoImg"
+                onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
             <!-- h1 삭제하고 이미지로 대체 가능하도록 구성 -->
         </div>
         <button id="viewToggleBtn" class="admin-toggle-btn" onclick="toggleView()">관리자 모드</button>
@@ -269,7 +287,8 @@
 
     <!-- 사용자 입력 뷰 -->
     <div id="userView" class="container">
-        <h2>🔒 출입기록 작성</h2>
+        <h2>제한·통제구역 출입자 명부
+        </h2>
         <div class="card">
             <div class="form-group">
                 <label for="date">날짜</label>
@@ -280,12 +299,12 @@
                 <input type="text" id="name" placeholder="성함을 입력하세요">
             </div>
             <div class="form-group">
-                <label for="empId">사번 / 소속</label>
-                <input type="text" id="empId" placeholder="예: 12345 / 인사팀">
+                <label for="empId">소속</label>
+                <input type="text" id="empId" placeholder="예: 행정지원부">
             </div>
             <div class="form-group">
                 <label for="purpose">방문 용무</label>
-                <input type="text" id="purpose" placeholder="예: 서버 유지보수">
+                <input type="text" id="purpose" placeholder="예: 기록물 확인">
             </div>
 
             <div class="time-check-row">
@@ -303,7 +322,7 @@
                 </div>
             </div>
 
-            <button class="submit-btn" onclick="saveRecord()">등록하기</button>
+            <button class="submit-btn" onclick="saveRecord()">입실하기</button>
         </div>
     </div>
 
@@ -313,7 +332,7 @@
             <h2>📜 전체 출입 기록</h2>
             <button class="btn-export" onclick="exportData()">엑셀 저장</button>
         </div>
-        
+
         <div class="log-table" style="overflow-x: auto;">
             <table id="logTable">
                 <thead>
@@ -352,8 +371,8 @@
             const exitGroup = document.getElementById('exitGroup');
 
             const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
-                            now.getMinutes().toString().padStart(2, '0');
+            const timeStr = now.getHours().toString().padStart(2, '0') + ":" +
+                now.getMinutes().toString().padStart(2, '0');
 
             if (type === 'in') {
                 if (checkIn.checked) {
@@ -435,7 +454,7 @@
         }
 
         function deleteRecord(id) {
-            if(!confirm('정말 삭제하시겠습니까?')) return;
+            if (!confirm('정말 삭제하시겠습니까?')) return;
             let records = JSON.parse(localStorage.getItem('incheonLogs') || '[]');
             records = records.filter(r => r.id !== id);
             localStorage.setItem('incheonLogs', JSON.stringify(records));
@@ -458,7 +477,7 @@
                 isAdmin = false;
                 document.getElementById('userView').style.display = 'block';
                 document.getElementById('adminView').style.display = 'none';
-                document.getElementById('viewToggleBtn').innerText = '관리자 모드';
+                document.getElementById('viewToggleBtn').innerText = '관리자';
             }
         }
 
@@ -466,8 +485,8 @@
         function exportData() {
             const records = JSON.parse(localStorage.getItem('incheonLogs') || '[]');
             if (records.length === 0) return alert('내보낼 데이터가 없습니다.');
-            
-            let csv = "\uFEFF"; 
+
+            let csv = "\uFEFF";
             csv += "날짜,이름,정보,용무,입실,퇴실\n";
             records.forEach(r => {
                 csv += `${r.date},${r.name},${r.info},${r.purpose},${r.inTime},${r.outTime}\n`;
@@ -476,11 +495,12 @@
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `출입기록_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute("download", `출입기록_${new Date().toISOString().slice(0, 10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
     </script>
 </body>
+
 </html>
