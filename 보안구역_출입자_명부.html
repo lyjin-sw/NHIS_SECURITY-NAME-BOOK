@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>제한통제구역 출입자 명부</title>
+    <style>
+        :root {
+            --primary-color: #e30613;
+            --primary-hover: #c20511;
+            --bg-color: #f8f9fb;
+            --card-bg: #ffffff;
+            --text-main: #222222;
+            --text-sub: #666666;
+            --border-color: #e5e8eb;
+            --input-bg: #f9fafb;
+            --success: #2ecc71;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 헤더 디자인 */
+        header {
+            background: var(--white);
+            border-bottom: 3px solid var(--primary-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            height: 40px; /* 로고 크기 조절 */
+            object-fit: contain;
+        }
+
+        .admin-toggle-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* 메인 영역 */
+        .container {
+            width: 100%;
+            max-width: 600px; /* 모바일 폭에 맞춤 */
+            margin: 0 auto;
+            padding: 20px 15px 40px;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        /* 카드 컨테이너 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            transition: all 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: var(--white);
+            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
+        }
+
+        /* 입실/퇴실 체크박스 섹션 */
+        .time-check-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .check-box-group {
+            background: #fdfdfd;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .check-box-group.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            background-color: #f1f1f1;
+        }
+
+        .custom-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .custom-check input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .time-display {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            min-height: 1.6rem;
+        }
+
+        /* 버튼 */
+        .submit-btn {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(227, 6, 19, 0.2);
+            transition: all 0.2s;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 10px rgba(227, 6, 19, 0.2);
+        }
+
+        /* 관리자 모부 스타일 */
+        #adminView {
+            display: none;
+            max-width: 1000px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .log-table {
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th { background: #f9fafb; font-weight: 700; color: #666; }
+
+        .btn-export {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            color: #ff4d4d;
+            background: none;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* 모바일 대응 레이아웃 */
+        @media (max-width: 480px) {
+            .time-check-row { grid-template-columns: 1fr; }
+            h2 { font-size: 1.2rem; }
+            .card { padding: 25px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <img src="logo.png" alt="국민건강보험 로고" class="logo-img" id="logoImg" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+            <!-- h1 삭제하고 이미지로 대체 가능하도록 구성 -->
+        </div>
+        <button id="viewToggleBtn" class="admin-toggle-btn" onclick="toggleView()">관리자 모드</button>
+    </header>
+
+    <!-- 사용자 입력 뷰 -->
+    <div id="userView" class="container">
+        <h2>🔒 출입기록 작성</h2>
+        <div class="card">
+            <div class="form-group">
+                <label for="date">날짜</label>
+                <input type="date" id="date">
+            </div>
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" placeholder="성함을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="empId">사번 / 소속</label>
+                <input type="text" id="empId" placeholder="예: 12345 / 인사팀">
+            </div>
+            <div class="form-group">
+                <label for="purpose">방문 용무</label>
+                <input type="text" id="purpose" placeholder="예: 서버 유지보수">
+            </div>
+
+            <div class="time-check-row">
+                <div class="check-box-group">
+                    <label class="custom-check">
+                        <input type="checkbox" id="checkIn" onchange="handleTimeCheck('in')"> 입실
+                    </label>
+                    <div id="inTimeDisplay" class="time-display">--:--</div>
+                </div>
+                <div class="check-box-group disabled" id="exitGroup">
+                    <label class="custom-check">
+                        <input type="checkbox" id="checkOut" onchange="handleTimeCheck('out')"> 퇴실
+                    </label>
+                    <div id="outTimeDisplay" class="time-display">--:--</div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="saveRecord()">등록하기</button>
+        </div>
+    </div>
+
+    <!-- 관리자 뷰 -->
+    <div id="adminView" class="container" style="max-width: 900px;">
+        <div class="admin-header">
+            <h2>📜 전체 출입 기록</h2>
+            <button class="btn-export" onclick="exportData()">엑셀 저장</button>
+        </div>
+        
+        <div class="log-table" style="overflow-x: auto;">
+            <table id="logTable">
+                <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>이름</th>
+                        <th>정보</th>
+                        <th>용무</th>
+                        <th>입실</th>
+                        <th>퇴실</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody id="logBody">
+                    <!-- 데이터가 여기에 렌더링됨 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let isAdmin = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 날짜 기본값
+            document.getElementById('date').valueAsDate = new Date();
+            loadRecords();
+        });
+
+        // 입실/퇴실 체크박스 로직
+        function handleTimeCheck(type) {
+            const checkIn = document.getElementById('checkIn');
+            const checkOut = document.getElementById('checkOut');
+            const inDisplay = document.getElementById('inTimeDisplay');
+            const outDisplay = document.getElementById('outTimeDisplay');
+            const exitGroup = document.getElementById('exitGroup');
+
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
+                            now.getMinutes().toString().padStart(2, '0');
+
+            if (type === 'in') {
+                if (checkIn.checked) {
+                    inDisplay.innerText = timeStr;
+                    exitGroup.classList.remove('disabled');
+                } else {
+                    inDisplay.innerText = '--:--';
+                    exitGroup.classList.add('disabled');
+                    checkOut.checked = false;
+                    outDisplay.innerText = '--:--';
+                }
+            } else {
+                if (checkOut.checked) {
+                    outDisplay.innerText = timeStr;
+                } else {
+                    outDisplay.innerText = '--:--';
+                }
+            }
+        }
+
+        // 데이터 저장
+        function saveRecord() {
+            const date = document.getElementById('date').value;
+            const name = document.getElementById('name').value;
+            const info = document.getElementById('empId').value;
+            const purpose = document.getElementById('purpose').value;
+            const inTime = document.getElementById('inTimeDisplay').innerText;
+            const outTime = document.getElementById('outTimeDisplay').innerText;
+
+            if (!name || inTime === '--:--') {
+                alert('이름과 입실 시간을 확인해 주세요.');
+                return;
+            }
+
+            const record = {
+                id: Date.now(),
+                date, name, info, purpose, inTime, outTime
+            };
+
+            const records = JSON.parse(localStorage.getItem('incheonLogs') || '[]');
+            records.unshift(record);
+            localStorage.setItem('incheonLogs', JSON.stringify(records));
+
+            alert('등록되었습니다.');
+            resetForm();
+            loadRecords();
+        }
+
+        function resetForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('empId').value = '';
+            document.getElementById('purpose').value = '';
+            document.getElementById('checkIn').checked = false;
+            document.getElementById('checkOut').checked = false;
+            document.getElementById('inTimeDisplay').innerText = '--:--';
+            document.getElementById('outTimeDisplay').innerText = '--:--';
+            document.getElementById('exitGroup').classList.add('disabled');
+        }
+
+        // 기록 불러오기
+        function loadRecords() {
+            const records = JSON.parse(localStorage.getItem('incheonLogs') || '[]');
+            const tbody = document.getElementById('logBody');
+            tbody.innerHTML = '';
+
+            records.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${r.date.slice(5)}</td>
+                    <td style="font-weight: bold;">${r.name}</td>
+                    <td>${r.info}</td>
+                    <td>${r.purpose}</td>
+                    <td style="color: blue;">${r.inTime}</td>
+                    <td style="color: red;">${r.outTime === '--:--' ? '-' : r.outTime}</td>
+                    <td><button class="delete-btn" onclick="deleteRecord(${r.id})">삭제</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteRecord(id) {
+            if(!confirm('정말 삭제하시겠습니까?')) return;
+            let records = JSON.parse(localStorage.getItem('incheonLogs') || '[]');
+            records = records.filter(r => r.id !== id);
+            localStorage.setItem('incheonLogs', JSON.stringify(records));
+            loadRecords();
+        }
+
+        // 뷰 전환
+        function toggleView() {
+            if (!isAdmin) {
+                const pw = prompt('관리자 비밀번호를 입력하세요 (기본: 1234)');
+                if (pw === '1234') {
+                    isAdmin = true;
+                    document.getElementById('userView').style.display = 'none';
+                    document.getElementById('adminView').style.display = 'block';
+                    document.getElementById('viewToggleBtn').innerText = '사용자 모드';
+                } else {
+                    alert('비밀번호가 틀렸습니다.');
+                }
+            } else {
+                isAdmin = false;
+                document.getElementById('userView').style.display = 'block';
+                document.getElementById('adminView').style.display = 'none';
+                document.getElementById('viewToggleBtn').innerText = '관리자 모드';
+            }
+        }
+
+        // 데이터 엑셀(CSV) 저장
+        function exportData() {
+            const records = JSON.parse(localStorage.getItem('incheonLogs') || '[]');
+            if (records.length === 0) return alert('내보낼 데이터가 없습니다.');
+            
+            let csv = "\uFEFF"; 
+            csv += "날짜,이름,정보,용무,입실,퇴실\n";
+            records.forEach(r => {
+                csv += `${r.date},${r.name},${r.info},${r.purpose},${r.inTime},${r.outTime}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `출입기록_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
