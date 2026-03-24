@@ -6,15 +6,15 @@
     <title>제한통제구역 출입자 명부</title>
     <style>
         :root {
-            --primary-color: #263238;
-            --secondary-color: #37474f;
-            --accent-color: #2196f3;
-            --bg-color: #eceff1;
+            --primary-color: #e30613; /* NHIS Red */
+            --primary-hover: #c20511;
+            --bg-color: #f5f6f8;
             --card-bg: #ffffff;
-            --text-color: #263238;
-            --border-color: #cfd8dc;
-            --hover-color: #f5f7f8;
-            --header-bg: #455a64;
+            --text-main: #333333;
+            --text-sub: #666666;
+            --border-color: #e1e4e8;
+            --header-bg: #ffffff;
+            --btn-secondary: #666666;
             --white: #ffffff;
         }
 
@@ -22,206 +22,253 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 20px;
+            color: var(--text-main);
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
+        /* 헤더 디자인: 공공기관 느낌의 깔끔한 화이트 */
         header {
-            background-color: var(--primary-color);
-            color: var(--white);
-            padding: 20px 30px;
+            width: 100%;
+            background-color: var(--header-bg);
+            border-bottom: 2px solid var(--primary-color);
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 35px;
+            height: 35px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
         }
 
         header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
         }
 
         .export-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px 18px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
         .export-btn:hover {
-            background-color: #1976d2;
+            background-color: var(--bg-color);
+            border-color: var(--text-sub);
         }
 
-        /* 입력 폼 */
-        .form-section {
-            padding: 30px;
-            border-bottom: 1px solid var(--border-color);
-            background-color: #fafbfc;
+        .main-content {
+            width: 100%;
+            max-width: 1100px;
+            padding: 40px 20px;
+        }
+
+        /* 입력 폼 카드 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            padding: 35px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
 
         .form-group label {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: var(--secondary-color);
+            color: var(--text-sub);
         }
 
-        .form-group input, .form-group select {
-            padding: 10px;
+        .form-group input {
+            padding: 12px 16px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: #fafafa;
+            transition: all 0.2s;
         }
 
         .form-group input:focus {
-            border-color: var(--accent-color);
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+        }
+
+        .btn-area {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
         }
 
         .submit-btn {
-            grid-column: span 1;
-            background-color: var(--secondary-color);
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 14px 60px;
+            border-radius: 30px;
             cursor: pointer;
-            font-weight: 600;
-            align-self: flex-end;
-            margin-top: 5px;
-            transition: background 0.3s;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: transform 0.2s, background 0.2s;
         }
 
         .submit-btn:hover {
-            background-color: var(--primary-color);
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
         }
 
-        /* 테이블 섹션 */
-        .table-section {
-            flex: 1;
-            overflow: auto;
-            max-height: 600px;
+        /* 테이블 디자인 */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            text-align: left;
+            min-width: 800px;
         }
 
         thead {
-            position: sticky;
-            top: 0;
-            background-color: var(--header-bg);
-            color: white;
-            z-index: 10;
-        }
-
-        th, td {
-            padding: 15px 20px;
+            background-color: #f9fafb;
             border-bottom: 1px solid var(--border-color);
         }
 
         th {
-            font-weight: 600;
+            padding: 18px 15px;
+            font-weight: 700;
             font-size: 0.9rem;
-            text-transform: uppercase;
+            color: var(--text-sub);
+            text-align: left;
+        }
+
+        td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #f1f1f1;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
         }
 
         tbody tr:hover {
-            background-color: var(--hover-color);
+            background-color: #fdfdfd;
         }
 
         .delete-btn {
-            background-color: #ef5350;
-            color: white;
+            background-color: #f1f1f1;
+            color: #999;
             border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
+            padding: 6px 14px;
+            border-radius: 15px;
             cursor: pointer;
             font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
         }
 
         .delete-btn:hover {
-            background-color: #d32f2f;
+            background-color: #ffebee;
+            color: #d32f2f;
         }
 
         /* 반응형 모바일 */
         @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .submit-btn {
-                grid-column: span 2;
-            }
-            table {
-                font-size: 0.85rem;
-            }
-            th, td {
-                padding: 10px;
-            }
+            header { padding: 15px 20px; }
+            .main-content { padding: 20px 15px; }
+            .card { padding: 25px; }
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .submit-btn { width: 100%; padding: 14px 0; }
         }
 
         @media (max-width: 480px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .submit-btn {
-                grid-column: span 1;
-            }
+            .form-grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>🔒 제한통제구역 출입자 명부</h1>
-            <button class="export-btn" onclick="exportToCSV()">Excel 저장 (CSV)</button>
-        </header>
+    <header>
+        <div class="logo-area">
+            <div class="logo-icon">❤</div>
+            <h1>제한통제구역 출입자 명부</h1>
+        </div>
+        <button class="export-btn" onclick="exportToCSV()">Excel 저장 (CSV)</button>
+    </header>
 
-        <section class="form-section">
+    <main class="main-content">
+        <!-- 등록 폼 -->
+        <section class="card">
+            <div class="card-title">📝 출입 기록 등록</div>
             <div class="form-grid">
                 <div class="form-group">
                     <label for="date">날짜</label>
@@ -229,7 +276,7 @@
                 </div>
                 <div class="form-group">
                     <label for="purpose">용무</label>
-                    <input type="text" id="purpose" placeholder="예: 점검, 방문 등">
+                    <input type="text" id="purpose" placeholder="예: 시스템 점검">
                 </div>
                 <div class="form-group">
                     <label for="empId">사번</label>
@@ -241,7 +288,7 @@
                 </div>
                 <div class="form-group">
                     <label for="name">이름</label>
-                    <input type="text" id="name" placeholder="이름 입력">
+                    <input type="text" id="name" placeholder="성함 입력">
                 </div>
                 <div class="form-group">
                     <label for="entryTime">입실시간</label>
@@ -251,76 +298,80 @@
                     <label for="exitTime">퇴실시간</label>
                     <input type="time" id="exitTime">
                 </div>
-                <button class="submit-btn" onclick="addData()">등록</button>
+                <div class="btn-area">
+                    <button class="submit-btn" onclick="addData()">등록하기</button>
+                </div>
             </div>
         </section>
 
-        <section class="table-section">
-            <table id="logTable">
-                <thead>
-                    <tr>
-                        <th>날짜</th>
-                        <th>용무</th>
-                        <th>사번</th>
-                        <th>소속</th>
-                        <th>이름</th>
-                        <th>입실시간</th>
-                        <th>퇴실시간</th>
-                        <th>관리</th>
-                    </tr>
-                </thead>
-                <tbody id="logBody">
-                    <!-- 데이터가 여기에 추가됩니다 -->
-                </tbody>
-            </table>
+        <!-- 목록 테이블 -->
+        <section class="table-card">
+            <div class="table-wrapper">
+                <table id="logTable">
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>용무</th>
+                            <th>사번</th>
+                            <th>소속</th>
+                            <th>이름</th>
+                            <th>입실</th>
+                            <th>퇴실</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logBody">
+                        <!-- 데이터 로드 -->
+                    </tbody>
+                </table>
+            </div>
         </section>
-    </div>
+    </main>
 
     <script>
-        // 초기 로드 시 실행
         document.addEventListener('DOMContentLoaded', () => {
             initInputs();
             loadData();
         });
 
-        // 날짜 및 입실시간 자동 설정
         function initInputs() {
             const now = new Date();
             const dateInput = document.getElementById('date');
             const entryTimeInput = document.getElementById('entryTime');
 
-            // KST 기준 날짜 (YYYY-MM-DD)
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
             dateInput.value = `${year}-${month}-${day}`;
 
-            // KST 기준 시간 (HH:MM)
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             entryTimeInput.value = `${hours}:${minutes}`;
         }
 
-        // 데이터 로드
         function loadData() {
             const data = JSON.parse(localStorage.getItem('accessLogs') || '[]');
             renderTable(data);
         }
 
-        // 테이블 렌더링
         function renderTable(data) {
             const tbody = document.getElementById('logBody');
             tbody.innerHTML = '';
 
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: #999;">등록된 출입 기록이 없습니다.</td></tr>';
+                return;
+            }
+
             data.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${item.date}</td>
+                    <td style="font-weight:600;">${item.date}</td>
                     <td>${item.purpose}</td>
                     <td>${item.empId}</td>
                     <td>${item.affiliation}</td>
                     <td>${item.name}</td>
-                    <td>${item.entryTime}</td>
+                    <td style="color:#e30613; font-weight:600;">${item.entryTime}</td>
                     <td>${item.exitTime || '-'}</td>
                     <td><button class="delete-btn" onclick="deleteData(${index})">삭제</button></td>
                 `;
@@ -328,7 +379,6 @@
             });
         }
 
-        // 데이터 추가
         function addData() {
             const date = document.getElementById('date').value;
             const purpose = document.getElementById('purpose').value;
@@ -339,7 +389,7 @@
             const exitTime = document.getElementById('exitTime').value;
 
             if (!date || !name || !empId) {
-                alert('날짜, 사번, 이름은 필수 입력 항목입니다.');
+                alert('날짜, 사번, 이름은 반드시 입력해야 합니다.');
                 return;
             }
 
@@ -352,7 +402,6 @@
             clearForm();
         }
 
-        // 폼 초기화 (날짜/시간은 유지 또는 자동 갱신)
         function clearForm() {
             document.getElementById('purpose').value = '';
             document.getElementById('empId').value = '';
@@ -362,48 +411,34 @@
             initInputs();
         }
 
-        // 데이터 삭제
         function deleteData(index) {
-            if (!confirm('해당 기록을 삭제하시겠습니까?')) return;
-            
+            if (!confirm('기록을 삭제하시겠습니까?')) return;
             const data = JSON.parse(localStorage.getItem('accessLogs') || '[]');
             data.splice(index, 1);
             localStorage.setItem('accessLogs', JSON.stringify(data));
             renderTable(data);
         }
 
-        // CSV 내보내기
         function exportToCSV() {
             const data = JSON.parse(localStorage.getItem('accessLogs') || '[]');
             if (data.length === 0) {
-                alert('내보낼 데이터가 없습니다.');
+                alert('저장할 데이터가 없습니다.');
                 return;
             }
 
-            let csvContent = "\uFEFF"; // Excel 한글 깨짐 방지 BOM
+            let csvContent = "\uFEFF"; 
             csvContent += "날짜,용무,사번,소속,이름,입실시간,퇴실시간\n";
 
             data.forEach(item => {
-                const row = [
-                    item.date,
-                    item.purpose,
-                    item.empId,
-                    item.affiliation,
-                    item.name,
-                    item.entryTime,
-                    item.exitTime || ''
-                ].map(v => `"${v}"`).join(",");
+                const row = [item.date, item.purpose, item.empId, item.affiliation, item.name, item.entryTime, item.exitTime || ''].map(v => `"${v}"`).join(",");
                 csvContent += row + "\n";
             });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
-            
-            const timestamp = new Date().toISOString().slice(0, 10);
             link.setAttribute("href", url);
-            link.setAttribute("download", `출입자명부_${timestamp}.csv`);
-            link.style.visibility = 'hidden';
+            link.setAttribute("download", `출입기록_${new Date().toISOString().slice(0, 10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
