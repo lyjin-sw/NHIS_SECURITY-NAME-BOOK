@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>제한통제구역 출입자 명부 |NHIS</title>
+    <!-- Modern Typeface -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        :root {
+            --primary: #e30613;
+            --primary-light: #ffebec;
+            --primary-dark: #b8050f;
+            --bg-overlay: rgba(0, 0, 0, 0.4);
+            --card-bg: #ffffff;
+            --page-bg: #f5f7f9;
+            --text-main: #1a1f26;
+            --text-sub: #4b5563;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--page-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+
+        /* Header Styling */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .btn-view-toggle {
+            background: white;
+            border: 1.5px solid var(--primary);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-view-toggle:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 500px;
+            margin: 32px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            margin-bottom: 4px;
+        }
+
+        .section-header p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+        }
+
+        /* Glass Card */
+        .card {
+            background: #ffffff;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .form-input {
+            width: 100%;
+            height: 52px;
+            padding: 0 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #fff;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            height: 56px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 16px rgba(227, 6, 19, 0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(227, 6, 19, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.97);
+        }
+
+        .btn-submit:disabled {
+            background: #d1d5db;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Active Status Card */
+        .status-card {
+            background: #fffbeb;
+            border: 2px solid #fcd34d;
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% {
+                border-color: #fcd34d;
+            }
+
+            50% {
+                border-color: #fbbf24;
+            }
+
+            100% {
+                border-color: #fcd34d;
+            }
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .status-info {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .status-time {
+            font-size: 0.9rem;
+            color: #b45309;
+        }
+
+        .btn-checkout-user {
+            width: 100%;
+            height: 56px;
+            background: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .btn-checkout-user:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+
+        /* Admin/Table View */
+        #adminView {
+            display: none;
+            max-width: 1000px;
+        }
+
+        .dashboard-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        #logTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        #logTable th {
+            background: #f9fafb;
+            padding: 16px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--text-sub);
+            border-bottom: 2px solid var(--border);
+        }
+
+        #logTable td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-in {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-out {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .btn-checkout {
+            background: #0369a1;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-checkout:hover {
+            background: #075985;
+        }
+
+        .btn-delete {
+            color: #ef4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .btn-export {
+            background: #1f2937;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            header {
+                padding: 10px 16px;
+            }
+
+            .logo-img {
+                height: 32px;
+            }
+
+            .container {
+                margin: 8px auto;
+                padding: 0 12px;
+            }
+
+            .section-header {
+                margin-bottom: 12px;
+            }
+
+            .section-header h2 {
+                font-size: 1.25rem;
+            }
+
+            .card {
+                padding: 16px;
+                border-radius: 12px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .form-label {
+                margin-bottom: 4px;
+                font-size: 0.85rem;
+            }
+
+            .form-input {
+                height: 44px;
+                font-size: 0.9rem;
+                padding: 0 12px;
+            }
+
+            .btn-submit {
+                height: 48px;
+                margin-top: 8px;
+            }
+
+            #logTable {
+                font-size: 0.8rem;
+            }
+
+            .hide-mobile {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="NHIS Logo" class="logo-img"
+                onerror="this.src='https://via.placeholder.com/120x40?text=NHIS'">
+        </div>
+        <button id="viewToggleBtn" class="btn-view-toggle" onclick="toggleView()">관리자 모드</button>
+    </header>
+
+    <!-- User View: Data Entry -->
+    <div id="userView" class="container">
+        <div id="entrySection">
+            <div class="section-header">
+                <h2>제한·통제구역 출입자 명부</h2>
+                <p>입실을 위해 정보를 입력해 주세요.</p>
+            </div>
+
+            <div class="card">
+                <div class="form-group">
+                    <label class="form-label" for="date">일자</label>
+                    <input type="date" id="date" class="form-input" oninput="checkFormValidity()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dept">소속 (기관명)</label>
+                    <input type="text" id="dept" class="form-input" placeholder="예: 행정지원부"
+                        oninput="checkFormValidity()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="position">직위 (직급)</label>
+                    <input type="text" id="position" class="form-input" placeholder="예: 6급"
+                        oninput="checkFormValidity()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="name">성명</label>
+                    <input type="text" id="name" class="form-input" placeholder="이름을 입력하세요"
+                        oninput="checkFormValidity()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="empNo">사원번호</label>
+                    <input type="text" id="empNo" class="form-input" placeholder="사원번호를 입력하세요"
+                        oninput="checkFormValidity()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="purpose">용무</label>
+                    <input type="text" id="purpose" class="form-input" placeholder="방문 목적을 입력하세요"
+                        oninput="checkFormValidity()">
+                </div>
+
+                <button id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>
+                    <span>제출하기</span>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Active Status Section (Show when checked-in) -->
+        <div id="activeStatusSection" style="display: none;">
+            <div class="section-header">
+                <h2>현재 입실 상태</h2>
+            </div>
+            <div class="status-card">
+                <div class="status-badge">입실중</div>
+                <div id="activeUserName" class="status-info">사용자님</div>
+                <div id="activeInTime" class="status-time">입실 시간: 00:00</div>
+                <button class="btn-checkout-user" onclick="userCheckOut()">
+                    퇴실하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin View: Record Logs -->
+    <div id="adminView" class="container">
+        <div class="dashboard-controls">
+            <h2>📋 출입 로그 현황</h2>
+            <button class="btn-export" onclick="exportData()">
+                <svg width="16" height="16" fill="white" viewBox="0 0 20 20">
+                    <path
+                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z">
+                    </path>
+                </svg>
+                CSV 내보내기
+            </button>
+        </div>
+
+        <div class="table-wrapper" style="overflow-x: auto;">
+            <table id="logTable">
+                <thead>
+                    <tr>
+                        <th>일자/상태</th>
+                        <th>성명(사원번호)</th>
+                        <th class="hide-mobile">소속/직위</th>
+                        <th class="hide-mobile">용무</th>
+                        <th>입실</th>
+                        <th>퇴실/관리</th>
+                    </tr>
+                </thead>
+                <tbody id="logBody">
+                    <!-- Data will be injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let isAdmin = false;
+        let activeSession = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default date to today
+            const today = new Date();
+            document.getElementById('date').valueAsDate = today;
+
+            // Check if there is an active session in progress
+            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
+            activeSession = records.find(r => r.outTime === null);
+
+            renderUI();
+            loadRecords();
+        });
+
+        // Form Validity Check
+        function checkFormValidity() {
+            const date = document.getElementById('date').value;
+            const dept = document.getElementById('dept').value.trim();
+            const position = document.getElementById('position').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const empNo = document.getElementById('empNo').value.trim();
+            const purpose = document.getElementById('purpose').value.trim();
+
+            const isValid = date && dept && position && name && empNo && purpose;
+            document.getElementById('submitBtn').disabled = !isValid;
+        }
+
+        // Render UI based on active session
+        function renderUI() {
+            const entrySection = document.getElementById('entrySection');
+            const activeStatusSection = document.getElementById('activeStatusSection');
+
+            if (activeSession) {
+                entrySection.style.display = 'none';
+                activeStatusSection.style.display = 'block';
+                document.getElementById('activeUserName').innerText = `${activeSession.name} (${activeSession.empNo}) 님`;
+                document.getElementById('activeInTime').innerText = `입실 시간: ${activeSession.inTime}`;
+            } else {
+                entrySection.style.display = 'block';
+                activeStatusSection.style.display = 'none';
+                resetForm();
+            }
+        }
+
+        // Save Record Function
+        function saveRecord() {
+            const date = document.getElementById('date').value;
+            const dept = document.getElementById('dept').value.trim();
+            const position = document.getElementById('position').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const empNo = document.getElementById('empNo').value.trim();
+            const purpose = document.getElementById('purpose').value.trim();
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+
+            const record = {
+                id: Date.now(),
+                date: date,
+                dept: dept,
+                position: position,
+                name: name,
+                empNo: empNo,
+                purpose: purpose,
+                inTime: timeStr,
+                outTime: null
+            };
+
+            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
+            records.unshift(record);
+            localStorage.setItem('nhisLogs', JSON.stringify(records));
+
+            activeSession = record;
+
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = '<span>처리 중...</span>';
+
+            setTimeout(() => {
+                alert('입실 기록이 정상적으로 제출되었습니다.');
+                renderUI();
+                loadRecords();
+                btn.innerHTML = '<span>기록 제출하기</span><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>';
+            }, 300);
+        }
+
+        function resetForm() {
+            document.getElementById('dept').value = '';
+            document.getElementById('position').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('empNo').value = '';
+            document.getElementById('purpose').value = '';
+            document.getElementById('submitBtn').disabled = true;
+
+            const today = new Date();
+            document.getElementById('date').valueAsDate = today;
+        }
+
+        // User Manual Checkout
+        function userCheckOut() {
+            if (!activeSession) return;
+            if (!confirm('퇴실 처리를 하시겠습니까?')) return;
+
+            checkOut(activeSession.id);
+            activeSession = null;
+            alert('퇴실 처리가 완료되었습니다.');
+            renderUI();
+        }
+
+        // Admin/Core Checkout Logic
+        function checkOut(id) {
+            let records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
+            const index = records.findIndex(r => r.id === id);
+
+            if (index !== -1) {
+                const now = new Date();
+                records[index].outTime = now.toLocaleTimeString('ko-KR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+                localStorage.setItem('nhisLogs', JSON.stringify(records));
+
+                // If the checkout out record was the active session, clear it
+                if (activeSession && activeSession.id === id) {
+                    activeSession = null;
+                    renderUI();
+                }
+
+                loadRecords();
+            }
+        }
+
+        // Load Records (Admin Table)
+        function loadRecords() {
+            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
+            const tbody = document.getElementById('logBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            records.forEach(r => {
+                const tr = document.createElement('tr');
+                const isCheckedOut = r.outTime !== null;
+
+                tr.innerHTML = `
+                    <td>
+                        <div style="font-weight: 700;">${r.date.slice(5)}</div>
+                        <span class="badge ${isCheckedOut ? 'badge-out' : 'badge-in'}">
+                            ${isCheckedOut ? '완료' : '진행중'}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700;">${r.name}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-sub);">${r.empNo || '-'}</div>
+                    </td>
+                    <td class="hide-mobile">
+                        <div>${r.dept || '-'}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-sub);">${r.position || '-'}</div>
+                    </td>
+                    <td class="hide-mobile">${r.purpose}</td>
+                    <td style="color: #2563eb; font-weight: 600;">${r.inTime}</td>
+                    <td>
+                        ${!isCheckedOut ?
+                        `<button class="btn-checkout" onclick="checkOut(${r.id})">퇴실처리</button>` :
+                        `<span style="color: #ef4444; font-weight: 600;">${r.outTime}</span>`
+                    }
+                        <button class="btn-delete" onclick="deleteRecord(${r.id})">
+                             <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                             </svg>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteRecord(id) {
+            if (!confirm('기록을 삭제하시겠습니까?')) return;
+            let records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
+            records = records.filter(r => r.id !== id);
+            localStorage.setItem('nhisLogs', JSON.stringify(records));
+
+            if (activeSession && activeSession.id === id) {
+                activeSession = null;
+                renderUI();
+            }
+
+            loadRecords();
+        }
+
+        function toggleView() {
+            if (!isAdmin) {
+                const pw = prompt('관리자 암호를 입력하세요 (기본: 1234)');
+                if (pw === '1234') {
+                    isAdmin = true;
+                    document.getElementById('userView').style.display = 'none';
+                    document.getElementById('adminView').style.display = 'block';
+                    document.getElementById('viewToggleBtn').innerText = '사용자 모드';
+                } else {
+                    alert('비밀번호가 올바르지 않습니다.');
+                }
+            } else {
+                isAdmin = false;
+                document.getElementById('userView').style.display = 'block';
+                document.getElementById('adminView').style.display = 'none';
+                document.getElementById('viewToggleBtn').innerText = '관리자 모드';
+                renderUI(); // Reset UI state for user view
+            }
+        }
+
+        function exportData() {
+            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
+            if (records.length === 0) return alert('내보낼 데이터가 없습니다.');
+
+            let csv = "\uFEFF"; // Unicode BOM for Excel Korean support
+
+            // Meta Information (matching physical sheet)
+            csv += "[별지 제16호서식] 보안업무 세부운용요령\n";
+            csv += "제한·통제구역 출입자 명부\n";
+            csv += "구역명: 제한통제구역\n\n";
+
+            // Sub-header for Approval subdivision
+            csv += "일자,소속(기관명),직위(직급),성명,사원번호,용무,입실시각,퇴실시각,승인(담당),승인(팀장),승인(부장)\n";
+
+            records.forEach(r => {
+                csv += `${r.date},${r.dept},${r.position},${r.name},${r.empNo},${r.purpose},${r.inTime},${r.outTime || '-'},,, \n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `NHIS_제한구역출입명부_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+
+</html>
