@@ -11,18 +11,18 @@
     <style>
         :root {
             --primary: #e30613;
-            --primary-light: #ffebec;
+            --primary-light: #fff0f0;
             --primary-dark: #b8050f;
             --bg-overlay: rgba(0, 0, 0, 0.4);
             --card-bg: #ffffff;
-            --page-bg: #f5f7f9;
-            --text-main: #1a1f26;
-            --text-sub: #4b5563;
-            --border: #e2e8f0;
+            --page-bg: linear-gradient(135deg, #fff5f5 0%, #fff9f9 50%, #ffffff 100%);
+            --text-main: #111827;
+            --text-sub: #6b7280;
+            --border: #fee2e2;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --radius: 20px;
+            --shadow-lg: 0 10px 40px -10px rgba(184, 5, 15, 0.08);
+            --radius: 40px;
         }
 
         * {
@@ -44,15 +44,14 @@
         /* Header Styling */
         header {
             background: #ffffff;
-            border-bottom: 1px solid var(--border);
-            padding: 16px 40px;
+            border-bottom: 1px solid #f1f2f4;
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .logo-container {
@@ -132,9 +131,9 @@
         .card {
             background: #ffffff;
             border-radius: var(--radius);
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
-            padding: 24px;
-            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            border: 1px solid #f1f2f4;
         }
 
         /* Form Controls */
@@ -152,14 +151,25 @@
 
         .form-input {
             width: 100%;
-            height: 52px;
-            padding: 0 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
+            height: 56px;
+            padding: 0 20px;
+            border: 1.5px solid #f1f2f4;
+            border-radius: 16px;
             font-size: 1rem;
-            background: #fff;
+            background: #fbfbfc;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Absolute normalization for date input */
+        input[type="date"].form-input {
+            padding: 0 16px;
+            height: 56px !important;
+            min-height: 56px !important;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .form-input:focus {
@@ -174,20 +184,21 @@
         /* Submit Button */
         .btn-submit {
             width: 100%;
-            height: 56px;
+            height: 64px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: 700;
+            border-radius: 100px;
+            font-size: 1.2rem;
+            font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 8px 16px rgba(227, 6, 19, 0.2);
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(227, 6, 19, 0.15);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 12px;
         }
 
         .btn-submit:hover {
@@ -413,8 +424,15 @@
 
             .form-input {
                 height: 44px;
+                min-height: 44px;
+                /* Ensure consistency */
                 font-size: 0.9rem;
                 padding: 0 12px;
+            }
+
+            input[type="date"].form-input {
+                height: 44px !important;
+                min-height: 44px !important;
             }
 
             .btn-submit {
@@ -437,8 +455,9 @@
 
     <header>
         <div class="logo-container">
-            <img src="logo.png" alt="NHIS Logo" class="logo-img"
-                onerror="this.src='https://via.placeholder.com/120x40?text=NHIS'">
+            <img src="logo.png?v=1" alt="NHIS Logo" class="logo-img"
+                style="display: block; opacity: 1; min-width: 120px;"
+                onerror="this.src='https://via.placeholder.com/120x40?text=NHIS_Logo_Error'">
         </div>
         <button id="viewToggleBtn" class="btn-view-toggle" onclick="toggleView()">관리자 모드</button>
     </header>
@@ -447,7 +466,9 @@
     <div id="userView" class="container">
         <div id="entrySection">
             <div class="section-header">
-                <h2>제한·통제구역 출입자 명부</h2>
+                <h2 style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="color: var(--primary);"></span> 제한·통제 구역 출입 명부
+                </h2>
                 <p>입실을 위해 정보를 입력해 주세요.</p>
             </div>
 
@@ -457,12 +478,12 @@
                     <input type="date" id="date" class="form-input" oninput="checkFormValidity()">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="dept">소속 (기관명)</label>
+                    <label class="form-label" for="dept">소속(기관명)</label>
                     <input type="text" id="dept" class="form-input" placeholder="예: 행정지원부"
                         oninput="checkFormValidity()">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="position">직위 (직급)</label>
+                    <label class="form-label" for="position">직위(직급)</label>
                     <input type="text" id="position" class="form-input" placeholder="예: 6급"
                         oninput="checkFormValidity()">
                 </div>
