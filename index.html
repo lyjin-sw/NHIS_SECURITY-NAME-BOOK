@@ -78,40 +78,77 @@
 
         .numInputWrapper {
             order: 1 !important;
-            margin-right: 2px !important;
+            margin-right: 8px !important;
             width: auto !important;
-            min-width: 48px !important;
             display: flex !important;
+            align-items: center;
+            background: #fff1f2 !important;
+            /* Soft Pink Box */
+            padding: 4px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            height: 32px !important;
+            line-height: normal !important;
+        }
+
+        /* Target ONLY native Flatpickr elements to hide */
+        .numInputWrapper .cur-year,
+        .numInputWrapper .arrowUp,
+        .numInputWrapper .arrowDown,
+        .numInputWrapper::after {
+            display: none !important;
+        }
+
+        .flatpickr-year-dropdown {
+            background: transparent !important;
+            border: none !important;
+            font-weight: 800 !important;
+            font-size: 0.95rem !important;
+            color: var(--primary) !important;
+            cursor: pointer;
+            outline: none;
+            padding: 0 !important;
+            appearance: auto !important;
+            /* Keep arrow for visibility */
+            margin-right: 2px;
+            display: inline-block !important;
+            min-width: 60px !important;
+        }
+
+        .year-label-text {
+            color: var(--primary) !important;
+            font-weight: 800 !important;
+            font-size: 0.95rem !important;
+            margin-left: 2px;
+            display: inline-flex !important; /* Changed to flex for arrow alignment */
             align-items: center;
         }
 
-        .numInputWrapper input.cur-year {
-            font-weight: 800 !important;
-            color: var(--text-main) !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            width: 42px !important;
-        }
-
-        .numInputWrapper::after {
-            content: "년";
-            font-size: 0.95rem;
-            font-weight: 800;
-            margin-left: -2px;
-            margin-right: 4px;
-            white-space: nowrap !important;
+        .year-label-text::after {
+            content: "⌵"; /* Chevron Arrow */
+            font-size: 0.8rem;
+            margin-left: 4px;
+            font-weight: bold;
         }
 
         .flatpickr-monthDropdown-months {
             order: 2 !important;
             margin: 0 !important;
-            padding: 0 12px 0 0 !important;
-            background: transparent !important;
+            padding: 4px 12px !important;
+            background: #fff1f2 !important;
+            /* Soft Pink Box */
             border: none !important;
+            border-radius: 8px !important;
             font-weight: 800 !important;
-            font-size: 0.95rem !important;
+            font-size: 0.9rem !important;
             width: auto !important;
-            color: var(--text-main) !important;
+            color: var(--primary) !important;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .flatpickr-monthDropdown-months:hover {
+            background: #ffe4e6 !important;
         }
 
         /* Prev/Next Arrows Styling */
@@ -144,9 +181,35 @@
             border-radius: 10px !important;
         }
 
+        .flatpickr-day.today {
+            border-color: transparent !important;
+            background: #fff5f5 !important;
+            color: var(--primary) !important;
+            font-weight: 800 !important;
+            position: relative;
+        }
+
+        .flatpickr-day.today::after {
+            content: "";
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
         .flatpickr-day.selected {
             background: var(--primary) !important;
+            color: white !important;
             border-radius: 10px !important;
+        }
+
+        .flatpickr-day.selected::after {
+            display: none;
+            /* Hide dot when selected */
         }
 
         .flatpickr-weekday {
@@ -161,35 +224,82 @@
             overflow: hidden !important;
         }
 
+        /* Continuous Scroll Animations - Hard Strip Slide (No Overlap) */
+        .flatpickr-days-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .days-film-strip {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
         .flatpickr-days {
-            transition: none !important; /* Managed by JS/Animations */
+            width: 100% !important;
+            min-width: 100% !important;
+            flex-shrink: 0;
+            background: white;
         }
 
-        /* Continuous Scroll Animations */
-        @keyframes slideOutUp {
-            from { transform: translateY(0); opacity: 1; filter: blur(0); }
-            to { transform: translateY(-100%); opacity: 0; filter: blur(4px); }
+        @keyframes hardSlideInUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
         }
 
-        @keyframes slideInUp {
-            from { transform: translateY(100%); opacity: 0; filter: blur(4px); }
-            to { transform: translateY(0); opacity: 1; filter: blur(0); }
+        @keyframes hardSlideOutUp {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-100%);
+            }
         }
 
-        @keyframes slideOutDown {
-            from { transform: translateY(0); opacity: 1; filter: blur(0); }
-            to { transform: translateY(100%); opacity: 0; filter: blur(4px); }
+        @keyframes hardSlideInDown {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
         }
 
-        @keyframes slideInDown {
-            from { transform: translateY(-100%); opacity: 0; filter: blur(4px); }
-            to { transform: translateY(0); opacity: 1; filter: blur(0); }
+        @keyframes hardSlideOutDown {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(100%);
+            }
         }
 
-        .slide-out-up { animation: slideOutUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .slide-in-up { animation: slideInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .slide-out-down { animation: slideOutDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .slide-in-down { animation: slideInDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-up-in {
+            animation: hardSlideInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .slide-up-out {
+            animation: hardSlideOutUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .slide-down-in {
+            animation: hardSlideInDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .slide-down-out {
+            animation: hardSlideOutDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         /* Select Styling - Premium Rounded */
         select.form-input {
@@ -928,11 +1038,6 @@
                 <div class="form-group">
                     <label class="form-label">자필 서명</label>
                     <div id="signaturePreview" class="signature-placeholder" onclick="openSignatureModal()">
-                        <svg id="signIcon" width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                            </path>
-                        </svg>
                         <span id="signText" style="margin-top: 8px; font-weight: 700;">여기를 클릭하여 서명해 주세요</span>
                         <img id="signatureImage" class="signature-img" style="display: none;">
                     </div>
@@ -1040,36 +1145,75 @@
                 locale: "ko",
                 dateFormat: "Y-m-d",
                 defaultDate: new Date(),
+                minDate: "2000-07-01",
+                maxDate: "today",
                 disableMobile: "true",
                 animate: true,
-                monthSelectorType: "dropdown", // Better vertical navigation
-                onReady: function (selectedDates, dateStr, instance) {
-                    const calendar = instance.calendarContainer;
+                monthSelectorType: "dropdown",
+                onReady: function (instance) {
+                    // Ensure it runs after Flatpickr settles initial paint
+                    setTimeout(() => rebuildYearDropdown(instance), 0);
 
-                    // Vertical Scroll Implementation with Motion
+                    const calendar = instance.calendarContainer;
+                    if (!calendar) return;
+
+                    const daysContainer = instance.daysContainer;
+                    let startY = 0;
+                    let isDragging = false;
+
+                    // Mouse/Touch Start
+                    const startDrag = (e) => {
+                        startY = e.touches ? e.touches[0].clientY : e.clientY;
+                        isDragging = true;
+                        daysContainer.style.transition = 'none';
+                    };
+
+                    // Mouse/Touch Move - Visible dragging
+                    const moveDrag = (e) => {
+                        if (!isDragging) return;
+                        const currentY = e.touches ? e.touches[0].clientY : e.clientY;
+                        const diff = currentY - startY;
+                        // Limit drag distance
+                        const moveDist = Math.max(-80, Math.min(80, diff));
+                        daysContainer.style.transform = `translateY(${moveDist}px)`;
+                    };
+
+                    // Mouse/Touch End - Trigger change or reset
+                    const endDrag = (e) => {
+                        if (!isDragging) return;
+                        isDragging = false;
+                        const endY = (e.changedTouches ? e.changedTouches[0].clientY : (e.clientY || startY));
+                        const diff = startY - endY;
+
+                        if (Math.abs(diff) > 40) {
+                            const dir = diff > 0 ? 1 : -1;
+                            triggerMonthChangeWithMotion(instance, dir);
+                        } else {
+                            daysContainer.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                            daysContainer.style.transform = 'translateY(0)';
+                        }
+                    };
+
+                    calendar.addEventListener('mousedown', startDrag);
+                    calendar.addEventListener('touchstart', startDrag, { passive: true });
+                    window.addEventListener('mousemove', moveDrag);
+                    calendar.addEventListener('touchmove', moveDrag, { passive: false });
+                    window.addEventListener('mouseup', endDrag);
+                    calendar.addEventListener('touchend', endDrag, { passive: true });
+
+                    // Scroll Implementation
                     calendar.addEventListener('wheel', (e) => {
                         e.preventDefault();
                         const dir = e.deltaY > 0 ? 1 : -1;
                         triggerMonthChangeWithMotion(instance, dir);
                     }, { passive: false });
-
-                    // Mobile Touch Support for vertical scroll
-                    let touchStartY = 0;
-                    calendar.addEventListener('touchstart', (e) => {
-                        touchStartY = e.touches[0].clientY;
-                    }, { passive: true });
-
-                    calendar.addEventListener('touchend', (e) => {
-                        const touchEndY = e.changedTouches[0].clientY;
-                        const diff = touchStartY - touchEndY;
-                        if (Math.abs(diff) > 40) { // Threshold
-                            const dir = diff > 0 ? 1 : -1;
-                            triggerMonthChangeWithMotion(instance, dir);
-                        }
-                    }, { passive: true });
                 },
                 onMonthChange: function (selectedDates, dateStr, instance) {
-                    // This can be used for extra cleanup if needed
+                    instance.daysContainer.style.transform = 'translateY(0)';
+                    rebuildYearDropdown(instance);
+                },
+                onYearChange: function (selectedDates, dateStr, instance) {
+                    rebuildYearDropdown(instance);
                 },
                 onChange: () => checkFormValidity()
             });
@@ -1122,17 +1266,13 @@
         }
 
         function triggerMonthChangeWithMotion(instance, dir) {
-            const calendar = instance.calendarContainer;
-            if (!calendar) return;
-
             const daysContainer = instance.daysContainer;
             if (!daysContainer) {
                 instance.changeMonth(dir);
                 return;
             }
 
-            // Dual Layer Scroll Effect (iOS Style)
-            // 1. Create a clone of the current month to slide out
+            // 1. Create a clone to show the outgoing month
             const clone = daysContainer.cloneNode(true);
             clone.style.position = 'absolute';
             clone.style.top = '0';
@@ -1140,26 +1280,24 @@
             clone.style.width = '100%';
             clone.style.zIndex = '1';
             clone.style.pointerEvents = 'none';
-            daysContainer.parentElement.style.position = 'relative';
             daysContainer.parentElement.appendChild(clone);
 
-            // 2. Clear animations from main container to avoid conflicts
+            // 2. Trigger reflow to ensure clean start
             daysContainer.style.animation = 'none';
-            void daysContainer.offsetWidth; // Force Reflow
+            void daysContainer.offsetWidth;
 
             // 3. Add animation classes
             if (dir > 0) {
-                clone.className = 'flatpickr-days slide-out-up';
-                daysContainer.className = 'flatpickr-days slide-in-up';
+                clone.className = 'flatpickr-days slide-up-out';
+                daysContainer.className = 'flatpickr-days slide-up-in';
             } else {
-                clone.className = 'flatpickr-days slide-out-down';
-                daysContainer.className = 'flatpickr-days slide-in-down';
+                clone.className = 'flatpickr-days slide-down-out';
+                daysContainer.className = 'flatpickr-days slide-down-in';
             }
 
-            // 4. Change the actual month data
+            // 4. Change actual metadata
             instance.changeMonth(dir);
 
-            // 5. Cleanup clone after animation
             setTimeout(() => {
                 if (clone && clone.parentNode) {
                     clone.parentNode.removeChild(clone);
@@ -1167,6 +1305,47 @@
                 // Reset main container class if it was changed
                 if (daysContainer) daysContainer.className = 'flatpickr-days';
             }, 450);
+        }
+
+        // --- Persistent Year Dropdown Rebuild Logic ---
+        function rebuildYearDropdown(instance) {
+            const calendar = instance.calendarContainer;
+            if (!calendar) return;
+
+            const yearWrapper = calendar.querySelector('.numInputWrapper');
+            if (yearWrapper) {
+                yearWrapper.innerHTML = '';
+
+                const yearSelect = document.createElement('select');
+                yearSelect.className = 'flatpickr-year-dropdown';
+
+                // Range: NHIS Foundation (2000) to Future (2051)
+                for (let y = 2000; y <= 2051; y++) {
+                    const opt = document.createElement('option');
+                    opt.value = y;
+                    opt.text = y;
+                    if (y === instance.currentYear) opt.selected = true;
+                    yearSelect.appendChild(opt);
+                }
+
+                yearSelect.addEventListener('change', (e) => {
+                    const selectedYear = parseInt(e.target.value);
+                    const now = new Date();
+                    if (selectedYear > now.getFullYear()) {
+                        alert("미래의 날짜는 선택하실 수 없습니다.");
+                        e.target.value = instance.currentYear;
+                        return;
+                    }
+                    instance.changeYear(selectedYear);
+                });
+
+                const label = document.createElement('span');
+                label.className = 'year-label-text';
+                label.innerText = ' 년';
+
+                yearWrapper.appendChild(yearSelect);
+                yearWrapper.appendChild(label);
+            }
         }
 
         // Form Validity Check
