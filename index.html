@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+    <!-- Signature Pad Library -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
         :root {
             --primary: #e30613;
@@ -22,7 +24,7 @@
             --page-bg: linear-gradient(135deg, #fff5f5 0%, #fff9f9 50%, #ffffff 100%);
             --text-main: #111827;
             --text-sub: #6b7280;
-            --border: #fee2e2;
+            --border: #e5e7eb;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 40px -10px rgba(184, 5, 15, 0.08);
@@ -30,10 +32,24 @@
             --radius-sm: 16px;
         }
 
+        /* Prevent Layout Shift */
+        html,
+        body {
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            /* Smooth for user, manual for script */
+        }
+
+        body {
+            background: var(--page-bg);
+            color: var(--text-main);
+            padding-bottom: 40px;
+            min-height: 100vh;
+        }
+
         /* Flatpickr Customization - iPhone Style */
         .flatpickr-calendar {
             width: 280px !important;
-            /* Smaller box */
             border-radius: 24px !important;
             box-shadow: 0 10px 40px -5px rgba(0, 0, 0, 0.1) !important;
             border: 1px solid rgba(0, 0, 0, 0.03) !important;
@@ -43,7 +59,6 @@
             backdrop-filter: blur(10px);
             animation: slideUpCalendar 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
             font-size: 0.85rem !important;
-            /* Overall smaller font */
         }
 
         .flatpickr-months {
@@ -70,28 +85,39 @@
             padding: 0 !important;
             font-weight: 800 !important;
             font-size: 0.95rem !important;
-            /* Smaller font */
             color: var(--text-main) !important;
             white-space: nowrap !important;
-            /* Don't wrap */
         }
 
         .numInputWrapper {
             order: 1 !important;
             margin-right: 8px !important;
-            width: auto !important;
+            width: fit-content !important;
             display: flex !important;
             align-items: center;
-            background: #fff1f2 !important;
-            /* Soft Pink Box */
-            padding: 4px 12px;
-            border-radius: 8px;
+            background: #ffffff !important;
+            /* Pure white */
+            border: 1px solid #f1f2f4 !important;
+            /* Subtle border */
+            padding: 0 4px;
+            border-radius: 12px;
             cursor: pointer;
             height: 32px !important;
             line-height: normal !important;
+            box-sizing: border-box !important;
+            transition: all 0.2s;
         }
 
-        /* Target ONLY native Flatpickr elements to hide */
+        .numInputWrapper:hover {
+            border-color: #e5e7eb !important;
+        }
+
+        .numInputWrapper:active,
+        .numInputWrapper:focus-within {
+            border: 2px solid var(--primary) !important;
+            /* Red Focus */
+        }
+
         .numInputWrapper .cur-year,
         .numInputWrapper .arrowUp,
         .numInputWrapper .arrowDown,
@@ -100,55 +126,54 @@
         }
 
         .flatpickr-year-dropdown {
-            background: transparent !important;
+            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e30613'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 5px center !important;
+            background-size: 14px !important;
             border: none !important;
             font-weight: 800 !important;
-            font-size: 0.95rem !important;
+            font-size: 1rem !important;
             color: var(--primary) !important;
             cursor: pointer;
             outline: none;
-            padding: 0 !important;
-            appearance: auto !important;
-            /* Keep arrow for visibility */
-            margin-right: 2px;
+            padding: 0 18px 0 6px !important;
+            appearance: none !important;
             display: inline-block !important;
-            min-width: 60px !important;
-        }
-
-        .year-label-text {
-            color: var(--primary) !important;
-            font-weight: 800 !important;
-            font-size: 0.95rem !important;
-            margin-left: 2px;
-            display: inline-flex !important; /* Changed to flex for arrow alignment */
-            align-items: center;
-        }
-
-        .year-label-text::after {
-            content: "⌵"; /* Chevron Arrow */
-            font-size: 0.8rem;
-            margin-left: 4px;
-            font-weight: bold;
+            width: auto !important;
+            height: 100% !important;
+            border-radius: 12px !important;
+            box-sizing: border-box !important;
         }
 
         .flatpickr-monthDropdown-months {
             order: 2 !important;
             margin: 0 !important;
-            padding: 4px 12px !important;
-            background: #fff1f2 !important;
-            /* Soft Pink Box */
-            border: none !important;
-            border-radius: 8px !important;
+            padding: 0 22px 0 8px !important;
+            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e30613'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 6px center !important;
+            background-size: 14px !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 12px !important;
             font-weight: 800 !important;
             font-size: 0.9rem !important;
+            /* Slightly reduced for better balance */
+            font-family: inherit !important;
             width: auto !important;
+            height: 32px !important;
             color: var(--primary) !important;
             cursor: pointer;
             outline: none;
+            appearance: none !important;
+            display: inline-block !important;
+            box-sizing: border-box !important;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .flatpickr-monthDropdown-months:active,
+        .flatpickr-monthDropdown-months:focus {
+            border: 2px solid var(--primary) !important;
         }
 
         .flatpickr-monthDropdown-months:hover {
-            background: #ffe4e6 !important;
+            background-color: #ffffff !important;
         }
 
         /* Prev/Next Arrows Styling */
@@ -171,10 +196,8 @@
 
         .flatpickr-day {
             font-size: 0.75rem !important;
-            /* Smaller numbers */
             font-weight: 500 !important;
             height: 32px !important;
-            /* Smaller day cell */
             line-height: 32px !important;
             width: 32px !important;
             margin: 1px !important;
@@ -183,7 +206,7 @@
 
         .flatpickr-day.today {
             border-color: transparent !important;
-            background: #fff5f5 !important;
+            background: #ffffff !important;
             color: var(--primary) !important;
             font-weight: 800 !important;
             position: relative;
@@ -209,12 +232,10 @@
 
         .flatpickr-day.selected::after {
             display: none;
-            /* Hide dot when selected */
         }
 
         .flatpickr-weekday {
             font-size: 0.7rem !important;
-            /* Smaller weekdays */
             font-weight: 700 !important;
             color: #adb5bd !important;
         }
@@ -224,7 +245,7 @@
             overflow: hidden !important;
         }
 
-        /* Continuous Scroll Animations - Hard Strip Slide (No Overlap) */
+        /* Continuous Scroll Animations */
         .flatpickr-days-container {
             position: relative;
             overflow: hidden;
@@ -301,66 +322,81 @@
             animation: hardSlideOutDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Select Styling - Premium Rounded */
-        select.form-input {
-            appearance: none;
-            background-color: #f8fafc;
-            border: 1.5px solid #edf2f7;
-            border-radius: 20px;
-            padding: 0 45px 0 20px;
+        /* Final Unified Premium Form Styling */
+        /* Unified Input & Trigger Styling - Pure White Start */
+        .form-input,
+        .custom-select-trigger {
+            width: 100% !important;
+            height: 56px !important;
+            background: #ffffff !important;
+            /* Pure white background */
+            border: 1.5px solid #e5e7eb !important;
+            /* Consistent border */
+            border-radius: 12px !important;
+            padding: 0 20px !important;
+            font-size: 1rem !important;
+            /* Default selected text size */
+            color: var(--text-main) !important;
+            /* Default selected color */
+            font-weight: 800 !important;
+            font-family: inherit !important;
+            box-sizing: border-box !important;
+            display: flex !important;
+            align-items: center !important;
+            transition: all 0.25s ease !important;
             cursor: pointer;
+        }
+
+        /* Placeholder & Hint Text Styling */
+        .form-input::placeholder {
+            color: #9ca3af !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+        }
+
+        .custom-select-trigger.placeholder {
+            color: #9ca3af !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+        }
+
+        /* Focus & Active Highlights */
+        .form-input:focus,
+        .custom-select-trigger:active,
+        .custom-select.open .custom-select-trigger {
+            outline: none !important;
+            border: 2px solid var(--primary) !important;
+            /* NHIS Red */
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08) !important;
+            /* Red Focus Glow */
+        }
+
+        input.form-input {
+            cursor: text;
+        }
+
+        select.form-input,
+        .custom-select-trigger {
+            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e30613'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 16px center !important;
+            background-size: 18px !important;
+            padding-right: 45px !important;
+            cursor: pointer;
+            appearance: none;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 1rem !important;
+            /* Unified with input text */
+            font-weight: 800 !important;
             color: var(--text-main);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 18px center;
-            background-size: 20px;
-            transition: all 0.25s ease;
         }
 
-        select.form-input:hover {
-            border-color: #cbd5e1;
-            background-color: #f1f5f9;
-        }
-
-        select.form-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
-            background-color: white;
-        }
-
-        /* Custom Dropdown Styling */
-        .custom-select-container {
+        .custom-select {
             position: relative;
             width: 100%;
-        }
-
-        .custom-select-trigger {
-            width: 100%;
-            height: 56px;
-            padding: 0 45px 0 20px;
-            border: 1.5px solid #edf2f7;
-            border-radius: 20px;
-            background-color: #f8fafc;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            font-size: 1rem;
-            color: var(--text-main);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 18px center;
-            background-size: 20px;
-            transition: all 0.2s;
-        }
-
-        .custom-select-trigger:hover {
-            border-color: #cbd5e1;
-        }
-
-        .custom-select-container.open .custom-select-trigger {
-            border-color: var(--primary);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
         }
 
         .custom-options {
@@ -368,1320 +404,809 @@
             top: calc(100% + 8px);
             left: 0;
             right: 0;
-            background: white;
-            border-radius: 24px;
-            /* Rounded corners as requested */
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: #ffffff !important;
+            /* Pure white */
+            border-radius: 20px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb !important;
+            /* Defined border */
             z-index: 200;
             overflow: hidden;
             display: none;
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
-            animation: slideUpCalendar 0.25s ease-out;
-        }
-
-        .custom-select-container.open .custom-options {
-            display: block;
+            animation: slideUpScale 0.25s ease-out;
         }
 
         .custom-option {
             padding: 14px 20px;
-            font-size: 0.95rem;
-            color: var(--text-main);
             cursor: pointer;
             transition: all 0.2s;
+            font-weight: 700;
+            color: var(--text-main);
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .custom-option:last-child {
+            border-bottom: none;
         }
 
         .custom-option:hover {
-            background-color: var(--primary-light);
+            background-color: #f1f5f9 !important;
+            /* Subtle neutral gray hover (No pink) */
             color: var(--primary);
+            /* Red point text on hover */
         }
 
-        .custom-option.selected {
-            background-color: var(--primary-light);
-            color: var(--primary);
-            font-weight: 700;
+        @keyframes slideUpScale {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
-        /* Webkit scrollbar for custom options */
-        .custom-options::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-options::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .custom-options::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
-            border-radius: 10px;
-        }
-
+        /* Rest of the common styles... */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", system-ui, Roboto, "Helvetica Neue", sans-serif;
+            font-family: 'Pretendard', sans-serif;
             -webkit-font-smoothing: antialiased;
-            letter-spacing: -0.3px;
         }
 
-        body {
-            background: var(--page-bg);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding-bottom: 40px;
-        }
-
-
-        /* Header Styling */
         header {
-            background: #ffffff;
-            border-bottom: 1px solid #f1f2f4;
-            padding: 8px 40px;
+            background: #fff;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            height: 72px;
+            /* Fixed height to prevent jumps */
+            box-sizing: border-box;
         }
 
-        .logo-container {
+        .logo-img {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 32px;
+            border: 1px solid #f1f2f4;
+        }
+
+        .btn-submit {
+            width: 100%;
+            height: 64px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 16px rgba(227, 6, 19, 0.15);
+            transition: all 0.2s;
+        }
+
+        .btn-submit:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .id-container {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .logo-img {
-            height: 56px;
-            object-fit: contain;
-        }
-
-        .header-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-        }
-
-        .btn-view-toggle {
-            background: white;
-            border: 1.5px solid var(--primary);
-            padding: 8px 20px;
-            border-radius: 100px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--primary);
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-view-toggle:hover {
-            background: var(--primary-light);
-            transform: translateY(-1px);
-        }
-
-        /* Container */
-        .container {
-            max-width: 500px;
-            margin: 12px auto;
-            padding: 0 20px;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .section-header h2 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: -0.8px;
-            margin-bottom: 4px;
-        }
-
-        .section-header p {
-            color: var(--text-sub);
-            font-size: 0.95rem;
-        }
-
-        /* Glass Card */
-        .card {
-            background: #ffffff;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            padding: 40px;
-            border: 1px solid #f1f2f4;
-        }
-
-        /* Form Controls */
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        .form-input {
-            width: 100%;
-            height: 56px;
-            padding: 0 20px;
-            border: 1.5px solid #f1f2f4;
-            border-radius: 16px;
-            font-size: 1rem;
-            background: #fbfbfc;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            outline: none;
-            display: flex;
+        .na-option {
+            display: none;
             align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            cursor: pointer;
+            user-select: none;
         }
 
-        /* Absolute normalization for date input */
-        input[type="date"].form-input {
-            padding: 0 16px;
-            height: 56px !important;
-            min-height: 56px !important;
-            appearance: none;
-            -webkit-appearance: none;
+        .na-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
         }
 
-        .form-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: #9ca3af;
-        }
-
-        /* Signature Styling */
         .signature-placeholder {
             width: 100%;
-            height: 120px;
-            border: 1.5px dashed #d1d5db;
+            height: 160px;
+            border: 2px dashed #e5e7eb;
             border-radius: 16px;
+            background: #fbfbfc;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #fbfbfc;
+            color: #9ca3af;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-sub);
-            position: relative;
             overflow: hidden;
+            position: relative;
+            transition: all 0.25s ease;
+            outline: none;
         }
 
-        .signature-placeholder:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
+        .signature-placeholder:focus,
+        .signature-placeholder:active {
+            border: 2px solid var(--primary) !important;
+            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1) !important;
+            background: #ffffff !important;
         }
 
         .signature-img {
-            max-height: 100%;
-            max-width: 100%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
         }
 
         /* Signature Modal */
-        .modal-overlay {
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg-overlay);
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(4px);
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
-            background: white;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 24px;
+            background: #fff;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 30px;
             padding: 24px;
             box-shadow: var(--shadow-lg);
-            animation: modalScale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes modalScale {
-            from {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.5;
         }
 
         .canvas-container {
             width: 100%;
-            aspect-ratio: 16/9;
-            background: #f3f4f6;
-            border: 2px solid #e5e7eb;
-            border-radius: 16px;
-            position: relative;
+            height: 160px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            margin: 16px 0;
             touch-action: none;
+            position: relative;
         }
 
-        #signatureCanvas {
+        canvas {
             width: 100%;
             height: 100%;
-            cursor: crosshair;
+            border-radius: 20px;
         }
 
-        .modal-footer {
-            display: flex;
+        .modal-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 20px;
         }
 
-        .btn-modal {
-            flex: 1;
-            height: 52px;
+        .btn-secondary {
+            height: 50px;
             border-radius: 100px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
             font-weight: 700;
+            color: #6b7280;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .btn-clear {
-            background: #f3f4f6;
-            color: var(--text-main);
+        .btn-primary {
+            height: 50px;
+            border-radius: 100px;
             border: none;
-        }
-
-        .btn-confirm {
             background: var(--primary);
-            color: white;
-            border: none;
-        }
-
-        .error-msg {
-            color: var(--primary);
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 8px;
-            display: none;
-        }
-
-        /* Submit Button */
-        .btn-submit {
-            width: 100%;
-            height: 64px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 100px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 8px 24px rgba(227, 6, 19, 0.15);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-top: 12px;
-        }
-
-        .btn-submit:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px rgba(227, 6, 19, 0.3);
-        }
-
-        .btn-submit:active {
-            transform: scale(0.97);
-        }
-
-        .btn-submit:disabled {
-            background: #d1d5db;
-            color: #9ca3af;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        /* Active Status Card */
-        .status-card {
-            background: #fffbeb;
-            border: 2px solid #fcd34d;
-            border-radius: var(--radius);
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 24px;
-            animation: pulse-border 2s infinite;
-        }
-
-        @keyframes pulse-border {
-            0% {
-                border-color: #fcd34d;
-            }
-
-            50% {
-                border-color: #fbbf24;
-            }
-
-            100% {
-                border-color: #fcd34d;
-            }
-        }
-
-        .status-badge {
-            display: inline-block;
-            background: #f59e0b;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 100px;
-            font-size: 1rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
-        .status-info {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 8px;
-        }
-
-        .status-time {
-            font-size: 0.9rem;
-            color: #b45309;
-        }
-
-        .btn-checkout-user {
-            width: 100%;
-            height: 56px;
-            background: #1f2937;
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 1.1rem;
+            color: #fff;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.2s;
-        }
-
-        .btn-checkout-user:hover {
-            background: #000;
-            transform: translateY(-2px);
-        }
-
-        /* Admin/Table View */
-        #adminView {
-            display: none;
-            max-width: 1000px;
-        }
-
-        .dashboard-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .table-wrapper {
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        #logTable {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        #logTable th {
-            background: #f9fafb;
-            padding: 16px;
-            text-align: left;
-            font-weight: 700;
-            color: var(--text-sub);
-            border-bottom: 2px solid var(--border);
-        }
-
-        #logTable td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .badge-in {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .badge-out {
-            background: #f3f4f6;
-            color: #4b5563;
-        }
-
-        .btn-checkout {
-            background: #0369a1;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-checkout:hover {
-            background: #075985;
-        }
-
-        .btn-delete {
-            color: #ef4444;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .btn-export {
-            background: #1f2937;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 640px) {
-            header {
-                padding: 6px 16px;
-            }
-
-            .logo-img {
-                height: 40px;
-            }
-
-            .container {
-                margin: 4px auto;
-                padding: 0 12px;
-            }
-
-            .section-header {
-                margin-bottom: 12px;
-            }
-
-            .section-header h2 {
-                font-size: 1.25rem;
-            }
-
-            .card {
-                padding: 16px;
-                border-radius: 12px;
-            }
-
-            .form-group {
-                margin-bottom: 10px;
-            }
-
-            .form-label {
-                margin-bottom: 4px;
-                font-size: 0.85rem;
-            }
-
-            .form-input {
-                height: 44px;
-                min-height: 44px;
-                /* Ensure consistency */
-                font-size: 0.9rem;
-                padding: 0 12px;
-            }
-
-            input[type="date"].form-input {
-                height: 44px !important;
-                min-height: 44px !important;
-            }
-
-            .btn-submit {
-                height: 48px;
-                margin-top: 8px;
-            }
-
-            #logTable {
-                font-size: 0.8rem;
-            }
-
-            .hide-mobile {
-                display: none;
-            }
         }
     </style>
 </head>
 
 <body>
-
-    <header>
-        <div class="logo-container">
-            <img src="logo.png" alt="NHIS Logo" class="logo-img" style="display: block; opacity: 1;"
-                onerror="this.src='https://via.placeholder.com/120x40?text=NHIS_Logo_Error'">
-        </div>
-        <button id="viewToggleBtn" class="btn-view-toggle" onclick="toggleView()">관리자 모드</button>
+    <header
+        style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #fff; border-bottom: 1.5px solid #f1f2f4;">
+        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcT8e6J%2FbtsLIuC6Z9S%2FiO6vJdDk7E0S7IkmE0D2L1%2Fimg.png"
+            alt="NHIS Logo" style="height: 54px; object-fit: contain;">
+        <button id="adminToggleBtn" onclick="requestAdminAccess()"
+            style="background: #fff; border: 1.5px solid var(--primary); padding: 8px 18px; border-radius: 100px; color: var(--primary); font-weight: 900; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-shadow: 0 2px 8px rgba(227, 6, 19, 0.05);">
+            관리자 모드
+        </button>
     </header>
 
-    <!-- User View: Data Entry -->
     <div id="userView" class="container">
+        <!-- Status Dashboard (Visible only when in-progress) -->
+        <div id="statusSection" class="card"
+            style="display: none; margin-bottom: 30px; text-align: center; border: 2px solid var(--primary); background: #ffffff;">
+            <div
+                style="display: inline-block; padding: 6px 12px; background: var(--primary); color: #fff; border-radius: 8px; font-weight: 800; font-size: 0.85rem; margin-bottom: 12px;">
+                입실 중</div>
+            <h2 id="statusWho"
+                style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">자격부과부 홍길동 님
+            </h2>
+            <div id="statusTimer"
+                style="font-size: 1.5rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 20px;">
+                00:00:00</div>
+            <button class="btn-submit" onclick="saveCheckout()" style="background: var(--text-main);">퇴실하기</button>
+        </div>
+
         <div id="entrySection">
-            <div class="section-header">
-                <h2 style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <span style="color: var(--primary);"></span> 제한·통제 구역 출입 명부
-                </h2>
-                <p>입실을 위해 정보를 입력해 주세요.</p>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <h1
+                    style="font-size: 1.45rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 12px; color: var(--text-main); text-align: center;">
+                    제한·통제 구역 출입 명부</h1>
+                <p
+                    style="color: var(--text-sub); margin-bottom: 30px; font-weight: 500; font-size: 0.95rem; text-align: center;">
+                    입실 정보를 정확히 입력해 주세요.</p>
             </div>
 
             <div class="card">
-                <div class="form-group">
-                    <label class="form-label" for="date">일자</label>
-                    <input type="text" id="date" class="form-input" placeholder="날짜를 선택하세요" readonly>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">일자</label>
+                    <input type="text" id="date" class="form-input" readonly placeholder="날짜 선택">
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="dept">소속(기관명)</label>
-                    <div class="custom-select-container" id="deptDropdown">
-                        <div class="custom-select-trigger" id="deptTrigger" onclick="toggleDropdown()">
-                            <span id="selectedDeptName">기관을 선택해 주세요</span>
-                        </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">소속(부서명)</label>
+                    <div class="custom-select" id="deptSelect">
+                        <div class="custom-select-trigger placeholder" onclick="toggleDeptDropdown()">기관을 선택하세요</div>
                         <div class="custom-options" id="deptOptions">
-                            <div class="custom-option" data-value="자격부과부" onclick="selectOption(this)">자격부과부</div>
-                            <div class="custom-option" data-value="징수부" onclick="selectOption(this)">징수부</div>
-                            <div class="custom-option" data-value="지사업무지원1부" onclick="selectOption(this)">지사업무지원1부</div>
-                            <div class="custom-option" data-value="지사업무지원2부" onclick="selectOption(this)">지사업무지원2부</div>
-                            <div class="custom-option" data-value="행정지원부" onclick="selectOption(this)">행정지원부</div>
-                            <div class="custom-option" data-value="요양지원1부" onclick="selectOption(this)">요양지원1부</div>
-                            <div class="custom-option" data-value="요양지원2부" onclick="selectOption(this)">요양지원2부</div>
-                            <div class="custom-option" data-value="요양운영부" onclick="selectOption(this)">요양운영부</div>
-                            <div class="custom-option" data-value="건강관리부" onclick="selectOption(this)">건강관리부</div>
-                            <div class="custom-option" data-value="건강지원센터" onclick="selectOption(this)">건강지원센터</div>
-                            <div class="custom-option" data-value="보험급여부" onclick="selectOption(this)">보험급여부</div>
-                            <div class="custom-option" data-value="요양기관지원" onclick="selectOption(this)">요양기관지원</div>
-                            <div class="custom-option" data-value="기타" onclick="selectOption(this)">기타 직접입력</div>
+                            <div class="custom-option" onclick="selectDept('자격부과부')">자격부과부</div>
+                            <div class="custom-option" onclick="selectDept('징수부')">징수부</div>
+                            <div class="custom-option" onclick="selectDept('지사업무지원1부')">지사업무지원1부</div>
+                            <div class="custom-option" onclick="selectDept('지사업무지원2부')">지사업무지원2부</div>
+                            <div class="custom-option" onclick="selectDept('행정지원부')">행정지원부</div>
+                            <div class="custom-option" onclick="selectDept('요양지원부1부')">요양지원부1부</div>
+                            <div class="custom-option" onclick="selectDept('요양지원부2부')">요양지원부2부</div>
+                            <div class="custom-option" onclick="selectDept('요양운영부')">요양운영부</div>
+                            <div class="custom-option" onclick="selectDept('건강관리부')">건강관리부</div>
+                            <div class="custom-option" onclick="selectDept('건강지원센터')">건강지원센터</div>
+                            <div class="custom-option" onclick="selectDept('보험급여부')">보험급여부</div>
+                            <div class="custom-option" onclick="selectDept('요양기관지원부')">요양기관지원부</div>
+                            <div class="custom-option" onclick="selectDept('기타')">기타 직접입력</div>
                         </div>
                     </div>
-                    <input type="text" id="dept" class="form-input" style="display: none; margin-top: 8px;"
-                        placeholder="기관명을 직접 입력하세요" oninput="checkFormValidity()">
+                    <!-- Hidden by default with !important priority -->
+                    <input type="text" id="deptDirectInput" class="form-input"
+                        style="display: none !important; margin-top: 12px;" placeholder="부서명을 직접 입력해 주세요"
+                        oninput="checkForm()">
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="position">직위(직급)</label>
-                    <input type="text" id="position" class="form-input" placeholder="예: 6급"
-                        oninput="checkFormValidity()">
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">직위(직급)</label>
+                    <div class="custom-select" id="posSelect">
+                        <div class="custom-select-trigger placeholder" onclick="togglePosDropdown()">직급을 선택하세요</div>
+                        <div class="custom-options" id="posOptions">
+                            <div class="custom-option" onclick="selectPos('1급')">1급</div>
+                            <div class="custom-option" onclick="selectPos('2급')">2급</div>
+                            <div class="custom-option" onclick="selectPos('3급')">3급</div>
+                            <div class="custom-option" onclick="selectPos('4급')">4급</div>
+                            <div class="custom-option" onclick="selectPos('5급')">5급</div>
+                            <div class="custom-option" onclick="selectPos('6급')">6급</div>
+                            <div class="custom-option" onclick="selectPos('인턴')">인턴</div>
+                            <div class="custom-option" onclick="selectPos('기타')">기타 직접입력</div>
+                        </div>
+                    </div>
+                    <!-- Hidden by default for Position Direct Input -->
+                    <input type="text" id="posDirectInput" class="form-input"
+                        style="display: none !important; margin-top: 12px;" placeholder="직급을 직접 입력해 주세요"
+                        oninput="checkForm()">
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="name">성명</label>
-                    <input type="text" id="name" class="form-input" placeholder="이름을 입력하세요"
-                        oninput="checkFormValidity()">
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">성명</label>
+                    <input type="text" id="name" class="form-input" placeholder="성명을 입력하세요" oninput="checkForm()">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">자필 서명</label>
-                    <div id="signaturePreview" class="signature-placeholder" onclick="openSignatureModal()">
-                        <span id="signText" style="margin-top: 8px; font-weight: 700;">여기를 클릭하여 서명해 주세요</span>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">자필서명</label>
+                    <div id="signatureContainer" class="signature-placeholder" onclick="openSignatureModal()"
+                        tabindex="0">
+                        <span id="signatureHint" style="font-size: 0.85rem; padding: 0 10px; text-align: center;">서명란에
+                            성함을 정자(正字)로 모두 기재 바랍니다.</span>
                         <img id="signatureImage" class="signature-img" style="display: none;">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="empNo">사원번호</label>
-                    <input type="text" id="empNo" class="form-input" placeholder="사원번호를 입력하세요"
-                        oninput="checkFormValidity()">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="purpose">용무</label>
-                    <input type="text" id="purpose" class="form-input" placeholder="방문 목적을 입력하세요"
-                        oninput="checkFormValidity()">
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">사원번호</label>
+                    <div class="id-container">
+                        <input type="text" id="idNum" class="form-input" placeholder="사원번호 6자리를 입력하세요"
+                            oninput="checkForm()">
+                        <label id="naContainer" class="na-option">
+                            <input type="checkbox" id="idNumNa" class="na-checkbox" onchange="toggleIdNumNa()"> 해당없음
+                        </label>
+                    </div>
                 </div>
 
-                <button id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>
-                    <span>입실하기</span>
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-        </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="input-label">용무</label>
+                    <input type="text" id="purpose" class="form-input" placeholder="방문 목적을 입력하세요" oninput="checkForm()">
+                </div>
 
-        <!-- Active Status Section (Show when checked-in) -->
-        <div id="activeStatusSection" style="display: none;">
-            <div class="section-header">
-                <h2>현재 입실 상태</h2>
-            </div>
-            <div class="status-card">
-                <div class="status-badge">입실중</div>
-                <div id="activeUserName" class="status-info">사용자님</div>
-                <div id="activeInTime" class="status-time">입실 시간: 00:00</div>
-                <button class="btn-checkout-user" onclick="userCheckOut()">
-                    퇴실하기
-                </button>
+                <button id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>입실하기</button>
             </div>
         </div>
+        </thead>
+        <tbody id="logTableBody" style="font-weight: 500; color: var(--text-main);">
+            <!-- Rows will be injected here -->
+        </tbody>
+        </table>
     </div>
     </div>
 
-    <!-- Signature Modal -->
-    <div id="signatureModal" class="modal-overlay">
+    <!-- Signature Modal HTML -->
+    <div id="signatureModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    서명란에 성함을 정자(正字)로<br>모두 기재하여 주시기 바랍니다.
-                </div>
-            </div>
+            <h3 style="font-weight: 800; text-align: center;">자필 서명</h3>
+            <p style="font-size: 0.85rem; color: #e30613; margin-top: 4px; text-align: center; font-weight: 700;">※ 성함을
+                정자(正字)로 기재해 주세요.</p>
             <div class="canvas-container">
                 <canvas id="signatureCanvas"></canvas>
             </div>
-            <div id="signatureError" class="error-msg">서명을 해주세요.</div>
-            <div class="modal-footer">
-                <button class="btn-modal btn-clear" onclick="clearSignature()">초기화</button>
-                <button class="btn-modal btn-confirm" onclick="saveSignature()">확인</button>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="clearSignature()">다시 쓰기</button>
+                <button class="btn-primary" onclick="saveSignature()">서명 완료</button>
             </div>
+            <button onclick="closeSignatureModal()"
+                style="width: 100%; margin-top: 12px; background: none; border: none; color: #9ca3af; font-size: 0.9rem; font-weight: 600; cursor: pointer;">닫기</button>
         </div>
     </div>
 
-    <!-- Admin View: Record Logs -->
-    <div id="adminView" class="container">
-        <div class="dashboard-controls">
-            <h2>📋 출입 로그 현황</h2>
-            <button class="btn-export" onclick="exportData()">
-                <svg width="16" height="16" fill="white" viewBox="0 0 20 20">
-                    <path
-                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z">
-                    </path>
-                </svg>
-                CSV 내보내기
-            </button>
-        </div>
-
-        <div class="table-wrapper" style="overflow-x: auto;">
-            <table id="logTable">
-                <thead>
-                    <tr>
-                        <th>일자/상태</th>
-                        <th>성명(사원번호)</th>
-                        <th class="hide-mobile">소속/직위</th>
-                        <th class="hide-mobile">용무</th>
-                        <th>입실</th>
-                        <th>퇴실/관리</th>
-                    </tr>
-                </thead>
-                <tbody id="logBody">
-                    <!-- Data will be injected here -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+    <!-- Logic elements preserved from previous stable builds -->
     <script>
-        let isAdmin = false;
-        let activeSession = null;
-        let signatureData = null;
-        let flatpickrInstance = null;
+        // Core Logic for Reverted Stable Version
+        let timerInterval = null;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize Flatpickr
-            flatpickrInstance = flatpickr("#date", {
-                locale: "ko",
-                dateFormat: "Y-m-d",
-                defaultDate: new Date(),
-                minDate: "2000-07-01",
-                maxDate: "today",
-                disableMobile: "true",
-                animate: true,
-                monthSelectorType: "dropdown",
-                onReady: function (instance) {
-                    // Ensure it runs after Flatpickr settles initial paint
-                    setTimeout(() => rebuildYearDropdown(instance), 0);
+        function resetForm() {
+            const dateInput = document.getElementById('date');
+            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
-                    const calendar = instance.calendarContainer;
-                    if (!calendar) return;
-
-                    const daysContainer = instance.daysContainer;
-                    let startY = 0;
-                    let isDragging = false;
-
-                    // Mouse/Touch Start
-                    const startDrag = (e) => {
-                        startY = e.touches ? e.touches[0].clientY : e.clientY;
-                        isDragging = true;
-                        daysContainer.style.transition = 'none';
-                    };
-
-                    // Mouse/Touch Move - Visible dragging
-                    const moveDrag = (e) => {
-                        if (!isDragging) return;
-                        const currentY = e.touches ? e.touches[0].clientY : e.clientY;
-                        const diff = currentY - startY;
-                        // Limit drag distance
-                        const moveDist = Math.max(-80, Math.min(80, diff));
-                        daysContainer.style.transform = `translateY(${moveDist}px)`;
-                    };
-
-                    // Mouse/Touch End - Trigger change or reset
-                    const endDrag = (e) => {
-                        if (!isDragging) return;
-                        isDragging = false;
-                        const endY = (e.changedTouches ? e.changedTouches[0].clientY : (e.clientY || startY));
-                        const diff = startY - endY;
-
-                        if (Math.abs(diff) > 40) {
-                            const dir = diff > 0 ? 1 : -1;
-                            triggerMonthChangeWithMotion(instance, dir);
-                        } else {
-                            daysContainer.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-                            daysContainer.style.transform = 'translateY(0)';
-                        }
-                    };
-
-                    calendar.addEventListener('mousedown', startDrag);
-                    calendar.addEventListener('touchstart', startDrag, { passive: true });
-                    window.addEventListener('mousemove', moveDrag);
-                    calendar.addEventListener('touchmove', moveDrag, { passive: false });
-                    window.addEventListener('mouseup', endDrag);
-                    calendar.addEventListener('touchend', endDrag, { passive: true });
-
-                    // Scroll Implementation
-                    calendar.addEventListener('wheel', (e) => {
-                        e.preventDefault();
-                        const dir = e.deltaY > 0 ? 1 : -1;
-                        triggerMonthChangeWithMotion(instance, dir);
-                    }, { passive: false });
-                },
-                onMonthChange: function (selectedDates, dateStr, instance) {
-                    instance.daysContainer.style.transform = 'translateY(0)';
-                    rebuildYearDropdown(instance);
-                },
-                onYearChange: function (selectedDates, dateStr, instance) {
-                    rebuildYearDropdown(instance);
-                },
-                onChange: () => checkFormValidity()
-            });
-
-            // Check if there is an active session in progress
-            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
-            activeSession = records.find(r => r.outTime === null);
-
-            initSignaturePad();
-            renderUI();
-            loadRecords();
-
-            // Handle clicking outside to close dropdown
-            window.addEventListener('click', (e) => {
-                const dropdown = document.getElementById('deptDropdown');
-                if (!dropdown.contains(e.target)) {
-                    dropdown.classList.remove('open');
-                }
-            });
-        });
-
-        // --- Custom Dropdown Logic ---
-        function toggleDropdown() {
-            document.getElementById('deptDropdown').classList.toggle('open');
-        }
-
-        function selectOption(element) {
-            const val = element.getAttribute('data-value');
-            const text = element.innerText;
-            const input = document.getElementById('dept');
-            const triggerText = document.getElementById('selectedDeptName');
-
-            // Reset selection style
-            document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-
-            triggerText.innerText = text;
-            triggerText.style.color = 'var(--text-main)';
-
-            if (val === '기타') {
-                input.style.display = 'block';
-                input.value = '';
-            } else {
-                input.style.display = 'none';
-                input.value = val;
+            // Dept Reset
+            const deptTrigger = document.querySelector('#deptSelect .custom-select-trigger');
+            if (deptTrigger) {
+                deptTrigger.innerText = '기관을 선택하세요';
+                deptTrigger.classList.add('placeholder');
+                deptTrigger.style.backgroundColor = '#ffffff';
+            }
+            const deptDirectInput = document.getElementById('deptDirectInput');
+            if (deptDirectInput) {
+                deptDirectInput.style.setProperty('display', 'none', 'important');
+                deptDirectInput.value = '';
             }
 
-            document.getElementById('deptDropdown').classList.remove('open');
-            checkFormValidity();
+            // Position Reset
+            const posTrigger = document.querySelector('#posSelect .custom-select-trigger');
+            if (posTrigger) {
+                posTrigger.innerText = '직급을 선택하세요';
+                posTrigger.classList.add('placeholder');
+                posTrigger.style.backgroundColor = '#ffffff';
+            }
+            const posDirectInput = document.getElementById('posDirectInput');
+            if (posDirectInput) {
+                posDirectInput.style.setProperty('display', 'none', 'important');
+                posDirectInput.value = '';
+            }
+
+            document.getElementById('name').value = '';
+            document.getElementById('idNum').value = '';
+            document.getElementById('idNum').disabled = false;
+            document.getElementById('idNumNa').checked = false;
+            const naContainer = document.getElementById('naContainer');
+            if (naContainer) naContainer.style.display = 'none';
+            document.getElementById('purpose').value = '';
+
+            // Signature Reset
+            currentSignature = null;
+            const sigImg = document.getElementById('signatureImage');
+            const sigHint = document.getElementById('signatureHint');
+            if (sigImg) sigImg.style.display = 'none';
+            if (sigHint) sigHint.style.display = 'block';
+
+            checkForm();
         }
 
-        function triggerMonthChangeWithMotion(instance, dir) {
-            const daysContainer = instance.daysContainer;
-            if (!daysContainer) {
-                instance.changeMonth(dir);
+        function renderUI() {
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const activeEntry = records.find(r => !r.checkOutTime);
+
+            const entrySection = document.getElementById('entrySection');
+            const statusSection = document.getElementById('statusSection');
+
+            if (activeEntry) {
+                if (entrySection) entrySection.style.display = 'none';
+                if (statusSection) statusSection.style.display = 'block';
+                const statusWho = document.getElementById('statusWho');
+                if (statusWho) statusWho.innerText = `${activeEntry.dept} ${activeEntry.name} 님`;
+                startTimer(activeEntry.checkInTime);
+            } else {
+                if (entrySection) entrySection.style.display = 'block';
+                if (statusSection) statusSection.style.display = 'none';
+                stopTimer();
+                resetForm();
+            }
+
+            // Admin Dashboard Data
+            const todayISO = new Date().toISOString().split('T')[0];
+            const recordsToday = records.filter(r => r.date === todayISO);
+
+            const totalCountEl = document.getElementById('totalCount');
+            const todayCountEl = document.getElementById('todayCount');
+            const adminView = document.getElementById('adminView');
+
+            if (totalCountEl) totalCountEl.innerText = records.length;
+            if (todayCountEl) todayCountEl.innerText = recordsToday.length;
+
+            // Admin Table
+            const tbody = document.getElementById('logTableBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+                [...records].reverse().forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = "1px solid #f1f2f4";
+
+                    const formatTime = (isoStr) => {
+                        if (!isoStr) return "-";
+                        const d = new Date(isoStr);
+                        return d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+                    };
+
+                    tr.innerHTML = `
+                        <td style="padding: 15px 20px;">${r.date}</td>
+                        <td style="padding: 15px 20px;">${r.dept}</td>
+                        <td style="padding: 15px 20px;">${r.name}</td>
+                        <td style="padding: 15px 20px; font-weight: 800;">${formatTime(r.checkInTime)}</td>
+                        <td style="padding: 15px 20px; color: var(--primary); font-weight: 800;">${formatTime(r.checkOutTime)}</td>
+                        <td style="padding: 15px 20px;">${r.purpose}</td>
+                        <td style="padding: 8px 20px;"><img src="${r.signature}" style="height: 35px; border: 1px solid #eee; border-radius: 4px;"></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function startTimer(startTimeStr) {
+            stopTimer();
+            const startTime = new Date(startTimeStr).getTime();
+
+            function update() {
+                const now = new Date().getTime();
+                const diff = now - startTime;
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('statusTimer').innerText =
+                    `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            update();
+            timerInterval = setInterval(update, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function saveRecord() {
+            const date = document.getElementById('date').value;
+            const deptDropdown = document.querySelector('#deptSelect .custom-select-trigger').innerText;
+            const deptDirect = document.getElementById('deptDirectInput').value;
+            const posDropdown = document.querySelector('#posSelect .custom-select-trigger').innerText;
+            const posDirect = document.getElementById('posDirectInput').value;
+            const name = document.getElementById('name').value;
+            const idNum = document.getElementById('idNum').value;
+            const idNumNa = document.getElementById('idNumNa').checked;
+            const purpose = document.getElementById('purpose').value;
+
+            const finalDept = deptDropdown === '기타 직접입력' ? deptDirect : deptDropdown;
+            const finalPos = posDropdown === '기타 직접입력' ? posDirect : posDropdown;
+            const finalId = idNumNa ? '해당없음' : idNum;
+
+            const newRecord = {
+                id: Date.now(),
+                date,
+                dept: finalDept,
+                position: finalPos,
+                name,
+                idNum: finalId,
+                purpose,
+                checkInTime: new Date().toISOString(),
+                signature: currentSignature
+            };
+
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            records.push(newRecord);
+            localStorage.setItem('access_records', JSON.stringify(records));
+
+            renderUI();
+        }
+
+        function saveCheckout() {
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const activeIdx = records.findIndex(r => !r.checkOutTime);
+            if (activeIdx !== -1) {
+                records[activeIdx].checkOutTime = new Date().toISOString();
+                localStorage.setItem('access_records', JSON.stringify(records));
+                alert("퇴실처리 되었습니다.");
+                renderUI();
+            }
+        }
+
+        function requestAdminAccess() {
+            const password = prompt("관리자 비밀번호를 입력해주세요.");
+            if (password === '1234') {
+                document.getElementById('userView').style.display = 'none';
+                document.getElementById('adminView').style.display = 'block';
+                document.getElementById('adminToggleBtn').style.display = 'none';
+                renderUI();
+            } else if (password !== null) {
+                alert("비밀번호가 올바르지 않습니다.");
+            }
+        }
+
+        function hideAdminLogs() {
+            document.getElementById('adminView').style.display = 'none';
+            document.getElementById('userView').style.display = 'block';
+            document.getElementById('adminToggleBtn').style.display = 'block';
+            renderUI();
+        }
+
+        // Global state for signature
+        let signaturePad = null;
+        let currentSignature = null;
+
+        function initSignaturePad() {
+            const canvas = document.getElementById('signatureCanvas');
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)'
+            });
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        }
+
+        function resizeCanvas() {
+            const canvas = document.getElementById('signatureCanvas');
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            if (signaturePad) signaturePad.clear();
+        }
+
+        function openSignatureModal() {
+            document.getElementById('signatureModal').classList.add('active');
+            if (!signaturePad) initSignaturePad();
+            else signaturePad.clear();
+        }
+
+        function closeSignatureModal() {
+            document.getElementById('signatureModal').classList.remove('active');
+        }
+
+        function clearSignature() {
+            if (signaturePad) signaturePad.clear();
+        }
+
+        function saveSignature() {
+            if (signaturePad.isEmpty()) {
+                alert("서명이 누락되었습니다. 서명란에 성함을 정자(正字)로 기재해 주세요.");
                 return;
             }
-
-            // 1. Create a clone to show the outgoing month
-            const clone = daysContainer.cloneNode(true);
-            clone.style.position = 'absolute';
-            clone.style.top = '0';
-            clone.style.left = '0';
-            clone.style.width = '100%';
-            clone.style.zIndex = '1';
-            clone.style.pointerEvents = 'none';
-            daysContainer.parentElement.appendChild(clone);
-
-            // 2. Trigger reflow to ensure clean start
-            daysContainer.style.animation = 'none';
-            void daysContainer.offsetWidth;
-
-            // 3. Add animation classes
-            if (dir > 0) {
-                clone.className = 'flatpickr-days slide-up-out';
-                daysContainer.className = 'flatpickr-days slide-up-in';
-            } else {
-                clone.className = 'flatpickr-days slide-down-out';
-                daysContainer.className = 'flatpickr-days slide-down-in';
-            }
-
-            // 4. Change actual metadata
-            instance.changeMonth(dir);
-
-            setTimeout(() => {
-                if (clone && clone.parentNode) {
-                    clone.parentNode.removeChild(clone);
-                }
-                // Reset main container class if it was changed
-                if (daysContainer) daysContainer.className = 'flatpickr-days';
-            }, 450);
+            currentSignature = signaturePad.toDataURL();
+            const img = document.getElementById('signatureImage');
+            img.src = currentSignature;
+            img.style.display = 'block';
+            document.getElementById('signatureHint').style.display = 'none';
+            closeSignatureModal();
+            checkForm();
         }
 
-        // --- Persistent Year Dropdown Rebuild Logic ---
+        function checkForm() {
+            const date = document.getElementById('date').value;
+            const deptTrigger = document.querySelector('#deptSelect .custom-select-trigger');
+            const deptDropdown = deptTrigger ? deptTrigger.innerText : '';
+            const deptDirect = document.getElementById('deptDirectInput').value;
+            const posTrigger = document.querySelector('#posSelect .custom-select-trigger');
+            const posDropdown = posTrigger ? posTrigger.innerText : '';
+            const posDirect = document.getElementById('posDirectInput').value;
+            const name = document.getElementById('name').value;
+            const idNum = document.getElementById('idNum').value;
+            const idNumNa = document.getElementById('idNumNa').checked;
+            const purpose = document.getElementById('purpose').value;
+
+            const isDeptValid = (deptDropdown !== '기관을 선택하세요' && (deptDropdown !== '기타 직접입력' || deptDirect.trim() !== ''));
+            const isPosValid = (posDropdown !== '직급을 선택하세요' && (posDropdown !== '기타 직접입력' || posDirect.trim() !== ''));
+            const isIdValid = idNumNa || idNum.trim() !== '';
+
+            const isValid = date && isDeptValid && isPosValid && name.trim() && isIdValid && purpose.trim() && currentSignature;
+            document.getElementById('submitBtn').disabled = !isValid;
+        }
+
+        function toggleIdNumNa() {
+            const idInput = document.getElementById('idNum');
+            const isNa = document.getElementById('idNumNa').checked;
+            idInput.disabled = isNa;
+            if (isNa) idInput.value = '';
+            checkForm();
+        }
+
         function rebuildYearDropdown(instance) {
             const calendar = instance.calendarContainer;
             if (!calendar) return;
-
             const yearWrapper = calendar.querySelector('.numInputWrapper');
             if (yearWrapper) {
                 yearWrapper.innerHTML = '';
-
+                yearWrapper.style.width = 'fit-content';
                 const yearSelect = document.createElement('select');
                 yearSelect.className = 'flatpickr-year-dropdown';
-
-                // Range: NHIS Foundation (2000) to Future (2051)
-                for (let y = 2000; y <= 2051; y++) {
+                const currentYear = new Date().getFullYear();
+                for (let y = 2000; y <= currentYear; y++) {
                     const opt = document.createElement('option');
                     opt.value = y;
-                    opt.text = y;
-                    if (y === instance.currentYear) opt.selected = true;
+                    opt.text = y + '년';
+                    if (y === instance.currentYear) {
+                        opt.selected = true;
+                    }
                     yearSelect.appendChild(opt);
                 }
+                // Explicitly sync the value to ensure 2026 is the focused one
+                yearSelect.value = instance.currentYear;
 
                 yearSelect.addEventListener('change', (e) => {
                     const selectedYear = parseInt(e.target.value);
-                    const now = new Date();
-                    if (selectedYear > now.getFullYear()) {
+                    if (selectedYear > currentYear) {
                         alert("미래의 날짜는 선택하실 수 없습니다.");
-                        e.target.value = instance.currentYear;
+                        yearSelect.value = instance.currentYear;
                         return;
                     }
                     instance.changeYear(selectedYear);
                 });
-
-                const label = document.createElement('span');
-                label.className = 'year-label-text';
-                label.innerText = ' 년';
-
                 yearWrapper.appendChild(yearSelect);
-                yearWrapper.appendChild(label);
             }
         }
 
-        // Form Validity Check
-        function checkFormValidity() {
-            const date = document.getElementById('date').value;
-            const dept = document.getElementById('dept').value.trim();
-            const position = document.getElementById('position').value.trim();
-            const name = document.getElementById('name').value.trim();
-            const empNo = document.getElementById('empNo').value.trim();
-            const purpose = document.getElementById('purpose').value.trim();
+        flatpickr("#date", {
+            locale: "ko",
+            dateFormat: "Y-m-d",
+            defaultDate: new Date(),
+            maxDate: "today", // Block future dates explicitly
+            animate: true,
+            onReady: (d, s, i) => rebuildYearDropdown(i),
+            onMonthChange: (d, s, i) => rebuildYearDropdown(i),
+            onYearChange: (d, s, i) => rebuildYearDropdown(i)
+        });
 
-            const isValid = date && dept && position && name && empNo && purpose && signatureData;
-            document.getElementById('submitBtn').disabled = !isValid;
+        function toggleDeptDropdown() {
+            const selectContainer = document.getElementById('deptSelect');
+            const opts = document.getElementById('deptOptions');
+            const isOpen = opts.style.display === 'block';
+
+            // Close other dropdowns first
+            closeAllDropdowns();
+
+            opts.style.display = isOpen ? 'none' : 'block';
+            if (!isOpen) { selectContainer.classList.add('open'); }
         }
 
-        // --- Signature Pad Logic ---
-        let canvas, ctx, drawing = false;
+        function selectDept(val) {
+            const trigger = document.querySelector('#deptSelect .custom-select-trigger');
+            const directInput = document.getElementById('deptDirectInput');
+            const opts = document.getElementById('deptOptions');
+            const selectContainer = document.getElementById('deptSelect');
 
-        function initSignaturePad() {
-            canvas = document.getElementById('signatureCanvas');
-            ctx = canvas.getContext('2d');
+            trigger.innerText = val === '기타' ? '기타 직접입력' : val;
+            trigger.classList.remove('placeholder');
+            opts.style.display = 'none';
+            selectContainer.classList.remove('open');
 
-            // Resize canvas to cover container
-            function resize() {
-                const rect = canvas.parentElement.getBoundingClientRect();
-                canvas.width = rect.width;
-                canvas.height = rect.height;
-                ctx.lineWidth = 3;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = '#111827';
-            }
-
-            window.addEventListener('resize', resize);
-            resize();
-
-            // Support Touch & Mouse
-            const getPos = (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                return { x: clientX - rect.left, y: clientY - rect.top };
-            };
-
-            const start = (e) => {
-                drawing = true;
-                const pos = getPos(e);
-                ctx.beginPath();
-                ctx.moveTo(pos.x, pos.y);
-                document.getElementById('signatureError').style.display = 'none';
-            };
-
-            const move = (e) => {
-                if (!drawing) return;
-                e.preventDefault();
-                const pos = getPos(e);
-                ctx.lineTo(pos.x, pos.y);
-                ctx.stroke();
-            };
-
-            const stop = () => { drawing = false; };
-
-            canvas.addEventListener('mousedown', start);
-            canvas.addEventListener('mousemove', move);
-            window.addEventListener('mouseup', stop);
-
-            canvas.addEventListener('touchstart', start);
-            canvas.addEventListener('touchmove', move);
-            canvas.addEventListener('touchend', stop);
-        }
-
-        function openSignatureModal() {
-            document.getElementById('signatureModal').style.display = 'flex';
-            setTimeout(() => {
-                const rect = canvas.parentElement.getBoundingClientRect();
-                canvas.width = rect.width;
-                canvas.height = rect.height;
-                ctx.lineWidth = 3;
-                ctx.lineCap = 'round';
-            }, 50);
-        }
-
-        function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function saveSignature() {
-            // Check if canvas is empty
-            const blank = document.createElement('canvas');
-            blank.width = canvas.width;
-            blank.height = canvas.height;
-            if (canvas.toDataURL() === blank.toDataURL()) {
-                document.getElementById('signatureError').style.display = 'block';
-                return;
-            }
-
-            signatureData = canvas.toDataURL();
-
-            // UI Transition
-            const signImg = document.getElementById('signatureImage');
-            const signIcon = document.getElementById('signIcon');
-            const signText = document.getElementById('signText');
-
-            signImg.src = signatureData;
-            signImg.style.display = 'block';
-            signIcon.style.display = 'none';
-            signText.style.display = 'none';
-
-            document.getElementById('signatureModal').style.display = 'none';
-            checkFormValidity();
-        }
-
-        // Render UI based on active session
-        function renderUI() {
-            const entrySection = document.getElementById('entrySection');
-            const activeStatusSection = document.getElementById('activeStatusSection');
-
-            if (activeSession) {
-                entrySection.style.display = 'none';
-                activeStatusSection.style.display = 'block';
-                document.getElementById('activeUserName').innerText = `${activeSession.name} (${activeSession.empNo}) 님`;
-                document.getElementById('activeInTime').innerText = `입실 시간: ${activeSession.inTime}`;
+            // Only reveal the box and N/A option when '기타' is truly selected
+            if (val === '기타') {
+                directInput.style.setProperty('display', 'block', 'important');
+                document.getElementById('naContainer').style.display = 'flex';
+                directInput.focus();
             } else {
-                entrySection.style.display = 'block';
-                activeStatusSection.style.display = 'none';
-                resetForm();
-            }
-        }
-
-        // Save Record Function
-        function saveRecord() {
-            const date = document.getElementById('date').value;
-            const dept = document.getElementById('dept').value.trim();
-            const position = document.getElementById('position').value.trim();
-            const name = document.getElementById('name').value.trim();
-            const empNo = document.getElementById('empNo').value.trim();
-            const purpose = document.getElementById('purpose').value.trim();
-
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('ko-KR', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            });
-
-            const record = {
-                id: Date.now(),
-                date: date,
-                dept: dept,
-                position: position,
-                name: name,
-                empNo: empNo,
-                purpose: purpose,
-                inTime: timeStr,
-                outTime: null,
-                signature: signatureData
-            };
-
-            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
-            records.unshift(record);
-            localStorage.setItem('nhisLogs', JSON.stringify(records));
-
-            activeSession = record;
-
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<span>처리 중...</span>';
-
-            setTimeout(() => {
-                alert('입실 기록이 정상적으로 제출되었습니다.');
-                renderUI();
-                loadRecords();
-                btn.innerHTML = '<span>기록 제출하기</span><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>';
-            }, 300);
-        }
-
-        function resetForm() {
-            document.getElementById('selectedDeptName').innerText = '기관을 선택해 주세요';
-            document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
-            document.getElementById('dept').value = '';
-            document.getElementById('dept').style.display = 'none';
-            document.getElementById('position').value = '';
-            document.getElementById('name').value = '';
-            document.getElementById('empNo').value = '';
-            document.getElementById('purpose').value = '';
-            document.getElementById('submitBtn').disabled = true;
-
-            // Reset Signature
-            signatureData = null;
-            document.getElementById('signatureImage').style.display = 'none';
-            document.getElementById('signIcon').style.display = 'block';
-            document.getElementById('signText').style.display = 'block';
-
-            if (flatpickrInstance) {
-                flatpickrInstance.setDate(new Date());
-            }
-        }
-
-        // User Manual Checkout
-        function userCheckOut() {
-            if (!activeSession) return;
-            if (!confirm('퇴실 처리를 하시겠습니까?')) return;
-
-            checkOut(activeSession.id);
-            activeSession = null;
-            alert('퇴실 처리가 완료되었습니다.');
-            renderUI();
-        }
-
-        // Admin/Core Checkout Logic
-        function checkOut(id) {
-            let records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
-            const index = records.findIndex(r => r.id === id);
-
-            if (index !== -1) {
-                const now = new Date();
-                records[index].outTime = now.toLocaleTimeString('ko-KR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                });
-                localStorage.setItem('nhisLogs', JSON.stringify(records));
-
-                // If the checkout out record was the active session, clear it
-                if (activeSession && activeSession.id === id) {
-                    activeSession = null;
-                    renderUI();
-                }
-
-                loadRecords();
-            }
-        }
-
-        // Load Records (Admin Table)
-        function loadRecords() {
-            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
-            const tbody = document.getElementById('logBody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            records.forEach(r => {
-                const tr = document.createElement('tr');
-                const isCheckedOut = r.outTime !== null;
-
-                tr.innerHTML = `
-                    <td>
-                        <div style="font-weight: 700;">${r.date.slice(5)}</div>
-                        <span class="badge ${isCheckedOut ? 'badge-out' : 'badge-in'}">
-                            ${isCheckedOut ? '완료' : '진행중'}
-                        </span>
-                    </td>
-                    <td>
-                        <div style="font-weight: 700;">${r.name}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-sub);">${r.empNo || '-'}</div>
-                        ${r.signature ? `<img src="${r.signature}" style="height: 20px; margin-top: 4px; display: block; filter: grayscale(1);">` : ''}
-                    </td>
-                    <td class="hide-mobile">
-                        <div>${r.dept || '-'}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-sub);">${r.position || '-'}</div>
-                    </td>
-                    <td class="hide-mobile">${r.purpose}</td>
-                    <td style="color: #2563eb; font-weight: 600;">${r.inTime}</td>
-                    <td>
-                        ${!isCheckedOut ?
-                        `<button class="btn-checkout" onclick="checkOut(${r.id})">퇴실처리</button>` :
-                        `<span style="color: #ef4444; font-weight: 600;">${r.outTime}</span>`
-                    }
-                        <button class="btn-delete" onclick="deleteRecord(${r.id})">
-                             <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                             </svg>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function deleteRecord(id) {
-            if (!confirm('기록을 삭제하시겠습니까?')) return;
-            let records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
-            records = records.filter(r => r.id !== id);
-            localStorage.setItem('nhisLogs', JSON.stringify(records));
-
-            if (activeSession && activeSession.id === id) {
-                activeSession = null;
-                renderUI();
+                directInput.style.setProperty('display', 'none', 'important');
+                document.getElementById('naContainer').style.display = 'none';
+                document.getElementById('idNumNa').checked = false;
+                document.getElementById('idNum').disabled = false;
+                directInput.value = '';
             }
 
-            loadRecords();
+            checkForm();
         }
 
-        function toggleView() {
-            if (!isAdmin) {
-                const pw = prompt('관리자 암호를 입력하세요 (기본: 1234)');
-                if (pw === '1234') {
-                    isAdmin = true;
-                    document.getElementById('userView').style.display = 'none';
-                    document.getElementById('adminView').style.display = 'block';
-                    document.getElementById('viewToggleBtn').innerText = '사용자 모드';
-                } else {
-                    alert('비밀번호가 올바르지 않습니다.');
-                }
+        function togglePosDropdown() {
+            const selectContainer = document.getElementById('posSelect');
+            const opts = document.getElementById('posOptions');
+            const isOpen = opts.style.display === 'block';
+
+            // Close other dropdowns first
+            closeAllDropdowns();
+
+            opts.style.display = isOpen ? 'none' : 'block';
+            if (!isOpen) { selectContainer.classList.add('open'); }
+        }
+
+        function closeAllDropdowns() {
+            const dropdowns = document.querySelectorAll('.custom-options');
+            const containers = document.querySelectorAll('.custom-select');
+            dropdowns.forEach(d => d.style.display = 'none');
+            containers.forEach(c => c.classList.remove('open'));
+        }
+
+        function selectPos(val) {
+            const trigger = document.querySelector('#posSelect .custom-select-trigger');
+            const directInput = document.getElementById('posDirectInput');
+            const opts = document.getElementById('posOptions');
+            const selectContainer = document.getElementById('posSelect');
+
+            trigger.innerText = val === '기타' ? '기타 직접입력' : val;
+            trigger.classList.remove('placeholder');
+            opts.style.display = 'none';
+            selectContainer.classList.remove('open');
+
+            if (val === '기타') {
+                directInput.style.setProperty('display', 'block', 'important');
+                directInput.focus();
             } else {
-                isAdmin = false;
-                document.getElementById('userView').style.display = 'block';
-                document.getElementById('adminView').style.display = 'none';
-                document.getElementById('viewToggleBtn').innerText = '관리자 모드';
-                renderUI(); // Reset UI state for user view
+                directInput.style.setProperty('display', 'none', 'important');
+                directInput.value = '';
             }
+
+            checkForm();
         }
 
-        function exportData() {
-            const records = JSON.parse(localStorage.getItem('nhisLogs') || '[]');
-            if (records.length === 0) return alert('내보낼 데이터가 없습니다.');
-
-            let csv = "\uFEFF"; // Unicode BOM for Excel Korean support
-
-            // Meta Information (matching physical sheet)
-            csv += "[별지 제16호서식] 보안업무 세부운용요령\n";
-            csv += "제한·통제구역 출입자 명부\n";
-            csv += "구역명: 제한통제구역\n\n";
-
-            // Sub-header for Approval subdivision
-            csv += "일자,소속(기관명),직위(직급),성명,사원번호,용무,입실시각,퇴실시각,승인(담당),승인(팀장),승인(부장)\n";
-
-            records.forEach(r => {
-                csv += `${r.date},${r.dept},${r.position},${r.name},${r.empNo},${r.purpose},${r.inTime},${r.outTime || '-'},,, \n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `NHIS_제한구역출입명부_${new Date().toISOString().slice(0, 10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        // Initialize UI
+        renderUI();
     </script>
 </body>
 
