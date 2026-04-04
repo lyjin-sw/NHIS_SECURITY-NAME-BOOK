@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>제한통제구역 출입자 명부 |NHIS</title>
     <!-- Modern Typeface -->
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <!-- Flatpickr for Modern Date Picker -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
     <!-- Signature Pad Library -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
@@ -37,7 +36,9 @@
         body {
             overflow-x: hidden;
             scroll-behavior: smooth;
-            /* Smooth for user, manual for script */
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -49,16 +50,15 @@
 
         /* Flatpickr Customization - iPhone Style */
         .flatpickr-calendar {
-            width: 280px !important;
-            border-radius: 24px !important;
+            width: 180px !important;
+            border-radius: 14px !important;
             box-shadow: 0 10px 40px -5px rgba(0, 0, 0, 0.1) !important;
-            border: 1px solid rgba(0, 0, 0, 0.03) !important;
-            overflow: hidden;
-            padding: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.02) !important;
+            padding: 2px;
             background: rgba(255, 255, 255, 0.98) !important;
             backdrop-filter: blur(10px);
             animation: slideUpCalendar 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            font-size: 0.85rem !important;
+            font-size: 0.65rem !important;
         }
 
         .flatpickr-months {
@@ -71,7 +71,7 @@
             flex-direction: row !important;
             justify-content: center !important;
             align-items: center !important;
-            height: 40px !important;
+            height: 30px !important;
             gap: 2px;
         }
 
@@ -102,7 +102,7 @@
             padding: 0 4px;
             border-radius: 12px;
             cursor: pointer;
-            height: 32px !important;
+            height: 24px !important;
             line-height: normal !important;
             box-sizing: border-box !important;
             transition: all 0.2s;
@@ -130,7 +130,7 @@
             background-size: 14px !important;
             border: none !important;
             font-weight: 800 !important;
-            font-size: 1rem !important;
+            font-size: 0.8rem !important;
             color: var(--primary) !important;
             cursor: pointer;
             outline: none;
@@ -152,11 +152,11 @@
             border: 1px solid #e5e7eb !important;
             border-radius: 12px !important;
             font-weight: 800 !important;
-            font-size: 0.9rem !important;
+            font-size: 0.85rem !important;
             /* Slightly reduced for better balance */
             font-family: inherit !important;
             width: auto !important;
-            height: 32px !important;
+            height: 24px !important;
             color: var(--primary) !important;
             cursor: pointer;
             outline: none;
@@ -195,13 +195,13 @@
         }
 
         .flatpickr-day {
-            font-size: 0.75rem !important;
+            font-size: 0.65rem !important;
             font-weight: 500 !important;
-            height: 32px !important;
-            line-height: 32px !important;
-            width: 32px !important;
+            height: 24px !important;
+            line-height: 24px !important;
+            width: 24px !important;
             margin: 1px !important;
-            border-radius: 10px !important;
+            border-radius: 6px !important;
         }
 
         .flatpickr-day.today {
@@ -327,70 +327,42 @@
         .form-input,
         .custom-select-trigger {
             width: 100% !important;
-            height: 56px !important;
+            height: 44px !important;
+            min-height: 44px !important;
             background: #ffffff !important;
-            /* Pure white background */
             border: 1.5px solid #e5e7eb !important;
-            /* Consistent border */
             border-radius: 12px !important;
-            padding: 0 20px !important;
-            font-size: 1rem !important;
-            /* Default selected text size */
+            padding: 0 14px !important;
+            font-size: 0.9rem !important;
             color: var(--text-main) !important;
-            /* Default selected color */
-            font-weight: 800 !important;
+            font-weight: 500 !important;
             font-family: inherit !important;
             box-sizing: border-box !important;
             display: flex !important;
+            flex-grow: 0 !important;
+            flex-shrink: 0 !important;
             align-items: center !important;
             transition: all 0.25s ease !important;
             cursor: pointer;
+            margin: 0 !important;
+            max-width: 100% !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            line-height: normal !important;
+            outline: none;
         }
 
-        /* Placeholder & Hint Text Styling */
-        .form-input::placeholder {
-            color: #9ca3af !important;
-            font-size: 0.95rem !important;
-            font-weight: 500 !important;
-        }
-
-        .custom-select-trigger.placeholder {
-            color: #9ca3af !important;
-            font-size: 0.95rem !important;
-            font-weight: 500 !important;
-        }
-
-        /* Focus & Active Highlights */
         .form-input:focus,
-        .custom-select-trigger:active,
         .custom-select.open .custom-select-trigger {
-            outline: none !important;
-            border: 2px solid var(--primary) !important;
-            /* NHIS Red */
-            background-color: #ffffff !important;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08) !important;
-            /* Red Focus Glow */
-        }
-
-        input.form-input {
-            cursor: text;
-        }
-
-        select.form-input,
-        .custom-select-trigger {
-            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e30613'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 16px center !important;
-            background-size: 18px !important;
-            padding-right: 45px !important;
-            cursor: pointer;
-            appearance: none;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.05) !important;
         }
 
         .input-label {
             display: block;
-            margin-bottom: 12px;
-            font-size: 1rem !important;
-            /* Unified with input text */
-            font-weight: 800 !important;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
             color: var(--text-main);
         }
 
@@ -419,10 +391,11 @@
         }
 
         .custom-option {
-            padding: 14px 20px;
+            padding: 8px 14px;
             cursor: pointer;
             transition: all 0.2s;
-            font-weight: 700;
+            font-size: 0.8rem;
+            font-weight: 600;
             color: var(--text-main);
             border-bottom: 1px solid #f8fafc;
         }
@@ -448,6 +421,31 @@
                 opacity: 1;
                 transform: translateY(0) scale(1);
             }
+        }
+
+        .placeholder,
+        .form-input::placeholder {
+            color: #9ca3af !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .pulsing {
+            animation: pulse 2s infinite ease-in-out;
         }
 
         /* Rest of the common styles... */
@@ -483,35 +481,41 @@
         }
 
         .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 0 20px;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            min-height: calc(100vh - 56px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
         }
 
         .card {
             background: #fff;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            padding: 32px;
-            border: 1px solid #f1f2f4;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            padding: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            width: 100%;
         }
 
         .btn-submit {
             width: 100%;
-            height: 64px;
+            height: 48px;
             background: var(--primary);
             color: #fff;
             border: none;
-            border-radius: 100px;
-            font-size: 1.1rem;
+            border-radius: 12px;
+            font-size: 1rem;
             font-weight: 800;
             cursor: pointer;
-            margin-top: 24px;
+            margin-top: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 8px 16px rgba(227, 6, 19, 0.15);
+            box-shadow: 0 6px 20px rgba(227, 6, 19, 0.15);
             transition: all 0.2s;
         }
 
@@ -522,43 +526,74 @@
             cursor: not-allowed;
         }
 
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 8px;
+            letter-spacing: 0.6px;
+            padding-left: 5px;
+            border-left: 3.5px solid var(--primary);
+            line-height: 1;
+        }
+
+        #idNum:disabled {
+            background-color: #f3f4f6 !important;
+            color: #9ca3af !important;
+            cursor: not-allowed !important;
+            border-color: #e5e7eb !important;
+            opacity: 0.7;
+        }
+
         .id-container {
+            width: 100%;
+        }
+
+        #idNum {
+            width: 100% !important;
+        }
+
+        .input-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
+            margin-bottom: 8px;
         }
 
         .na-option {
             display: none;
             align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            font-size: 0.9rem;
+            gap: 4px;
+            font-size: 0.85rem;
+            color: var(--text-main);
             font-weight: 700;
-            color: var(--text-sub);
+            white-space: nowrap;
             cursor: pointer;
             user-select: none;
         }
 
         .na-checkbox {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             accent-color: var(--primary);
             cursor: pointer;
         }
 
         .signature-placeholder {
             width: 100%;
-            height: 160px;
-            border: 2px dashed #e5e7eb;
-            border-radius: 16px;
+            height: 64px;
+            border: 1.5px dashed #e5e7eb;
+            border-radius: 10px;
             background: #fbfbfc;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #9ca3af;
-            font-size: 0.95rem;
+            font-size: 0.75rem;
             font-weight: 600;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
             cursor: pointer;
             overflow: hidden;
             position: relative;
@@ -577,6 +612,176 @@
             width: 100%;
             height: 100%;
             object-fit: fill;
+        }
+
+        /* Admin Table Styles */
+        .admin-table-container {
+            margin-top: 10px;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #f1f2f4;
+            max-height: 400px;
+        }
+
+        .admin-table {
+            margin: 0 auto;
+            /* 테이블 전체를 중앙으로 배치 */
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            min-width: 450px;
+            /* width: 100%; 옵션을 제거하여 셀들이 콘텐츠(가장 짧은 여백) 기준으로 균일하게 줄어들도록 설정 */
+        }
+
+        .admin-table th {
+            background: #f9f0f1;
+            padding: 10px 8px;
+            text-align: center !important;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid #f1f2f4;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .admin-table td {
+            padding: 10px 8px;
+            text-align: center !important;
+            border-bottom: 1px solid #f1f2f4;
+            color: var(--text-main);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-select {
+            width: auto !important;
+            height: 34px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 0 4px 0 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            background-color: #fff;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+        }
+
+        .form-input,
+        .custom-select-trigger {
+            width: 100% !important;
+            height: 44px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+            background: #fff;
+            color: var(--text-main);
+            appearance: none;
+        }
+
+        .form-group {
+            margin-bottom: 16px !important;
+        }
+
+        .btn-back {
+            padding: 8px 14px;
+            background: #f9f0f1;
+            border: 1px solid #fce7e8;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        /* Print styles for image-based format */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printArea,
+            #printArea * {
+                visibility: visible;
+            }
+
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                padding: 10mm;
+                box-sizing: border-box;
+            }
+
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                border: 2px solid black;
+                margin-top: 5px;
+            }
+
+            .print-table th,
+            .print-table td {
+                border: 1px solid black;
+                height: 48px;
+                text-align: center;
+                font-size: 11pt;
+                padding: 4px;
+                color: black !important;
+                background: transparent !important;
+                vertical-align: middle;
+            }
+
+            .print-table thead th {
+                font-weight: 700;
+                height: 35px;
+            }
+
+            .print-header {
+                text-align: center;
+                margin-bottom: 25px;
+            }
+
+            .print-sub-no {
+                text-align: left;
+                font-size: 11pt;
+                margin-bottom: 30px;
+                font-weight: 500;
+            }
+
+            .print-title {
+                font-size: 24pt;
+                font-weight: 900;
+                margin-bottom: 40px;
+                letter-spacing: 2px;
+            }
+
+            .print-zone {
+                text-align: left;
+                font-size: 12pt;
+                margin-bottom: 8px;
+            }
         }
 
         /* Signature Modal */
@@ -654,50 +859,241 @@
 
 <body>
     <header
-        style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #fff; border-bottom: 2.5px solid var(--primary); box-shadow: 0 4px 12px rgba(227, 6, 19, 0.08);">
-        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcT8e6J%2FbtsLIuC6Z9S%2FiO6vJdDk7E0S7IkmE0D2L1%2Fimg.png"
-            alt="NHIS Logo" style="height: 62px; width: auto; object-fit: contain; display: block;">
-        <button id="adminToggleBtn" onclick="requestAdminAccess()"
-            style="background: #fff; border: 1.5px solid var(--primary); padding: 8px 18px; border-radius: 100px; color: var(--primary); font-weight: 900; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-shadow: 0 2px 8px rgba(227, 6, 19, 0.05);">
-            관리자 모드
-        </button>
+        style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: #fff; border-bottom: 2px solid var(--primary); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); position: sticky; top: 0; z-index: 1000; height: 56px;">
+        <div style="flex: 1; display: flex; align-items: center;">
+            <!-- 올려주신 로고(인천경기지역본부)를 불러오도록 로컬 경로 설정 -->
+            <img src="./logo.png" alt="NHIS Logo" style="height: 34px; width: auto; object-fit: contain;">
+        </div>
+        <div style="flex: 2.5; text-align: center;">
+            <h1
+                style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap; letter-spacing: -0.5px;">
+                제한·통제 구역 출입 명부</h1>
+        </div>
+        <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center;">
+            <button id="adminToggleBtn" onclick="requestAdminAccess()"
+                style="background: #fff; border: 1.8px solid var(--primary); padding: 8px 18px; border-radius: 100px; color: var(--primary); font-weight: 900; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+                관리자 페이지
+            </button>
+            <div id="adminNavBtns" style="display: none; gap: 8px;">
+                <button onclick="exitAdmin()"
+                    style="background: transparent; border: 1.5px solid #e5e7eb; padding: 8px 16px; border-radius: 10px; color: #4b5563; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+                    HOME
+                </button>
+                <button onclick="printLogReport()"
+                    style="background: var(--primary); border: none; padding: 8px 16px; border-radius: 10px; color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+                    PDF
+                </button>
+            </div>
+        </div>
     </header>
 
     <div id="userView" class="container">
         <!-- Status Dashboard (Visible only when in-progress) -->
+        <!-- Admin Section -->
+        <div id="adminSection" class="card" style="display: none; margin-top: 10px;">
+            <!-- 일반 조회 타이틀 (관리자 모드에서는 숨김) -->
+            <div id="publicTitle" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <h2 style="font-size: 1.1rem; font-weight: 900; color: var(--primary); margin: 0; padding-left: 6px; border-left: 3.5px solid var(--primary); line-height: 1; letter-spacing: 0.6px;">출입기록 조회</h2>
+                <button id="publicBackBtn" onclick="exitAdmin()" style="display:none; height: 32px; padding: 0 14px; background: transparent; color: #6b7280; border: 1.5px solid #e5e7eb; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; flex-shrink: 0;">
+                    ← 뒤로가기
+                </button>
+            </div>
+            <div class="filter-group"
+                style="align-items: center; flex-wrap: nowrap; gap: 4px; overflow-x: auto; padding-bottom: 2px; white-space: nowrap;">
+                <span
+                    style="font-size: 0.82rem; font-weight: 800; color: var(--text-main); white-space: nowrap; flex-shrink: 0;">기간
+                    선택:</span>
+                <div style="display: flex; align-items: center; gap: 2px;">
+                    <select id="filterStartYear" class="filter-select"></select>
+                    <select id="filterStartMonth" class="filter-select">
+                        <option value="01">1월</option>
+                        <option value="02">2월</option>
+                        <option value="03">3월</option>
+                        <option value="04">4월</option>
+                        <option value="05">5월</option>
+                        <option value="06">6월</option>
+                        <option value="07">7월</option>
+                        <option value="08">8월</option>
+                        <option value="09">9월</option>
+                        <option value="10">10월</option>
+                        <option value="11">11월</option>
+                        <option value="12">12월</option>
+                    </select>
+                </div>
+                <span style="font-weight: 900; color: #9ca3af; margin: 0;">~</span>
+                <div style="display: flex; align-items: center; gap: 2px;">
+                    <select id="filterEndYear" class="filter-select"></select>
+                    <select id="filterEndMonth" class="filter-select">
+                        <option value="01">1월</option>
+                        <option value="02">2월</option>
+                        <option value="03">3월</option>
+                        <option value="04">4월</option>
+                        <option value="05">5월</option>
+                        <option value="06">6월</option>
+                        <option value="07">7월</option>
+                        <option value="08">8월</option>
+                        <option value="09">9월</option>
+                        <option value="10">10월</option>
+                        <option value="11">11월</option>
+                        <option value="12">12월</option>
+                    </select>
+                </div>
+                <!-- 조회용 수동 버튼 추가 -->
+                <button onclick="onFilterChange()"
+                    style="height: 34px; padding: 0 12px; background: transparent; color: #4b5563; border: 1.5px solid #e5e7eb; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-left: auto; flex-shrink: 0;">
+                    조회
+                </button>
+            </div>
+            <div id="adminEditDeleteBtns" style="display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 8px;">
+                <button onclick="editSelected()"
+                    style="height: 30px; padding: 0 14px; background: transparent; color: #4b5563; border: 1.5px solid #e5e7eb; border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer; transition: all 0.2s;">수정</button>
+                <button onclick="deleteSelected()"
+                    style="height: 30px; padding: 0 14px; background: transparent; color: var(--primary); border: 1.5px solid var(--primary); border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer; transition: all 0.2s;">삭제</button>
+            </div>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th id="adminCheckboxHeader" style="width: 36px;"></th>
+                            <th style="width: 50px;">순번</th>
+                            <th>일자</th>
+                            <th>소속</th>
+                            <th>직급 / 성명(사번)</th>
+                            <th>입/퇴실 시간</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableContent"></tbody>
+                </table>
+            </div>
+            <div id="noDataMsg"
+                style="display: none; padding: 40px 0; text-align: center; color: #9ca3af; font-size: 0.85rem;">기록이
+                없습니다.</div>
+            <div id="adminPagination"
+                style="display: none; justify-content: center; align-items: center; gap: 16px; margin-top: 15px; padding-bottom: 5px;">
+            </div>
+        </div>
+
+        <!-- 수정 모달 -->
+        <div id="editModal"
+            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:3000; justify-content:center; align-items:center;">
+            <div
+                style="background:#fff; border-radius:16px; padding:24px 20px; width:90%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+                <h3
+                    style="font-size:1rem; font-weight:900; color:var(--text-main); margin-bottom:18px; padding-left:6px; border-left:3.5px solid var(--primary); letter-spacing:0.5px;">
+                    출입 기록 수정</h3>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div>
+                        <label
+                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">일자</label>
+                        <input id="editDate" type="date"
+                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
+                    </div>
+                    <div>
+                        <label
+                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">소속</label>
+                        <select id="editDept"
+                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box; background:#fff; appearance:none; background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%239ca3af\'%3E%3Cpath d=\'M7 10l5 5 5-5z\'/%3E%3C/svg%3E'); background-repeat:no-repeat; background-position:right 8px center; background-size:16px;">
+                            <option value="">선택</option>
+                            <option value="자격부과부">자격부과부</option>
+                            <option value="징수부">징수부</option>
+                            <option value="지사업무지원1부">지사업무지원1부</option>
+                            <option value="지사업무지원2부">지사업무지원2부</option>
+                            <option value="행정지원부">행정지원부</option>
+                            <option value="요양지원부1부">요양지원부1부</option>
+                            <option value="요양지원부2부">요양지원부2부</option>
+                            <option value="요양운영부">요양운영부</option>
+                            <option value="요양심사부">요양심사부</option>
+                            <option value="건강보험지원부">건강보험지원부</option>
+                            <option value="장기요양부">장기요양부</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label
+                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">직급</label>
+                        <select id="editPosition"
+                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box; background:#fff; appearance:none; background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%239ca3af\'%3E%3Cpath d=\'M7 10l5 5 5-5z\'/%3E%3C/svg%3E'); background-repeat:no-repeat; background-position:right 8px center; background-size:16px;">
+                            <option value="">선택</option>
+                            <option value="1급">1급</option>
+                            <option value="2급">2급</option>
+                            <option value="3급">3급</option>
+                            <option value="4급">4급</option>
+                            <option value="5급">5급</option>
+                            <option value="6급">6급</option>
+                            <option value="인턴">인턴</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label
+                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">성명</label>
+                        <input id="editName" type="text"
+                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
+                    </div>
+                    <div>
+                        <label
+                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">사번</label>
+                        <input id="editIdNum" type="text"
+                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <div style="flex:1;">
+                            <label
+                                style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">입실
+                                시간</label>
+                            <input id="editCheckIn" type="time"
+                                style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
+                        </div>
+                        <div style="flex:1;">
+                            <label
+                                style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">퇴실
+                                시간</label>
+                            <input id="editCheckOut" type="time"
+                                style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px; margin-top:18px;">
+                    <button onclick="closeEditModal()"
+                        style="flex:1; height:40px; background:transparent; border:1.5px solid #e5e7eb; border-radius:10px; font-weight:800; font-size:0.9rem; color:#6b7280; cursor:pointer;">취소</button>
+                    <button onclick="saveEdit()"
+                        style="flex:1; height:40px; background:var(--primary); border:none; border-radius:10px; font-weight:800; font-size:0.9rem; color:#fff; cursor:pointer;">저장</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Print Area (Hidden in browser) -->
+        <div id="printArea" style="display: none;"></div>
+
         <div id="statusSection" class="card"
             style="display: none; margin-bottom: 30px; text-align: center; border: 2px solid var(--primary); background: #ffffff;">
-            <div
-                style="display: inline-block; padding: 6px 12px; background: var(--primary); color: #fff; border-radius: 8px; font-weight: 800; font-size: 0.85rem; margin-bottom: 12px;">
+            <div class="pulsing"
+                style="display: inline-block; padding: 4px 10px; background: var(--primary); color: #fff; border-radius: 6px; font-weight: 800; font-size: 0.9rem; margin-bottom: 16px; letter-spacing: -0.5px;">
                 입실 중</div>
             <h2 id="statusWho"
-                style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">자격부과부 홍길동 님
+                style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-bottom: 12px;">...
             </h2>
             <div id="statusTimer"
-                style="font-size: 1.5rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 20px;">
+                style="font-size: 1.25rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 16px;">
                 00:00:00</div>
-            <button class="btn-submit" onclick="saveCheckout()" style="background: var(--text-main);">퇴실하기</button>
+            <button class="btn-submit" onclick="saveCheckout()"
+                style="background: var(--primary); border: none; box-shadow: 0 8px 16px rgba(227, 6, 19, 0.15); font-size: 1.1rem;">퇴실하기</button>
         </div>
 
         <div id="entrySection">
-            <div style="text-align: center; margin-bottom: 24px;">
-                <h1
-                    style="font-size: 1.45rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 12px; color: var(--text-main); text-align: center;">
-                    제한·통제 구역 출입 명부</h1>
-                <p
-                    style="color: var(--text-sub); margin-bottom: 30px; font-weight: 500; font-size: 0.95rem; text-align: center;">
-                    입실 정보를 정확히 입력해 주세요.</p>
-            </div>
-
+            <p
+                style="font-size: 0.8rem; color: #6b7280; font-weight: 700; margin-top: 10px; margin-bottom: 10px; text-align: center; opacity: 0.8;">
+                입실 정보를 정확히 입력해 주세요.</p>
             <div class="card">
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 14px;">
                     <label class="input-label">일자</label>
-                    <input type="text" id="date" class="form-input" readonly placeholder="날짜 선택">
+                    <input type="text" id="date" class="form-input" readonly
+                        style="background-color: #f3f4f6 !important; color: #6b7280 !important; pointer-events: none !important; border: 1.5px solid #e5e7eb !important; font-weight: 800 !important; text-align: center !important; letter-spacing: 1px !important;">
                 </div>
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 14px;">
                     <label class="input-label">소속(부서명)</label>
                     <div class="custom-select" id="deptSelect">
-                        <div class="custom-select-trigger placeholder" onclick="toggleDeptDropdown()">기관을 선택하세요</div>
+                        <div class="custom-select-trigger placeholder" onclick="toggleDeptDropdown()">소속부서를 선택하세요</div>
                         <div class="custom-options" id="deptOptions">
                             <div class="custom-option" onclick="selectDept('자격부과부')">자격부과부</div>
                             <div class="custom-option" onclick="selectDept('징수부')">징수부</div>
@@ -711,15 +1107,16 @@
                             <div class="custom-option" onclick="selectDept('건강지원센터')">건강지원센터</div>
                             <div class="custom-option" onclick="selectDept('보험급여부')">보험급여부</div>
                             <div class="custom-option" onclick="selectDept('요양기관지원부')">요양기관지원부</div>
+                            <div class="custom-option" onclick="selectDept('통합돌봄부')">통합돌봄부</div>
                             <div class="custom-option" onclick="selectDept('기타')">기타 직접입력</div>
                         </div>
                     </div>
                     <!-- Hidden by default with !important priority -->
                     <input type="text" id="deptDirectInput" class="form-input"
-                        style="display: none !important; margin-top: 12px;" placeholder="부서명을 직접 입력해 주세요"
+                        style="display: none !important; margin-top: 10px;" placeholder="직접 입력해 주세요"
                         oninput="checkForm()">
                 </div>
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 14px;">
                     <label class="input-label">직위(직급)</label>
                     <div class="custom-select" id="posSelect">
                         <div class="custom-select-trigger placeholder" onclick="togglePosDropdown()">직급을 선택하세요</div>
@@ -736,41 +1133,52 @@
                     </div>
                     <!-- Hidden by default for Position Direct Input -->
                     <input type="text" id="posDirectInput" class="form-input"
-                        style="display: none !important; margin-top: 12px;" placeholder="직급을 직접 입력해 주세요"
+                        style="display: none !important; margin-top: 10px;" placeholder="직접 입력해 주세요"
                         oninput="checkForm()">
                 </div>
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 14px;">
                     <label class="input-label">성명</label>
                     <input type="text" id="name" class="form-input" placeholder="성명을 입력하세요" oninput="checkForm()">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 14px;">
                     <label class="input-label">자필서명</label>
                     <div id="signatureContainer" class="signature-placeholder" onclick="openSignatureModal()"
                         tabindex="0">
-                        <span id="signatureHint" style="font-size: 0.85rem; padding: 0 10px; text-align: center;">서명란에
-                            성함을 정자(正字)로 모두 기재 바랍니다.</span>
+                        <span id="signatureHint" style="font-size: 0.75rem; padding: 0 10px; text-align: center;">서명란을
+                            선택하세요</span>
                         <img id="signatureImage" class="signature-img" style="display: none;">
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label class="input-label">사원번호</label>
-                    <div class="id-container">
-                        <input type="text" id="idNum" class="form-input" placeholder="사원번호 6자리를 입력하세요"
-                            oninput="checkForm()">
+                <div class="form-group" style="margin-bottom: 14px;">
+                    <div class="input-header">
+                        <label class="input-label" style="margin-bottom: 0;">사원번호</label>
                         <label id="naContainer" class="na-option">
                             <input type="checkbox" id="idNumNa" class="na-checkbox" onchange="toggleIdNumNa()"> 해당없음
                         </label>
                     </div>
+                    <div class="id-container">
+                        <input type="text" id="idNum" class="form-input" placeholder="사원번호 6자리를 입력하세요" maxlength="6"
+                            inputmode="numeric" oninput="checkForm()">
+                    </div>
+                    <div id="idNumError"
+                        style="display: none; color: var(--primary); font-size: 0.75rem; margin-top: 4px; font-weight: 700;">
+                        ※ 사원번호 6자리를 정확히 입력해 주세요.</div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 14px;">
                     <label class="input-label">용무</label>
                     <input type="text" id="purpose" class="form-input" placeholder="방문 목적을 입력하세요" oninput="checkForm()">
                 </div>
 
-                <button id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>입실하기</button>
+                <button type="button" id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>
+                    입실하기
+                </button>
+                <button type="button" class="btn-secondary" onclick="showPublicLogs()"
+                    style="margin-top: 12px; width: 100%; height: 48px; border: 1.5px solid var(--primary); background: transparent; color: var(--primary); border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;">
+                    출입 기록 조회
+                </button>
             </div>
         </div>
         </thead>
@@ -786,7 +1194,7 @@
         <div class="modal-content">
             <h3 style="font-weight: 800; text-align: center;">자필 서명</h3>
             <p style="font-size: 0.85rem; color: #e30613; margin-top: 4px; text-align: center; font-weight: 700;">※ 성함을
-                정자(正字)로 기재해 주세요.</p>
+                반드시 정자(正字)로 기재해 주세요.</p>
             <div class="canvas-container">
                 <canvas id="signatureCanvas"></canvas>
             </div>
@@ -811,7 +1219,7 @@
             // Dept Reset
             const deptTrigger = document.querySelector('#deptSelect .custom-select-trigger');
             if (deptTrigger) {
-                deptTrigger.innerText = '기관을 선택하세요';
+                deptTrigger.innerText = '소속부서를 선택하세요';
                 deptTrigger.classList.add('placeholder');
                 deptTrigger.style.backgroundColor = '#ffffff';
             }
@@ -837,6 +1245,7 @@
             document.getElementById('name').value = '';
             document.getElementById('idNum').value = '';
             document.getElementById('idNum').disabled = false;
+            document.getElementById('idNum').style.backgroundColor = '#ffffff';
             document.getElementById('idNumNa').checked = false;
             const naContainer = document.getElementById('naContainer');
             if (naContainer) naContainer.style.display = 'none';
@@ -863,7 +1272,7 @@
                 if (entrySection) entrySection.style.display = 'none';
                 if (statusSection) statusSection.style.display = 'block';
                 const statusWho = document.getElementById('statusWho');
-                if (statusWho) statusWho.innerText = `${activeEntry.dept} ${activeEntry.name} 님`;
+                if (statusWho) statusWho.innerText = `${activeEntry.dept} ${activeEntry.name}(${activeEntry.idNum}) 님`;
                 startTimer(activeEntry.checkInTime);
             } else {
                 if (entrySection) entrySection.style.display = 'block';
@@ -948,7 +1357,11 @@
 
             const finalDept = deptDropdown === '기타 직접입력' ? deptDirect : deptDropdown;
             const finalPos = posDropdown === '기타 직접입력' ? posDirect : posDropdown;
-            const finalId = idNumNa ? '해당없음' : idNum;
+            const finalId = idNumNa ? '사원번호 없음' : idNum;
+
+            // 추가된 확인 대화상자
+            const confirmMsg = `[입실 정보 확인]\n일자: ${date}\n소속: ${finalDept} ${finalPos} ${name}(${finalId})\n\n위의 정보가 정확합니까?`;
+            if (!confirm(confirmMsg)) return;
 
             const newRecord = {
                 id: Date.now(),
@@ -970,6 +1383,8 @@
         }
 
         function saveCheckout() {
+            if (!confirm("퇴실하시겠습니까?")) return;
+
             const records = JSON.parse(localStorage.getItem('access_records') || '[]');
             const activeIdx = records.findIndex(r => !r.checkOutTime);
             if (activeIdx !== -1) {
@@ -980,16 +1395,284 @@
             }
         }
 
-        function requestAdminAccess() {
-            const password = prompt("관리자 비밀번호를 입력해주세요.");
-            if (password === '1234') {
-                document.getElementById('userView').style.display = 'none';
-                document.getElementById('adminView').style.display = 'block';
-                document.getElementById('adminToggleBtn').style.display = 'none';
-                renderUI();
-            } else if (password !== null) {
-                alert("비밀번호가 올바르지 않습니다.");
+        function showPublicLogs(isAdmin = false) {
+            document.getElementById('entrySection').style.display = 'none';
+            document.getElementById('statusSection').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'block';
+
+            // 상단 관리자 메뉴 버튼 토글
+            document.getElementById('adminToggleBtn').style.display = 'none';
+
+            if (isAdmin) {
+                document.getElementById('adminNavBtns').style.display = 'flex';
+                document.getElementById('adminEditDeleteBtns').style.display = 'flex';
+                document.getElementById('adminCheckboxHeader').style.display = 'table-cell';
+                document.getElementById('publicBackBtn').style.display = 'none';
+                document.getElementById('publicTitle').style.display = 'none';
+            } else {
+                document.getElementById('adminNavBtns').style.display = 'none';
+                document.getElementById('adminEditDeleteBtns').style.display = 'none';
+                document.getElementById('adminCheckboxHeader').style.display = 'none';
+                document.getElementById('publicBackBtn').style.display = 'inline-block';
+                document.getElementById('publicTitle').style.display = 'flex';
             }
+
+            // isAdmin 플래그를 전역에 저장하여 loadAdminLogs에서 활용
+            window._isAdminMode = isAdmin;
+
+            currentAdminPage = 1;
+            initFilterOptions();
+            loadAdminLogs();
+        }
+
+        function requestAdminAccess() {
+            const pw = prompt('비밀번호를 입력하세요:');
+            if (pw === '1234') {
+                showPublicLogs(true);
+            } else if (pw !== null) alert('비밀번호가 올바르지 않습니다.');
+        }
+
+        function exitAdmin() {
+            if (!confirm("첫 화면으로 돌아가시겠습니까?")) return;
+
+            document.getElementById('adminSection').style.display = 'none';
+
+            // 상단 관리자 메뉴 버튼 토글 복구
+            document.getElementById('adminToggleBtn').style.display = 'inline-block';
+            document.getElementById('adminNavBtns').style.display = 'none';
+
+            renderUI();
+        }
+
+        function initFilterOptions() {
+            const startYearSelect = document.getElementById('filterStartYear');
+            const endYearSelect = document.getElementById('filterEndYear');
+            startYearSelect.innerHTML = '';
+            endYearSelect.innerHTML = '';
+
+            const currentYear = new Date().getFullYear();
+            for (let y = currentYear; y >= currentYear - 5; y--) {
+                const opt1 = document.createElement('option');
+                opt1.value = y;
+                opt1.text = y + '년';
+                startYearSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = y;
+                opt2.text = y + '년';
+                endYearSelect.appendChild(opt2);
+            }
+            const currentMonthStr = (new Date().getMonth() + 1).toString().padStart(2, '0');
+            document.getElementById('filterStartMonth').value = currentMonthStr;
+            document.getElementById('filterEndMonth').value = currentMonthStr;
+        }
+
+        let currentAdminPage = 1;
+        const ADMIN_ITEMS_PER_PAGE = 19;
+
+        function onFilterChange() {
+            currentAdminPage = 1;
+            loadAdminLogs();
+        }
+
+        function loadAdminLogs() {
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const startYear = document.getElementById('filterStartYear').value;
+            const startMonth = document.getElementById('filterStartMonth').value;
+            const endYear = document.getElementById('filterEndYear').value;
+            const endMonth = document.getElementById('filterEndMonth').value;
+
+            const filterStart = `${startYear}-${startMonth}`;
+            const filterEnd = `${endYear}-${endMonth}`;
+
+            let filtered = records.filter(r => {
+                const rMonthPrefix = r.date.substring(0, 7);
+                return rMonthPrefix >= filterStart && rMonthPrefix <= filterEnd;
+            });
+            filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
+
+            const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_ITEMS_PER_PAGE));
+            if (currentAdminPage > totalPages) currentAdminPage = totalPages;
+
+            const startIndex = (currentAdminPage - 1) * ADMIN_ITEMS_PER_PAGE;
+            const pageData = filtered.slice(startIndex, startIndex + ADMIN_ITEMS_PER_PAGE);
+
+            const tableContent = document.getElementById('adminTableContent');
+            tableContent.innerHTML = '';
+            document.getElementById('noDataMsg').style.display = filtered.length ? 'none' : 'block';
+
+            const paginationEl = document.getElementById('adminPagination');
+            if (filtered.length > 0) {
+                paginationEl.style.display = 'flex';
+                renderPagination(totalPages);
+            } else {
+                paginationEl.style.display = 'none';
+            }
+
+            pageData.forEach((r, idx) => {
+                const seqNo = startIndex + idx + 1;
+                const globalIdx = records.indexOf(r);
+                const row = document.createElement('tr');
+                row.dataset.globalIdx = globalIdx;
+                const inDate = new Date(r.date);
+                const formattedDate = `${inDate.getMonth() + 1}월 ${inDate.getDate()}일`;
+
+                const inT = new Date(r.checkInTime);
+                const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
+
+                const inStr = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
+                let outStr = outT ? `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}` : '<span style="color:var(--primary);">입실중</span>';
+
+                const checkboxCell = window._isAdminMode
+                    ? `<td><input type="checkbox" class="row-checkbox" data-idx="${globalIdx}" onchange="onRowCheckbox(this)" style="width:15px;height:15px;accent-color:var(--primary);"></td>`
+                    : `<td style="display:none;"></td>`;
+
+                row.innerHTML = `
+                    ${checkboxCell}
+                    <td style="font-weight: 800; color: #6b7280;">${seqNo}</td>
+                    <td>${formattedDate}</td>
+                    <td>${r.dept}</td>
+                    <td style="font-weight: 700;">${r.position} ${r.name} (${r.idNum})</td>
+                    <td>${inStr} ~ ${outStr}</td>
+                `;
+                tableContent.appendChild(row);
+            });
+        }
+
+        function onRowCheckbox(cb) {
+            const allCbs = document.querySelectorAll('.row-checkbox');
+            const checkedCbs = Array.from(allCbs).filter(c => c.checked);
+            if (checkedCbs.length > 1) {
+                cb.checked = false;
+                alert('한 번에 하나씩 선택해 주세요.');
+            }
+        }
+
+        function getSelectedIndices() {
+            return Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => parseInt(cb.dataset.idx));
+        }
+
+        function deleteSelected() {
+            const indices = getSelectedIndices();
+            if (indices.length === 0) { alert('삭제할 항목을 선택해 주세요.'); return; }
+            if (!confirm(`선택한 ${indices.length}건을 삭제하시겠습니까?`)) return;
+            let records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            // 인덱스 내림차순 정렬 후 제거
+            indices.sort((a, b) => b - a).forEach(i => records.splice(i, 1));
+            localStorage.setItem('access_records', JSON.stringify(records));
+            document.getElementById('selectAll').checked = false;
+            loadAdminLogs();
+        }
+
+        let _editIdx = null;
+
+        function editSelected() {
+            const indices = getSelectedIndices();
+            if (indices.length === 0) { alert('수정할 항목을 선택해 주세요.'); return; }
+            if (indices.length > 1) { alert('수정은 1건씩 선택 후 진행해 주세요.'); return; }
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const r = records[indices[0]];
+            if (!r) return;
+            _editIdx = indices[0];
+
+            document.getElementById('editDate').value = r.date || '';
+            document.getElementById('editDept').value = r.dept || '';
+            document.getElementById('editPosition').value = r.position || '';
+            document.getElementById('editName').value = r.name || '';
+            document.getElementById('editIdNum').value = r.idNum || '';
+
+            const inT = new Date(r.checkInTime);
+            document.getElementById('editCheckIn').value = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
+            if (r.checkOutTime) {
+                const outT = new Date(r.checkOutTime);
+                document.getElementById('editCheckOut').value = `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}`;
+            } else {
+                document.getElementById('editCheckOut').value = '';
+            }
+
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            _editIdx = null;
+        }
+
+        function saveEdit() {
+            if (_editIdx === null) return;
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const r = records[_editIdx];
+            if (!r) return;
+
+            const newDate = document.getElementById('editDate').value;
+            const newDept = document.getElementById('editDept').value.trim();
+            const newPosition = document.getElementById('editPosition').value.trim();
+            const newName = document.getElementById('editName').value.trim();
+            const newIdNum = document.getElementById('editIdNum').value.trim();
+            const checkInVal = document.getElementById('editCheckIn').value;
+            const checkOutVal = document.getElementById('editCheckOut').value;
+
+            // 입실시간 반영: 날짜 + 시간 결합
+            const baseDate = newDate || r.date;
+            const newCheckInTime = checkInVal ? new Date(`${baseDate}T${checkInVal}:00`).toISOString() : r.checkInTime;
+            const newCheckOutTime = checkOutVal ? new Date(`${baseDate}T${checkOutVal}:00`).toISOString() : (r.checkOutTime || null);
+
+            records[_editIdx] = { ...r, date: baseDate, dept: newDept, position: newPosition, name: newName, idNum: newIdNum, checkInTime: newCheckInTime, checkOutTime: newCheckOutTime };
+            localStorage.setItem('access_records', JSON.stringify(records));
+            closeEditModal();
+            loadAdminLogs();
+        }
+
+        function renderPagination(totalPages) {
+            const paginationEl = document.getElementById('adminPagination');
+            paginationEl.innerHTML = '';
+
+            const btnStyle = "padding: 6px 12px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; font-weight: 700; font-size: 0.85rem; color: #4b5563; cursor: pointer; transition: all 0.2s;";
+            const disabledStyle = "padding: 6px 12px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; font-weight: 700; font-size: 0.85rem; color: #d1d5db; cursor: not-allowed;";
+            const activeStyle = "padding: 6px 12px; background: var(--primary); border: 1px solid var(--primary); border-radius: 6px; font-weight: 700; font-size: 0.85rem; color: #fff; cursor: default; box-shadow: 0 2px 4px rgba(227, 6, 19, 0.2);";
+
+            const prevBtn = document.createElement('button');
+            prevBtn.innerText = '이전';
+            prevBtn.style.cssText = currentAdminPage === 1 ? disabledStyle : btnStyle;
+            prevBtn.disabled = currentAdminPage === 1;
+            prevBtn.onclick = () => {
+                if (currentAdminPage > 1) {
+                    currentAdminPage--;
+                    loadAdminLogs();
+                }
+            };
+            paginationEl.appendChild(prevBtn);
+
+            const pageNumbersContainer = document.createElement('div');
+            pageNumbersContainer.style.cssText = "display: flex; gap: 6px;";
+
+            for (let p = 1; p <= totalPages; p++) {
+                const pBtn = document.createElement('button');
+                pBtn.innerText = p;
+                if (p === currentAdminPage) {
+                    pBtn.style.cssText = activeStyle;
+                } else {
+                    pBtn.style.cssText = btnStyle;
+                    pBtn.onclick = () => {
+                        currentAdminPage = p;
+                        loadAdminLogs();
+                    };
+                }
+                pageNumbersContainer.appendChild(pBtn);
+            }
+            paginationEl.appendChild(pageNumbersContainer);
+
+            const nextBtn = document.createElement('button');
+            nextBtn.innerText = '다음';
+            nextBtn.style.cssText = currentAdminPage === totalPages ? disabledStyle : btnStyle;
+            nextBtn.disabled = currentAdminPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentAdminPage < totalPages) {
+                    currentAdminPage++;
+                    loadAdminLogs();
+                }
+            };
+            paginationEl.appendChild(nextBtn);
         }
 
         function hideAdminLogs() {
@@ -1059,71 +1742,45 @@
             const posDropdown = posTrigger ? posTrigger.innerText : '';
             const posDirect = document.getElementById('posDirectInput').value;
             const name = document.getElementById('name').value;
-            const idNum = document.getElementById('idNum').value;
+            const idInput = document.getElementById('idNum');
+            const idNum = idInput.value;
             const idNumNa = document.getElementById('idNumNa').checked;
+            const idNumError = idNumNa ? null : document.getElementById('idNumError');
             const purpose = document.getElementById('purpose').value;
 
-            const isDeptValid = (deptDropdown !== '기관을 선택하세요' && (deptDropdown !== '기타 직접입력' || deptDirect.trim() !== ''));
+            // ID Number Validation Message
+            if (!idNumNa && idNum.trim().length > 0 && idNum.trim().length < 6) {
+                if (idNumError) idNumError.style.display = 'block';
+                idInput.style.borderColor = 'var(--primary)';
+            } else {
+                if (idNumError) idNumError.style.display = 'none';
+                if (idNumNa || idNum.trim().length === 6 || idNum.trim().length === 0) {
+                    idInput.style.borderColor = '#e5e7eb';
+                }
+            }
+
+            const isDeptValid = (deptDropdown !== '소속부서를 선택하세요' && (deptDropdown !== '기타 직접입력' || deptDirect.trim() !== ''));
             const isPosValid = (posDropdown !== '직급을 선택하세요' && (posDropdown !== '기타 직접입력' || posDirect.trim() !== ''));
-            const isIdValid = idNumNa || idNum.trim() !== '';
+            const isIdValid = idNumNa || idNum.trim().length === 6;
 
             const isValid = date && isDeptValid && isPosValid && name.trim() && isIdValid && purpose.trim() && currentSignature;
             document.getElementById('submitBtn').disabled = !isValid;
         }
 
         function toggleIdNumNa() {
-            const idInput = document.getElementById('idNum');
             const isNa = document.getElementById('idNumNa').checked;
+            const idInput = document.getElementById('idNum');
             idInput.disabled = isNa;
-            if (isNa) idInput.value = '';
+            if (isNa) {
+                idInput.value = '';
+                idInput.style.backgroundColor = '#f3f4f6';
+            } else {
+                idInput.style.backgroundColor = '#ffffff';
+            }
             checkForm();
         }
 
-        function rebuildYearDropdown(instance) {
-            const calendar = instance.calendarContainer;
-            if (!calendar) return;
-            const yearWrapper = calendar.querySelector('.numInputWrapper');
-            if (yearWrapper) {
-                yearWrapper.innerHTML = '';
-                yearWrapper.style.width = 'fit-content';
-                const yearSelect = document.createElement('select');
-                yearSelect.className = 'flatpickr-year-dropdown';
-                const currentYear = new Date().getFullYear();
-                for (let y = 2000; y <= currentYear; y++) {
-                    const opt = document.createElement('option');
-                    opt.value = y;
-                    opt.text = y + '년';
-                    if (y === instance.currentYear) {
-                        opt.selected = true;
-                    }
-                    yearSelect.appendChild(opt);
-                }
-                // Explicitly sync the value to ensure 2026 is the focused one
-                yearSelect.value = instance.currentYear;
-
-                yearSelect.addEventListener('change', (e) => {
-                    const selectedYear = parseInt(e.target.value);
-                    if (selectedYear > currentYear) {
-                        alert("미래의 날짜는 선택하실 수 없습니다.");
-                        yearSelect.value = instance.currentYear;
-                        return;
-                    }
-                    instance.changeYear(selectedYear);
-                });
-                yearWrapper.appendChild(yearSelect);
-            }
-        }
-
-        flatpickr("#date", {
-            locale: "ko",
-            dateFormat: "Y-m-d",
-            defaultDate: new Date(),
-            maxDate: "today", // Block future dates explicitly
-            animate: true,
-            onReady: (d, s, i) => rebuildYearDropdown(i),
-            onMonthChange: (d, s, i) => rebuildYearDropdown(i),
-            onYearChange: (d, s, i) => rebuildYearDropdown(i)
-        });
+        // Date auto-setting logic is handled in resetForm()
 
         function toggleDeptDropdown() {
             const selectContainer = document.getElementById('deptSelect');
@@ -1148,7 +1805,6 @@
             opts.style.display = 'none';
             selectContainer.classList.remove('open');
 
-            // Only reveal the box and N/A option when '기타' is truly selected
             if (val === '기타') {
                 directInput.style.setProperty('display', 'block', 'important');
                 document.getElementById('naContainer').style.display = 'flex';
@@ -1158,6 +1814,7 @@
                 document.getElementById('naContainer').style.display = 'none';
                 document.getElementById('idNumNa').checked = false;
                 document.getElementById('idNum').disabled = false;
+                idInput.style.backgroundColor = '#ffffff';
                 directInput.value = '';
             }
 
@@ -1207,6 +1864,103 @@
 
         // Initialize UI
         renderUI();
+
+        function printLogReport() {
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const startYear = document.getElementById('filterStartYear').value;
+            const startMonth = document.getElementById('filterStartMonth').value;
+            const endYear = document.getElementById('filterEndYear').value;
+            const endMonth = document.getElementById('filterEndMonth').value;
+
+            const filterStart = `${startYear}-${startMonth}`;
+            const filterEnd = `${endYear}-${endMonth}`;
+
+            let filtered = records.filter(r => {
+                const rMonthPrefix = r.date.substring(0, 7);
+                return rMonthPrefix >= filterStart && rMonthPrefix <= filterEnd;
+            });
+            filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
+
+            const printArea = document.getElementById('printArea');
+            printArea.innerHTML = '';
+
+            // 1페이지당 표출할 최대 행 개수를 19줄로 고정
+            const MAX_ROWS = 19;
+            const totalPages = Math.max(1, Math.ceil(filtered.length / MAX_ROWS));
+
+            for (let page = 0; page < totalPages; page++) {
+                const pageData = filtered.slice(page * MAX_ROWS, (page + 1) * MAX_ROWS);
+                const pageDiv = document.createElement('div');
+
+                // 마지막 페이지가 아니면 강제 페이지 넘김 추가
+                if (page < totalPages - 1) {
+                    pageDiv.style.pageBreakAfter = 'always';
+                }
+
+                let tbodyHTML = '';
+                for (let i = 0; i < MAX_ROWS; i++) {
+                    if (i < pageData.length) {
+                        const r = pageData[i];
+                        const inDate = new Date(r.date);
+                        const dayStr = `${inDate.getFullYear()}-${String(inDate.getMonth() + 1).padStart(2, '0')}-${String(inDate.getDate()).padStart(2, '0')}`;
+
+                        const inT = new Date(r.checkInTime);
+                        const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
+                        const inTime = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
+                        const outTime = outT ? `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}` : '-';
+
+                        tbodyHTML += `
+                            <tr>
+                                <td>${dayStr}</td>
+                                <td>${r.dept}</td>
+                                <td>${r.position}</td>
+                                <td>${r.name}</td>
+                                <td>${r.idNum}</td>
+                                <td>${r.purpose}</td>
+                                <td>${inTime}</td>
+                                <td>${outTime}</td>
+                                <td></td><td></td><td></td>
+                            </tr>
+                        `;
+                    } else {
+                        // 남은 공간을 빈 행으로 채움
+                        tbodyHTML += `<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+                    }
+                }
+
+                pageDiv.innerHTML = `
+                    <div class="print-sub-no">[별지 제16호서식]</div>
+                    <div class="print-header">
+                        <div class="print-title">제한 · 통제구역 출입자 명부</div>
+                    </div>
+                    <div class="print-zone">구역명: ____________________</div>
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 10%;">일 자</th>
+                                <th rowspan="2" style="width: 12%;">소 속<br>(기관명)</th>
+                                <th rowspan="2" style="width: 10%;">직 위<br>(직급)</th>
+                                <th rowspan="2" style="width: 10%;">성 명</th>
+                                <th rowspan="2" style="width: 12%;">사원번호</th>
+                                <th rowspan="2" style="width: 18%;">용 무</th>
+                                <th rowspan="2" style="width: 8%;">입실<br>시각</th>
+                                <th rowspan="2" style="width: 8%;">퇴실<br>시각</th>
+                                <th colspan="3">승 인</th>
+                            </tr>
+                            <tr>
+                                <th style="width: 4%;">담당</th>
+                                <th style="width: 4%;">팀장</th>
+                                <th style="width: 4%;">부장</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tbodyHTML}</tbody>
+                    </table>
+                `;
+                printArea.appendChild(pageDiv);
+            }
+
+            window.print();
+        }
     </script>
 </body>
 
