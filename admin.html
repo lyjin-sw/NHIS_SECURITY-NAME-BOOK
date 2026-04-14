@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>제한구역 출입기록 관리 - 관리자</title>
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        :root {
+            --primary: #e30613;
+            --primary-dark: #b9050f;
+            --bg-main: #f8f9fa;
+            --text-main: #1f2937;
+            --card-bg: #ffffff;
+            --input-border: #e5e7eb;
+            --accent-soft: rgba(227, 6, 19, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            word-break: keep-all;
+        }
+
+        header {
+            background: #fff;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            height: 56px;
+        }
+
+        .logo-img {
+            height: 24px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            height: 36px;
+            border: 1.5px solid var(--input-border);
+            border-radius: 8px;
+            padding: 0 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .admin-table th {
+            background: #f9fafb;
+            padding: 10px 4px;
+            border-bottom: 1.5px solid #eee;
+            color: #6b7280;
+            font-weight: 800;
+        }
+
+        .admin-table td {
+            padding: 10px 4px;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #4b5563;
+            border: 1.5px solid #e5e7eb;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: #fff;
+            width: 100%; max-width: 450px;
+            border-radius: 20px; padding: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        /* Pagination */
+        #adminPagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { position: absolute; left: 0; top: 0; width: 100%; }
+            .card, header { display: none !important; }
+        }
+
+        .print-sub-no { font-size: 10pt; text-align: left; margin-bottom: 5mm; }
+        .print-header { text-align: center; margin-bottom: 5mm; }
+        .print-title { font-size: 24pt; font-weight: bold; border: 1.5pt solid black; display: inline-block; padding: 2mm 10mm; }
+        .print-zone { text-align: left; font-size: 11pt; margin-bottom: 2mm; font-weight: bold; }
+        .print-table { width: 100%; border-collapse: collapse; border: 1.5pt solid black; font-size: 8.5pt; table-layout: fixed; }
+        .print-table th, .print-table td { border: 0.5pt solid black; padding: 1.5mm 0.5mm; text-align: center; word-break: break-all; overflow: hidden; height: 11.5mm; }
+        .print-table th { background-color: #f2f2f2; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="flex: 1; display: flex; align-items: center; gap: 12px;">
+            <img src="./logo.png" alt="NHIS" class="logo-img">
+            <h1 style="font-size: 1.05rem; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; white-space: nowrap;">
+                제한·통제 구역 출입 관리</h1>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button onclick="location.href='index.html'" class="btn-secondary">HOME</button>
+            <button onclick="printLogReport()" class="btn-primary">PDF</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="adminSection" class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <h2 style="font-size: 1.1rem; font-weight: 900; color: var(--primary); margin: 0; padding-left: 6px; border-left: 3.5px solid var(--primary); line-height: 1;">
+                    출입기록 관리 (관리자)</h2>
+            </div>
+
+            <div class="filter-group">
+                <span style="font-size: 0.85rem; font-weight: 800;">기간 선택:</span>
+                <select id="filterStartYear" class="filter-select" onchange="onFilterChange()"></select>
+                <select id="filterStartMonth" class="filter-select" onchange="onFilterChange()"></select>
+                <span>~</span>
+                <select id="filterEndYear" class="filter-select" onchange="onFilterChange()"></select>
+                <select id="filterEndMonth" class="filter-select" onchange="onFilterChange()"></select>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 8px;">
+                <button id="adminEditBtn" onclick="editSelected()" class="btn-secondary" style="height:32px; padding:0 12px; font-size:0.75rem;">수정</button>
+                <button id="adminDeleteBtn" onclick="deleteSelected()" class="btn-secondary" style="height:32px; padding:0 12px; font-size:0.75rem;">삭제</button>
+            </div>
+
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 36px;"></th>
+                            <th style="width: 40px;">순번</th>
+                            <th style="width: 80px;">일자</th>
+                            <th>소속</th>
+                            <th>성명(사번)</th>
+                            <th>시간</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableContent"></tbody>
+                </table>
+            </div>
+            <div id="noDataMsg" style="text-align: center; padding: 40px 0; color: #9ca3af; font-weight: 700; display: none;">조회된 기록이 없습니다.</div>
+            <div id="adminPagination"></div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3 style="font-weight: 900; color: var(--primary); margin-top: 0; margin-bottom: 16px;">기록 수정</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div>
+                    <label style="font-size:0.75rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">일자</label>
+                    <input id="editDate" type="date" style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px;">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <div style="flex: 1;">
+                        <label style="font-size:0.75rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">소속</label>
+                        <input id="editDept" type="text" style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size:0.75rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">직급</label>
+                        <input id="editPosition" type="text" style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px;">
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size:0.75rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">성명</label>
+                    <input id="editName" type="text" style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px;">
+                </div>
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <label style="font-size:0.75rem; font-weight:800; color:var(--primary);">사번</label>
+                        <label style="display:flex; align-items:center; gap:4px; font-size:0.7rem; color:#6b7280; font-weight:700; cursor:pointer;">
+                            <input type="checkbox" id="editIdNumNa" onchange="toggleEditIdNumNa()"> 해당없음
+                        </label>
+                    </div>
+                    <input id="editIdNum" type="text" style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px;">
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <div style="flex:1;">
+                        <label style="font-size:0.75rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">입실 시간</label>
+                        <input id="editCheckIn" type="time" style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="font-size:0.75rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">퇴실 시간</label>
+                        <input id="editCheckOut" type="time" style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px;">
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:20px;">
+                <button onclick="closeEditModal()" class="btn-secondary" style="flex:1;">취소</button>
+                <button onclick="saveEdit()" class="btn-primary" style="flex:1;">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="printArea" style="display: none;"></div>
+
+    <script>
+        window.onload = function() {
+            initAdminPage();
+        };
+
+        function initAdminPage() {
+            initFilterOptions();
+            loadAdminLogs();
+        }
+
+        function initFilterOptions() {
+            const currentYear = new Date().getFullYear();
+            const sY = document.getElementById('filterStartYear');
+            const eY = document.getElementById('filterEndYear');
+            const sM = document.getElementById('filterStartMonth');
+            const eM = document.getElementById('filterEndMonth');
+
+            // Year options (-2 to +1)
+            [sY, eY].forEach(select => {
+                select.innerHTML = '';
+                for (let y = currentYear - 2; y <= currentYear + 1; y++) {
+                    const opt = document.createElement('option');
+                    opt.value = y; opt.text = y + '년';
+                    select.appendChild(opt);
+                }
+                select.value = currentYear;
+            });
+
+            // Month options
+            [sM, eM].forEach(select => {
+                select.innerHTML = '';
+                for (let m = 1; m <= 12; m++) {
+                    const opt = document.createElement('option');
+                    const val = m.toString().padStart(2, '0');
+                    opt.value = val; opt.text = m + '월';
+                    select.appendChild(opt);
+                }
+                select.value = (new Date().getMonth() + 1).toString().padStart(2, '0');
+            });
+        }
+
+        let currentAdminPage = 1;
+        const ADMIN_ITEMS_PER_PAGE = 19;
+
+        function onFilterChange() {
+            currentAdminPage = 1;
+            loadAdminLogs();
+        }
+
+        function loadAdminLogs() {
+            updateEditDeleteButtons();
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            
+            const startYear = document.getElementById('filterStartYear').value;
+            const startMonth = document.getElementById('filterStartMonth').value;
+            const endYear = document.getElementById('filterEndYear').value;
+            const endMonth = document.getElementById('filterEndMonth').value;
+            const filterStart = `${startYear}-${startMonth}`;
+            const filterEnd = `${endYear}-${endMonth}`;
+
+            let filtered = records.filter(r => {
+                const rMonth = r.date.substring(0, 7);
+                return rMonth >= filterStart && rMonth <= filterEnd;
+            });
+            filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
+
+            const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_ITEMS_PER_PAGE));
+            if (currentAdminPage > totalPages) currentAdminPage = totalPages;
+
+            const startIndex = (currentAdminPage - 1) * ADMIN_ITEMS_PER_PAGE;
+            const pageData = filtered.slice(startIndex, startIndex + ADMIN_ITEMS_PER_PAGE);
+
+            const tableContent = document.getElementById('adminTableContent');
+            tableContent.innerHTML = '';
+            document.getElementById('noDataMsg').style.display = filtered.length ? 'none' : 'block';
+
+            pageData.forEach((r, idx) => {
+                const seqNo = startIndex + idx + 1;
+                const globalIdx = records.indexOf(r);
+                const row = document.createElement('tr');
+                
+                const inDate = new Date(r.date);
+                const formattedDate = `${inDate.getMonth() + 1}/${inDate.getDate()}`;
+                const inT = new Date(r.checkInTime);
+                const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
+                const inStr = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
+                let outStr = outT ? `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}` : '<span style="color:var(--primary);">대기중</span>';
+
+                row.innerHTML = `
+                    <td><input type="checkbox" class="row-checkbox" data-idx="${globalIdx}" onchange="onRowCheckbox(this)"></td>
+                    <td style="color: #6b7280; font-weight: 700;">${seqNo}</td>
+                    <td>${formattedDate}</td>
+                    <td style="font-size: 0.75rem;">${r.dept}</td>
+                    <td style="font-weight: 700;">${r.name} (${r.idNum})</td>
+                    <td style="font-size: 0.75rem;">${inStr}~${outStr}</td>
+                `;
+                tableContent.appendChild(row);
+            });
+            renderPagination(totalPages);
+        }
+
+        function onRowCheckbox(cb) {
+            if (cb.checked) {
+                document.querySelectorAll('.row-checkbox').forEach(c => { if (c !== cb) c.checked = false; });
+            }
+            updateEditDeleteButtons();
+        }
+
+        function updateEditDeleteButtons() {
+            const checked = document.querySelector('.row-checkbox:checked');
+            const editBtn = document.getElementById('adminEditBtn');
+            const deleteBtn = document.getElementById('adminDeleteBtn');
+            if (checked) {
+                editBtn.style.color = 'var(--primary)'; editBtn.style.borderColor = 'var(--primary)';
+                deleteBtn.style.color = 'var(--primary)'; deleteBtn.style.borderColor = 'var(--primary)';
+            } else {
+                editBtn.style.color = '#9ca3af'; editBtn.style.borderColor = '#e5e7eb';
+                deleteBtn.style.color = '#9ca3af'; deleteBtn.style.borderColor = '#e5e7eb';
+            }
+        }
+
+        function getSelectedIdx() {
+            const cb = document.querySelector('.row-checkbox:checked');
+            return cb ? parseInt(cb.dataset.idx) : null;
+        }
+
+        function deleteSelected() {
+            const idx = getSelectedIdx();
+            if (idx === null) return alert('삭제할 항목을 선택하세요.');
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            records.splice(idx, 1);
+            localStorage.setItem('access_records', JSON.stringify(records));
+            loadAdminLogs();
+        }
+
+        let _editIdx = null;
+        function editSelected() {
+            const idx = getSelectedIdx();
+            if (idx === null) return alert('수정할 항목을 선택하세요.');
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const r = records[idx];
+            _editIdx = idx;
+
+            document.getElementById('editDate').value = r.date;
+            document.getElementById('editDept').value = r.dept;
+            document.getElementById('editPosition').value = r.position;
+            document.getElementById('editName').value = r.name;
+            document.getElementById('editIdNum').value = r.idNum;
+            
+            const naBox = document.getElementById('editIdNumNa');
+            if (r.idNum === '해당없음') {
+                naBox.checked = true; document.getElementById('editIdNum').disabled = true;
+            } else {
+                naBox.checked = false; document.getElementById('editIdNum').disabled = false;
+            }
+
+            const inT = new Date(r.checkInTime);
+            document.getElementById('editCheckIn').value = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
+            const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
+            document.getElementById('editCheckOut').value = outT ? `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}` : '';
+
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function toggleEditIdNumNa() {
+            const isChecked = document.getElementById('editIdNumNa').checked;
+            const input = document.getElementById('editIdNum');
+            input.disabled = isChecked;
+            if (isChecked) { input.value = '해당없음'; input.style.background = '#f3f4f6'; }
+            else { input.value = ''; input.style.background = '#fff'; }
+        }
+
+        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        function saveEdit() {
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const r = records[_editIdx];
+            const newDate = document.getElementById('editDate').value;
+            const checkInV = document.getElementById('editCheckIn').value;
+            const checkOutV = document.getElementById('editCheckOut').value;
+
+            records[_editIdx] = {
+                ...r,
+                date: newDate,
+                dept: document.getElementById('editDept').value,
+                position: document.getElementById('editPosition').value,
+                name: document.getElementById('editName').value,
+                idNum: document.getElementById('editIdNumNa').checked ? '해당없음' : document.getElementById('editIdNum').value,
+                checkInTime: new Date(`${newDate}T${checkInV}:00`).toISOString(),
+                checkOutTime: checkOutV ? new Date(`${newDate}T${checkOutV}:00`).toISOString() : null
+            };
+            localStorage.setItem('access_records', JSON.stringify(records));
+            closeEditModal(); loadAdminLogs();
+        }
+
+        function renderPagination(totalPages) {
+            const el = document.getElementById('adminPagination');
+            el.innerHTML = '';
+            if (totalPages <= 1) return;
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = (i === currentAdminPage) ? 'btn-primary' : 'btn-secondary';
+                btn.style.padding = '4px 10px'; btn.style.fontSize = '0.75rem';
+                btn.onclick = () => { currentAdminPage = i; loadAdminLogs(); };
+                el.appendChild(btn);
+            }
+        }
+
+        function printLogReport() {
+            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const startYear = document.getElementById('filterStartYear').value;
+            const startMonth = document.getElementById('filterStartMonth').value;
+            const endYear = document.getElementById('filterEndYear').value;
+            const endMonth = document.getElementById('filterEndMonth').value;
+            const filterStart = `${startYear}-${startMonth}`;
+            const filterEnd = `${endYear}-${endMonth}`;
+
+            let filtered = records.filter(r => {
+                const rMonth = r.date.substring(0, 7);
+                return rMonth >= filterStart && rMonth <= filterEnd;
+            });
+            filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
+
+            const printArea = document.getElementById('printArea');
+            printArea.innerHTML = '';
+            const MAX_ROWS = 19;
+            const totalPages = Math.max(1, Math.ceil(filtered.length / MAX_ROWS));
+
+            for (let page = 0; page < totalPages; page++) {
+                const pageData = filtered.slice(page * MAX_ROWS, (page + 1) * MAX_ROWS);
+                const pageDiv = document.createElement('div');
+                if (page < totalPages - 1) pageDiv.style.pageBreakAfter = 'always';
+
+                let rowsHTML = '';
+                for (let i = 0; i < MAX_ROWS; i++) {
+                    if (i < pageData.length) {
+                        const r = pageData[i];
+                        const inT = new Date(r.checkInTime);
+                        const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
+                        rowsHTML += `<tr><td>${r.date}</td><td>${r.dept}</td><td>${r.position}</td><td>${r.name}</td><td>${r.idNum}</td><td>${r.purpose}</td><td>${inT.getHours()}:${String(inT.getMinutes()).padStart(2,'0')}</td><td>${outT ? outT.getHours()+':'+String(outT.getMinutes()).padStart(2,'0') : '-'}</td><td></td><td></td><td></td></tr>`;
+                    } else {
+                        rowsHTML += `<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+                    }
+                }
+                pageDiv.innerHTML = `
+                    <div class="print-sub-no">[별지 제16호서식]</div>
+                    <div class="print-header"><div class="print-title">제한 · 통제구역 출입자 명부</div></div>
+                    <div class="print-zone">구역명: ____________________</div>
+                    <table class="print-table">
+                        <thead><tr><th rowspan="2" style="width: 10%;">일 자</th><th rowspan="2" style="width: 12%;">소 속</th><th rowspan="2" style="width: 10%;">직 위</th><th rowspan="2" style="width: 10%;">성 명</th><th rowspan="2" style="width: 12%;">사번</th><th rowspan="2" style="width: 18%;">용 무</th><th rowspan="2" style="width: 8%;">입실</th><th rowspan="2" style="width: 8%;">퇴실</th><th colspan="3">승 인</th></tr>
+                        <tr><th style="width: 4%;">담당</th><th style="width: 4%;">팀장</th><th style="width: 4%;">부장</th></tr></thead>
+                        <tbody>${rowsHTML}</tbody>
+                    </table>`;
+                printArea.appendChild(pageDiv);
+            }
+            window.print();
+        }
+    </script>
+</body>
+</html>

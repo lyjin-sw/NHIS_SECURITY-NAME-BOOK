@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>제한통제구역 출입자 명부 |NHIS</title>
+    <title>제한통제구역 출입자 명부 | NHIS</title>
     <!-- Modern Typeface -->
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
@@ -48,407 +48,16 @@
             min-height: 100vh;
         }
 
-        /* Flatpickr Customization - iPhone Style */
-        .flatpickr-calendar {
-            width: 180px !important;
-            border-radius: 14px !important;
-            box-shadow: 0 10px 40px -5px rgba(0, 0, 0, 0.1) !important;
-            border: 1px solid rgba(0, 0, 0, 0.02) !important;
-            padding: 2px;
-            background: rgba(255, 255, 255, 0.98) !important;
-            backdrop-filter: blur(10px);
-            animation: slideUpCalendar 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            font-size: 0.65rem !important;
-        }
-
-        .flatpickr-months {
-            border-bottom: 0px !important;
-            margin-bottom: 4px;
-        }
-
-        .flatpickr-month {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: center !important;
-            align-items: center !important;
-            height: 30px !important;
-            gap: 2px;
-        }
-
-        .flatpickr-current-month {
-            position: relative !important;
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            width: auto !important;
-            left: 0 !important;
-            padding: 0 !important;
-            font-weight: 800 !important;
-            font-size: 0.95rem !important;
-            color: var(--text-main) !important;
-            white-space: nowrap !important;
-        }
-
-        .numInputWrapper {
-            order: 1 !important;
-            margin-right: 8px !important;
-            width: fit-content !important;
-            display: flex !important;
-            align-items: center;
-            background: #ffffff !important;
-            /* Pure white */
-            border: 1px solid #f1f2f4 !important;
-            /* Subtle border */
-            padding: 0 4px;
-            border-radius: 12px;
-            cursor: pointer;
-            height: 24px !important;
-            line-height: normal !important;
-            box-sizing: border-box !important;
-            transition: all 0.2s;
-        }
-
-        .numInputWrapper:hover {
-            border-color: #e5e7eb !important;
-        }
-
-        .numInputWrapper:active,
-        .numInputWrapper:focus-within {
-            border: 2px solid var(--primary) !important;
-            /* Red Focus */
-        }
-
-        .numInputWrapper .cur-year,
-        .numInputWrapper .arrowUp,
-        .numInputWrapper .arrowDown,
-        .numInputWrapper::after {
-            display: none !important;
-        }
-
-        .flatpickr-year-dropdown {
-            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e30613'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 5px center !important;
-            background-size: 14px !important;
-            border: none !important;
-            font-weight: 800 !important;
-            font-size: 0.8rem !important;
-            color: var(--primary) !important;
-            cursor: pointer;
-            outline: none;
-            padding: 0 18px 0 6px !important;
-            appearance: none !important;
-            display: inline-block !important;
-            width: auto !important;
-            height: 100% !important;
-            border-radius: 12px !important;
-            box-sizing: border-box !important;
-        }
-
-        .flatpickr-monthDropdown-months {
-            order: 2 !important;
-            margin: 0 !important;
-            padding: 0 22px 0 8px !important;
-            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e30613'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 6px center !important;
-            background-size: 14px !important;
-            border: 1px solid #e5e7eb !important;
-            border-radius: 12px !important;
-            font-weight: 800 !important;
-            font-size: 0.85rem !important;
-            /* Slightly reduced for better balance */
-            font-family: inherit !important;
-            width: auto !important;
-            height: 24px !important;
-            color: var(--primary) !important;
-            cursor: pointer;
-            outline: none;
-            appearance: none !important;
-            display: inline-block !important;
-            box-sizing: border-box !important;
-            text-align: left;
-            transition: all 0.2s;
-        }
-
-        .flatpickr-monthDropdown-months:active,
-        .flatpickr-monthDropdown-months:focus {
-            border: 2px solid var(--primary) !important;
-        }
-
-        .flatpickr-monthDropdown-months:hover {
-            background-color: #ffffff !important;
-        }
-
-        /* Prev/Next Arrows Styling */
-        .flatpickr-prev-month,
-        .flatpickr-next-month {
-            padding: 8px !important;
-            fill: #94a3b8 !important;
-            transition: all 0.2s;
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-        }
-
-        .flatpickr-prev-month:hover,
-        .flatpickr-next-month:hover {
-            background: #f1f5f9;
-            fill: var(--primary) !important;
-        }
-
-        .flatpickr-day {
-            font-size: 0.65rem !important;
-            font-weight: 500 !important;
-            height: 24px !important;
-            line-height: 24px !important;
-            width: 24px !important;
-            margin: 1px !important;
-            border-radius: 6px !important;
-        }
-
-        .flatpickr-day.today {
-            border-color: transparent !important;
-            background: #ffffff !important;
-            color: var(--primary) !important;
-            font-weight: 800 !important;
-            position: relative;
-        }
-
-        .flatpickr-day.today::after {
-            content: "";
-            position: absolute;
-            bottom: 4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 50%;
-        }
-
-        .flatpickr-day.selected {
-            background: var(--primary) !important;
-            color: white !important;
-            border-radius: 10px !important;
-        }
-
-        .flatpickr-day.selected::after {
-            display: none;
-        }
-
-        .flatpickr-weekday {
-            font-size: 0.7rem !important;
-            font-weight: 700 !important;
-            color: #adb5bd !important;
-        }
-
-        .flatpickr-innerContainer {
-            padding: 0 4px 8px 4px !important;
-            overflow: hidden !important;
-        }
-
-        /* Continuous Scroll Animations */
-        .flatpickr-days-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .days-film-strip {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .flatpickr-days {
-            width: 100% !important;
-            min-width: 100% !important;
-            flex-shrink: 0;
-            background: white;
-        }
-
-        @keyframes hardSlideInUp {
-            from {
-                transform: translateY(100%);
-            }
-
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes hardSlideOutUp {
-            from {
-                transform: translateY(0);
-            }
-
-            to {
-                transform: translateY(-100%);
-            }
-        }
-
-        @keyframes hardSlideInDown {
-            from {
-                transform: translateY(-100%);
-            }
-
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes hardSlideOutDown {
-            from {
-                transform: translateY(0);
-            }
-
-            to {
-                transform: translateY(100%);
-            }
-        }
-
-        .slide-up-in {
-            animation: hardSlideInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .slide-up-out {
-            animation: hardSlideOutUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .slide-down-in {
-            animation: hardSlideInDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .slide-down-out {
-            animation: hardSlideOutDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* Final Unified Premium Form Styling */
-        /* Unified Input & Trigger Styling - Pure White Start */
-        .form-input,
-        .custom-select-trigger {
-            width: 100% !important;
-            height: 44px !important;
-            min-height: 44px !important;
-            background: #ffffff !important;
-            border: 1.5px solid #e5e7eb !important;
-            border-radius: 12px !important;
-            padding: 0 14px !important;
-            font-size: 0.9rem !important;
-            color: var(--text-main) !important;
-            font-weight: 500 !important;
-            font-family: inherit !important;
-            box-sizing: border-box !important;
-            display: flex !important;
-            flex-grow: 0 !important;
-            flex-shrink: 0 !important;
-            align-items: center !important;
-            transition: all 0.25s ease !important;
-            cursor: pointer;
-            margin: 0 !important;
-            max-width: 100% !important;
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            line-height: normal !important;
-            outline: none;
-        }
-
-        .form-input:focus,
-        .custom-select.open .custom-select-trigger {
-            border-color: var(--primary) !important;
-            box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.05) !important;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .custom-select {
-            position: relative;
-            width: 100%;
-        }
-
-        .custom-options {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            right: 0;
-            background: #ffffff !important;
-            /* Pure white */
-            border-radius: 20px;
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb !important;
-            /* Defined border */
-            z-index: 200;
-            overflow: hidden;
-            display: none;
-            max-height: 250px;
-            overflow-y: auto;
-            animation: slideUpScale 0.25s ease-out;
-        }
-
-        .custom-option {
-            padding: 8px 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-main);
-            border-bottom: 1px solid #f8fafc;
-        }
-
-        .custom-option:last-child {
-            border-bottom: none;
-        }
-
-        .custom-option:hover {
-            background-color: #f1f5f9 !important;
-            /* Subtle neutral gray hover (No pink) */
-            color: var(--primary);
-            /* Red point text on hover */
-        }
-
-        @keyframes slideUpScale {
-            from {
-                opacity: 0;
-                transform: translateY(10px) scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .placeholder,
-        .form-input::placeholder {
-            color: #9ca3af !important;
-            font-size: 0.9rem !important;
-            font-weight: 500 !important;
-        }
-
         @keyframes pulse {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.4;
-            }
-
-            100% {
-                opacity: 1;
-            }
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
 
         .pulsing {
             animation: pulse 2s infinite ease-in-out;
         }
 
-        /* Rest of the common styles... */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -468,23 +77,15 @@
             z-index: 100;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
             height: 72px;
-            /* Fixed height to prevent jumps */
             box-sizing: border-box;
-        }
-
-        .logo-img {
-            height: 48px;
-            width: auto;
-            object-fit: contain;
-            flex-shrink: 0;
-            display: block;
+            border-bottom: 2px solid var(--primary);
         }
 
         .container {
             max-width: 480px;
             margin: 0 auto;
             padding: 12px 16px;
-            min-height: calc(100vh - 56px);
+            min-height: calc(100vh - 72px);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -495,35 +96,13 @@
             background: #fff;
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-            padding: 16px;
+            padding: 20px;
             border: 1px solid rgba(0, 0, 0, 0.03);
             width: 100%;
         }
 
-        .btn-submit {
-            width: 100%;
-            height: 48px;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 6px 20px rgba(227, 6, 19, 0.15);
-            transition: all 0.2s;
-        }
-
-        .btn-submit:disabled {
-            background: #e5e7eb;
-            color: #9ca3af;
-            box-shadow: none;
-            cursor: not-allowed;
+        .form-group {
+            margin-bottom: 18px;
         }
 
         .input-label {
@@ -538,259 +117,115 @@
             line-height: 1;
         }
 
-        #idNum:disabled {
-            background-color: #f3f4f6 !important;
-            color: #9ca3af !important;
-            cursor: not-allowed !important;
-            border-color: #e5e7eb !important;
-            opacity: 0.7;
+        .form-input,
+        .custom-select-trigger {
+            width: 100%;
+            height: 48px;
+            background: #fff;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 500;
+            outline: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
         }
 
-        .id-container {
+        .form-input:focus,
+        .custom-select.open .custom-select-trigger {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.08);
+        }
+
+        .custom-select {
+            position: relative;
             width: 100%;
         }
 
-        #idNum {
-            width: 100% !important;
-        }
-
-        .input-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .na-option {
+        .custom-options {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            z-index: 200;
             display: none;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            font-weight: 700;
-            white-space: nowrap;
-            cursor: pointer;
-            user-select: none;
+            max-height: 250px;
+            overflow-y: auto;
         }
 
-        .na-checkbox {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
+        .custom-option {
+            padding: 12px 16px;
             cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .custom-option:hover {
+            background-color: #f9fafb;
+            color: var(--primary);
+        }
+
+        .btn-submit {
+            width: 100%;
+            height: 52px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(227, 6, 19, 0.15);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
         }
 
         .signature-placeholder {
             width: 100%;
-            height: 64px;
+            height: 80px;
             border: 1.5px dashed #e5e7eb;
-            border-radius: 10px;
+            border-radius: 12px;
             background: #fbfbfc;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #9ca3af;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: -0.3px;
-            white-space: nowrap;
             cursor: pointer;
-            overflow: hidden;
             position: relative;
-            transition: all 0.25s ease;
-            outline: none;
-        }
-
-        .signature-placeholder:focus,
-        .signature-placeholder:active {
-            border: 2px solid var(--primary) !important;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1) !important;
-            background: #ffffff !important;
         }
 
         .signature-img {
-            width: 100%;
-            height: 100%;
-            object-fit: fill;
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
         }
 
-        /* Admin Table Styles */
-        .admin-table-container {
-            margin-top: 10px;
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid #f1f2f4;
-            max-height: 400px;
-        }
-
-        .admin-table {
-            margin: 0 auto;
-            /* 테이블 전체를 중앙으로 배치 */
-            border-collapse: collapse;
-            font-size: 0.75rem;
-            min-width: 450px;
-            /* width: 100%; 옵션을 제거하여 셀들이 콘텐츠(가장 짧은 여백) 기준으로 균일하게 줄어들도록 설정 */
-        }
-
-        .admin-table th {
-            background: #f9f0f1;
-            padding: 10px 8px;
-            text-align: center !important;
-            font-weight: 700;
-            color: var(--primary);
-            border-bottom: 2px solid #f1f2f4;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .admin-table td {
-            padding: 10px 8px;
-            text-align: center !important;
-            border-bottom: 1px solid #f1f2f4;
-            color: var(--text-main);
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .filter-select {
-            width: auto !important;
-            height: 34px;
-            border: 1.5px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 0 4px 0 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            font-family: inherit;
-            background-color: #fff;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .filter-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
-        }
-
-        .form-input,
-        .custom-select-trigger {
-            width: 100% !important;
-            height: 44px;
-            border: 1.5px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 0 16px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.25s ease;
-            box-sizing: border-box;
-            background: #fff;
-            color: var(--text-main);
-            appearance: none;
-        }
-
-        .form-group {
-            margin-bottom: 16px !important;
-        }
-
-        .btn-back {
-            padding: 8px 14px;
-            background: #f9f0f1;
-            border: 1px solid #fce7e8;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-
-        /* Print styles for image-based format */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-
-            #printArea,
-            #printArea * {
-                visibility: visible;
-            }
-
-            #printArea {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                background: white;
-                padding: 10mm;
-                box-sizing: border-box;
-            }
-
-            .print-table {
-                width: 100%;
-                border-collapse: collapse;
-                border: 2px solid black;
-                margin-top: 5px;
-            }
-
-            .print-table th,
-            .print-table td {
-                border: 1px solid black;
-                height: 48px;
-                text-align: center;
-                font-size: 11pt;
-                padding: 4px;
-                color: black !important;
-                background: transparent !important;
-                vertical-align: middle;
-            }
-
-            .print-table thead th {
-                font-weight: 700;
-                height: 35px;
-            }
-
-            .print-header {
-                text-align: center;
-                margin-bottom: 25px;
-            }
-
-            .print-sub-no {
-                text-align: left;
-                font-size: 11pt;
-                margin-bottom: 30px;
-                font-weight: 500;
-            }
-
-            .print-title {
-                font-size: 24pt;
-                font-weight: 900;
-                margin-bottom: 40px;
-                letter-spacing: 2px;
-            }
-
-            .print-zone {
-                text-align: left;
-                font-size: 12pt;
-                margin-bottom: 8px;
-            }
-        }
-
-        /* Signature Modal */
+        /* Modal Styles */
         .modal {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             display: none;
@@ -799,298 +234,99 @@
             padding: 20px;
         }
 
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
 
         .modal-content {
             background: #fff;
             width: 100%;
             max-width: 400px;
-            border-radius: 30px;
+            border-radius: 24px;
             padding: 24px;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
         }
 
         .canvas-container {
             width: 100%;
-            height: 160px;
+            height: 180px;
             background: #f9fafb;
             border: 1px solid #e5e7eb;
-            border-radius: 20px;
+            border-radius: 16px;
             margin: 16px 0;
             touch-action: none;
-            position: relative;
         }
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-        }
+        canvas { width: 100%; height: 100%; border-radius: 16px; }
 
-        .modal-btns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .btn-secondary {
-            height: 50px;
-            border-radius: 100px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            font-weight: 700;
-            color: #6b7280;
-            cursor: pointer;
+            height: 48px; border-radius: 100px; border: 1.5px solid #e5e7eb; background: #fff;
+            font-weight: 700; color: #6b7280; cursor: pointer;
         }
 
         .btn-primary {
-            height: 50px;
-            border-radius: 100px;
-            border: none;
-            background: var(--primary);
-            color: #fff;
+            height: 48px; border-radius: 100px; border: none; background: var(--primary);
+            color: #fff; font-weight: 700; cursor: pointer;
+        }
+
+        .placeholder { color: #9ca3af !important; }
+
+        .na-option {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
+        }
+        
+        .id-container input:disabled {
+            background-color: #f3f4f6 !important;
+            cursor: not-allowed;
         }
     </style>
 </head>
 
 <body>
-    <header
-        style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: #fff; border-bottom: 2px solid var(--primary); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); position: sticky; top: 0; z-index: 1000; height: 56px;">
+    <header>
         <div style="flex: 1; display: flex; align-items: center;">
-            <!-- 올려주신 로고(인천경기지역본부)를 불러오도록 로컬 경로 설정 -->
-            <img src="./logo.png" alt="NHIS Logo" style="height: 34px; width: auto; object-fit: contain;">
+            <img src="./logo.png" alt="NHIS Logo" style="height: 38px; width: auto; object-fit: contain;">
         </div>
         <div style="flex: 2.5; text-align: center;">
-            <h1
-                style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap; letter-spacing: -0.5px;">
-                제한·통제 구역 출입 명부</h1>
+            <h1 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap; letter-spacing: -0.5px;">
+                제한·통제 구역 출입 명부
+            </h1>
         </div>
         <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center;">
             <button id="adminToggleBtn" onclick="requestAdminAccess()"
-                style="background: #fff; border: 1.8px solid var(--primary); padding: 8px 18px; border-radius: 100px; color: var(--primary); font-weight: 900; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-                관리자 페이지
+                style="background: #fff; border: 1.8px solid var(--primary); padding: 8px 16px; border-radius: 100px; color: var(--primary); font-weight: 900; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+                관리자
             </button>
-            <div id="adminNavBtns" style="display: none; gap: 8px;">
-                <button onclick="exitAdmin()"
-                    style="background: transparent; border: 1.5px solid #e5e7eb; padding: 8px 16px; border-radius: 10px; color: #4b5563; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-                    HOME
-                </button>
-                <button onclick="printLogReport()"
-                    style="background: var(--primary); border: none; padding: 8px 16px; border-radius: 10px; color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-                    PDF
-                </button>
-            </div>
         </div>
     </header>
 
     <div id="userView" class="container">
-        <!-- Status Dashboard (Visible only when in-progress) -->
-        <!-- Admin Section -->
-        <div id="adminSection" class="card" style="display: none; margin-top: 10px;">
-            <!-- 일반 조회 타이틀 (관리자 모드에서는 숨김) -->
-            <div id="publicTitle" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-                <h2 style="font-size: 1.1rem; font-weight: 900; color: var(--primary); margin: 0; padding-left: 6px; border-left: 3.5px solid var(--primary); line-height: 1; letter-spacing: 0.6px;">출입기록 조회</h2>
-                <button id="publicBackBtn" onclick="exitAdmin()" style="display:none; height: 32px; padding: 0 14px; background: transparent; color: #6b7280; border: 1.5px solid #e5e7eb; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; flex-shrink: 0;">
-                    ← 뒤로가기
-                </button>
-            </div>
-            <div class="filter-group"
-                style="align-items: center; flex-wrap: nowrap; gap: 4px; overflow-x: auto; padding-bottom: 2px; white-space: nowrap;">
-                <span
-                    style="font-size: 0.82rem; font-weight: 800; color: var(--text-main); white-space: nowrap; flex-shrink: 0;">기간
-                    선택:</span>
-                <div style="display: flex; align-items: center; gap: 2px;">
-                    <select id="filterStartYear" class="filter-select"></select>
-                    <select id="filterStartMonth" class="filter-select">
-                        <option value="01">1월</option>
-                        <option value="02">2월</option>
-                        <option value="03">3월</option>
-                        <option value="04">4월</option>
-                        <option value="05">5월</option>
-                        <option value="06">6월</option>
-                        <option value="07">7월</option>
-                        <option value="08">8월</option>
-                        <option value="09">9월</option>
-                        <option value="10">10월</option>
-                        <option value="11">11월</option>
-                        <option value="12">12월</option>
-                    </select>
-                </div>
-                <span style="font-weight: 900; color: #9ca3af; margin: 0;">~</span>
-                <div style="display: flex; align-items: center; gap: 2px;">
-                    <select id="filterEndYear" class="filter-select"></select>
-                    <select id="filterEndMonth" class="filter-select">
-                        <option value="01">1월</option>
-                        <option value="02">2월</option>
-                        <option value="03">3월</option>
-                        <option value="04">4월</option>
-                        <option value="05">5월</option>
-                        <option value="06">6월</option>
-                        <option value="07">7월</option>
-                        <option value="08">8월</option>
-                        <option value="09">9월</option>
-                        <option value="10">10월</option>
-                        <option value="11">11월</option>
-                        <option value="12">12월</option>
-                    </select>
-                </div>
-                <!-- 조회용 수동 버튼 추가 -->
-                <button onclick="onFilterChange()"
-                    style="height: 34px; padding: 0 12px; background: transparent; color: #4b5563; border: 1.5px solid #e5e7eb; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-left: auto; flex-shrink: 0;">
-                    조회
-                </button>
-            </div>
-            <div id="adminEditDeleteBtns" style="display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 8px;">
-                <button onclick="editSelected()"
-                    style="height: 30px; padding: 0 14px; background: transparent; color: #4b5563; border: 1.5px solid #e5e7eb; border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer; transition: all 0.2s;">수정</button>
-                <button onclick="deleteSelected()"
-                    style="height: 30px; padding: 0 14px; background: transparent; color: var(--primary); border: 1.5px solid var(--primary); border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer; transition: all 0.2s;">삭제</button>
-            </div>
-            <div class="admin-table-container">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th id="adminCheckboxHeader" style="width: 36px;"></th>
-                            <th style="width: 50px;">순번</th>
-                            <th>일자</th>
-                            <th>소속</th>
-                            <th>직급 / 성명(사번)</th>
-                            <th>입/퇴실 시간</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminTableContent"></tbody>
-                </table>
-            </div>
-            <div id="noDataMsg"
-                style="display: none; padding: 40px 0; text-align: center; color: #9ca3af; font-size: 0.85rem;">기록이
-                없습니다.</div>
-            <div id="adminPagination"
-                style="display: none; justify-content: center; align-items: center; gap: 16px; margin-top: 15px; padding-bottom: 5px;">
-            </div>
-        </div>
-
-        <!-- 수정 모달 -->
-        <div id="editModal"
-            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:3000; justify-content:center; align-items:center;">
-            <div
-                style="background:#fff; border-radius:16px; padding:24px 20px; width:90%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
-                <h3
-                    style="font-size:1rem; font-weight:900; color:var(--text-main); margin-bottom:18px; padding-left:6px; border-left:3.5px solid var(--primary); letter-spacing:0.5px;">
-                    출입 기록 수정</h3>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <div>
-                        <label
-                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">일자</label>
-                        <input id="editDate" type="date"
-                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
-                    </div>
-                    <div>
-                        <label
-                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">소속</label>
-                        <select id="editDept"
-                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box; background:#fff; appearance:none; background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%239ca3af\'%3E%3Cpath d=\'M7 10l5 5 5-5z\'/%3E%3C/svg%3E'); background-repeat:no-repeat; background-position:right 8px center; background-size:16px;">
-                            <option value="">선택</option>
-                            <option value="자격부과부">자격부과부</option>
-                            <option value="징수부">징수부</option>
-                            <option value="지사업무지원1부">지사업무지원1부</option>
-                            <option value="지사업무지원2부">지사업무지원2부</option>
-                            <option value="행정지원부">행정지원부</option>
-                            <option value="요양지원부1부">요양지원부1부</option>
-                            <option value="요양지원부2부">요양지원부2부</option>
-                            <option value="요양운영부">요양운영부</option>
-                            <option value="요양심사부">요양심사부</option>
-                            <option value="건강보험지원부">건강보험지원부</option>
-                            <option value="장기요양부">장기요양부</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label
-                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">직급</label>
-                        <select id="editPosition"
-                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box; background:#fff; appearance:none; background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%239ca3af\'%3E%3Cpath d=\'M7 10l5 5 5-5z\'/%3E%3C/svg%3E'); background-repeat:no-repeat; background-position:right 8px center; background-size:16px;">
-                            <option value="">선택</option>
-                            <option value="1급">1급</option>
-                            <option value="2급">2급</option>
-                            <option value="3급">3급</option>
-                            <option value="4급">4급</option>
-                            <option value="5급">5급</option>
-                            <option value="6급">6급</option>
-                            <option value="인턴">인턴</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label
-                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">성명</label>
-                        <input id="editName" type="text"
-                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
-                    </div>
-                    <div>
-                        <label
-                            style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">사번</label>
-                        <input id="editIdNum" type="text"
-                            style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
-                    </div>
-                    <div style="display:flex; gap:8px;">
-                        <div style="flex:1;">
-                            <label
-                                style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">입실
-                                시간</label>
-                            <input id="editCheckIn" type="time"
-                                style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
-                        </div>
-                        <div style="flex:1;">
-                            <label
-                                style="font-size:0.78rem; font-weight:800; color:var(--primary); display:block; margin-bottom:4px;">퇴실
-                                시간</label>
-                            <input id="editCheckOut" type="time"
-                                style="width:100%; height:38px; border:1.5px solid #e5e7eb; border-radius:8px; padding:0 10px; font-size:0.85rem; font-family:inherit; outline:none; box-sizing:border-box;">
-                        </div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:8px; margin-top:18px;">
-                    <button onclick="closeEditModal()"
-                        style="flex:1; height:40px; background:transparent; border:1.5px solid #e5e7eb; border-radius:10px; font-weight:800; font-size:0.9rem; color:#6b7280; cursor:pointer;">취소</button>
-                    <button onclick="saveEdit()"
-                        style="flex:1; height:40px; background:var(--primary); border:none; border-radius:10px; font-weight:800; font-size:0.9rem; color:#fff; cursor:pointer;">저장</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Print Area (Hidden in browser) -->
-        <div id="printArea" style="display: none;"></div>
-
-        <div id="statusSection" class="card"
-            style="display: none; margin-bottom: 30px; text-align: center; border: 2px solid var(--primary); background: #ffffff;">
+        <!-- Status View (In-progress) -->
+        <div id="statusSection" class="card" style="display: none; text-align: center; border: 2.5px solid var(--primary);">
             <div class="pulsing"
-                style="display: inline-block; padding: 4px 10px; background: var(--primary); color: #fff; border-radius: 6px; font-weight: 800; font-size: 0.9rem; margin-bottom: 16px; letter-spacing: -0.5px;">
-                입실 중</div>
-            <h2 id="statusWho"
-                style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-bottom: 12px;">...
-            </h2>
-            <div id="statusTimer"
-                style="font-size: 1.25rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 16px;">
+                style="display: inline-block; padding: 6px 14px; background: var(--primary); color: #fff; border-radius: 8px; font-weight: 800; font-size: 0.95rem; margin-bottom: 20px;">
+                결재 대기중</div>
+            <h2 id="statusWho" style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-bottom: 12px;">...</h2>
+            <div id="statusTimer" style="font-size: 1.5rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 24px;">
                 00:00:00</div>
-            <button class="btn-submit" onclick="saveCheckout()"
-                style="background: var(--primary); border: none; box-shadow: 0 8px 16px rgba(227, 6, 19, 0.15); font-size: 1.1rem;">퇴실하기</button>
+            <button class="btn-submit" onclick="saveCheckout()" style="font-size: 1.1rem;">퇴실하기</button>
         </div>
 
+        <!-- Entry Form View -->
         <div id="entrySection">
-            <p
-                style="font-size: 0.8rem; color: #6b7280; font-weight: 700; margin-top: 10px; margin-bottom: 10px; text-align: center; opacity: 0.8;">
-                입실 정보를 정확히 입력해 주세요.</p>
+            <p style="text-align: center; color: var(--text-sub); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px;">입실 정보를 정확히 입력해 주세요.</p>
             <div class="card">
-                <div class="form-group" style="margin-bottom: 14px;">
+                <div class="form-group">
                     <label class="input-label">일자</label>
-                    <input type="text" id="date" class="form-input" readonly
-                        style="background-color: #f3f4f6 !important; color: #6b7280 !important; pointer-events: none !important; border: 1.5px solid #e5e7eb !important; font-weight: 800 !important; text-align: center !important; letter-spacing: 1px !important;">
+                    <input type="text" id="date" class="form-input" readonly style="background-color: #f9fafb; font-weight: 800; text-align: center;">
                 </div>
-                <div class="form-group" style="margin-bottom: 14px;">
+                
+                <div class="form-group">
                     <label class="input-label">소속(부서명)</label>
                     <div class="custom-select" id="deptSelect">
                         <div class="custom-select-trigger placeholder" onclick="toggleDeptDropdown()">소속부서를 선택하세요</div>
@@ -1111,12 +347,10 @@
                             <div class="custom-option" onclick="selectDept('기타')">기타 직접입력</div>
                         </div>
                     </div>
-                    <!-- Hidden by default with !important priority -->
-                    <input type="text" id="deptDirectInput" class="form-input"
-                        style="display: none !important; margin-top: 10px;" placeholder="직접 입력해 주세요"
-                        oninput="checkForm()">
+                    <input type="text" id="deptDirectInput" class="form-input" style="display: none; margin-top: 10px;" placeholder="직접 입력" oninput="checkForm()">
                 </div>
-                <div class="form-group" style="margin-bottom: 14px;">
+
+                <div class="form-group">
                     <label class="input-label">직위(직급)</label>
                     <div class="custom-select" id="posSelect">
                         <div class="custom-select-trigger placeholder" onclick="togglePosDropdown()">직급을 선택하세요</div>
@@ -1131,70 +365,49 @@
                             <div class="custom-option" onclick="selectPos('기타')">기타 직접입력</div>
                         </div>
                     </div>
-                    <!-- Hidden by default for Position Direct Input -->
-                    <input type="text" id="posDirectInput" class="form-input"
-                        style="display: none !important; margin-top: 10px;" placeholder="직접 입력해 주세요"
-                        oninput="checkForm()">
+                    <input type="text" id="posDirectInput" class="form-input" style="display: none; margin-top: 10px;" placeholder="직접 입력" oninput="checkForm()">
                 </div>
-                <div class="form-group" style="margin-bottom: 14px;">
+
+                <div class="form-group">
                     <label class="input-label">성명</label>
                     <input type="text" id="name" class="form-input" placeholder="성명을 입력하세요" oninput="checkForm()">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 14px;">
-                    <label class="input-label">자필서명</label>
-                    <div id="signatureContainer" class="signature-placeholder" onclick="openSignatureModal()"
-                        tabindex="0">
-                        <span id="signatureHint" style="font-size: 0.75rem; padding: 0 10px; text-align: center;">서명란을
-                            선택하세요</span>
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label class="input-label" style="margin-bottom: 0;">사원번호</label>
+                        <label id="naContainer" class="na-option">
+                            <input type="checkbox" id="idNumNa" style="accent-color: var(--primary);" onchange="toggleIdNumNa()"> 해당없음
+                        </label>
+                    </div>
+                    <div class="id-container">
+                        <input type="text" id="idNum" class="form-input" placeholder="사원번호 6자리를 입력하세요" maxlength="6" inputmode="numeric" oninput="checkForm()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="input-label">용무</label>
+                    <input type="text" id="purpose" class="form-input" placeholder="목적을 입력하세요" oninput="checkForm()">
+                </div>
+
+                <div class="form-group">
+                    <label class="input-label">자필 서명</label>
+                    <div id="signatureContainer" class="signature-placeholder" onclick="openSignatureModal()">
+                        <span id="signatureHint">여기를 눌러 서명해 주세요</span>
                         <img id="signatureImage" class="signature-img" style="display: none;">
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 14px;">
-                    <div class="input-header">
-                        <label class="input-label" style="margin-bottom: 0;">사원번호</label>
-                        <label id="naContainer" class="na-option">
-                            <input type="checkbox" id="idNumNa" class="na-checkbox" onchange="toggleIdNumNa()"> 해당없음
-                        </label>
-                    </div>
-                    <div class="id-container">
-                        <input type="text" id="idNum" class="form-input" placeholder="사원번호 6자리를 입력하세요" maxlength="6"
-                            inputmode="numeric" oninput="checkForm()">
-                    </div>
-                    <div id="idNumError"
-                        style="display: none; color: var(--primary); font-size: 0.75rem; margin-top: 4px; font-weight: 700;">
-                        ※ 사원번호 6자리를 정확히 입력해 주세요.</div>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 14px;">
-                    <label class="input-label">용무</label>
-                    <input type="text" id="purpose" class="form-input" placeholder="방문 목적을 입력하세요" oninput="checkForm()">
-                </div>
-
-                <button type="button" id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>
-                    입실하기
-                </button>
-                <button type="button" class="btn-secondary" onclick="showPublicLogs()"
-                    style="margin-top: 12px; width: 100%; height: 48px; border: 1.5px solid var(--primary); background: transparent; color: var(--primary); border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;">
-                    출입 기록 조회
-                </button>
+                <button id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>승인 요청</button>
             </div>
         </div>
-        </thead>
-        <tbody id="logTableBody" style="font-weight: 500; color: var(--text-main);">
-            <!-- Rows will be injected here -->
-        </tbody>
-        </table>
-    </div>
     </div>
 
-    <!-- Signature Modal HTML -->
+    <!-- Signature Modal -->
     <div id="signatureModal" class="modal">
         <div class="modal-content">
-            <h3 style="font-weight: 800; text-align: center;">자필 서명</h3>
-            <p style="font-size: 0.85rem; color: #e30613; margin-top: 4px; text-align: center; font-weight: 700;">※ 성함을
-                반드시 정자(正字)로 기재해 주세요.</p>
+            <h3 style="font-weight: 800; text-align: center; margin-bottom: 4px;">자필 서명</h3>
+            <p style="font-size: 0.8rem; color: var(--primary); text-align: center; font-weight: 700; margin-bottom: 12px;">※ 성함을 정자(正字)로 기재해 주세요.</p>
             <div class="canvas-container">
                 <canvas id="signatureCanvas"></canvas>
             </div>
@@ -1202,64 +415,19 @@
                 <button class="btn-secondary" onclick="clearSignature()">다시 쓰기</button>
                 <button class="btn-primary" onclick="saveSignature()">서명 완료</button>
             </div>
-            <button onclick="closeSignatureModal()"
-                style="width: 100%; margin-top: 12px; background: none; border: none; color: #9ca3af; font-size: 0.9rem; font-weight: 600; cursor: pointer;">닫기</button>
+            <button onclick="closeSignatureModal()" style="width: 100%; margin-top: 15px; border: none; background: none; color: #9ca3af; font-size: 0.9rem; font-weight: 700; cursor: pointer;">닫기</button>
         </div>
     </div>
 
-    <!-- Logic elements preserved from previous stable builds -->
     <script>
-        // Core Logic for Reverted Stable Version
         let timerInterval = null;
+        let signaturePad = null;
+        let currentSignature = null;
 
-        function resetForm() {
-            const dateInput = document.getElementById('date');
-            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
-
-            // Dept Reset
-            const deptTrigger = document.querySelector('#deptSelect .custom-select-trigger');
-            if (deptTrigger) {
-                deptTrigger.innerText = '소속부서를 선택하세요';
-                deptTrigger.classList.add('placeholder');
-                deptTrigger.style.backgroundColor = '#ffffff';
-            }
-            const deptDirectInput = document.getElementById('deptDirectInput');
-            if (deptDirectInput) {
-                deptDirectInput.style.setProperty('display', 'none', 'important');
-                deptDirectInput.value = '';
-            }
-
-            // Position Reset
-            const posTrigger = document.querySelector('#posSelect .custom-select-trigger');
-            if (posTrigger) {
-                posTrigger.innerText = '직급을 선택하세요';
-                posTrigger.classList.add('placeholder');
-                posTrigger.style.backgroundColor = '#ffffff';
-            }
-            const posDirectInput = document.getElementById('posDirectInput');
-            if (posDirectInput) {
-                posDirectInput.style.setProperty('display', 'none', 'important');
-                posDirectInput.value = '';
-            }
-
-            document.getElementById('name').value = '';
-            document.getElementById('idNum').value = '';
-            document.getElementById('idNum').disabled = false;
-            document.getElementById('idNum').style.backgroundColor = '#ffffff';
-            document.getElementById('idNumNa').checked = false;
-            const naContainer = document.getElementById('naContainer');
-            if (naContainer) naContainer.style.display = 'none';
-            document.getElementById('purpose').value = '';
-
-            // Signature Reset
-            currentSignature = null;
-            const sigImg = document.getElementById('signatureImage');
-            const sigHint = document.getElementById('signatureHint');
-            if (sigImg) sigImg.style.display = 'none';
-            if (sigHint) sigHint.style.display = 'block';
-
-            checkForm();
-        }
+        window.onload = function() {
+            renderUI();
+            resetForm();
+        };
 
         function renderUI() {
             const records = JSON.parse(localStorage.getItem('access_records') || '[]');
@@ -1269,99 +437,75 @@
             const statusSection = document.getElementById('statusSection');
 
             if (activeEntry) {
-                if (entrySection) entrySection.style.display = 'none';
-                if (statusSection) statusSection.style.display = 'block';
-                const statusWho = document.getElementById('statusWho');
-                if (statusWho) statusWho.innerText = `${activeEntry.dept} ${activeEntry.name}(${activeEntry.idNum}) 님`;
+                entrySection.style.display = 'none';
+                statusSection.style.display = 'block';
+                document.getElementById('statusWho').innerText = `${activeEntry.dept} ${activeEntry.name}(${activeEntry.idNum}) 님`;
                 startTimer(activeEntry.checkInTime);
             } else {
-                if (entrySection) entrySection.style.display = 'block';
-                if (statusSection) statusSection.style.display = 'none';
+                entrySection.style.display = 'block';
+                statusSection.style.display = 'none';
                 stopTimer();
                 resetForm();
             }
+        }
 
-            // Admin Dashboard Data
-            const todayISO = new Date().toISOString().split('T')[0];
-            const recordsToday = records.filter(r => r.date === todayISO);
+        function resetForm() {
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            
+            // Dropdowns reset
+            const triggers = document.querySelectorAll('.custom-select-trigger');
+            triggers[0].innerText = '소속부서를 선택하세요';
+            triggers[0].classList.add('placeholder');
+            triggers[1].innerText = '직급을 선택하세요';
+            triggers[1].classList.add('placeholder');
 
-            const totalCountEl = document.getElementById('totalCount');
-            const todayCountEl = document.getElementById('todayCount');
-            const adminView = document.getElementById('adminView');
-
-            if (totalCountEl) totalCountEl.innerText = records.length;
-            if (todayCountEl) todayCountEl.innerText = recordsToday.length;
-
-            // Admin Table
-            const tbody = document.getElementById('logTableBody');
-            if (tbody) {
-                tbody.innerHTML = '';
-                [...records].reverse().forEach(r => {
-                    const tr = document.createElement('tr');
-                    tr.style.borderBottom = "1px solid #f1f2f4";
-
-                    const formatTime = (isoStr) => {
-                        if (!isoStr) return "-";
-                        const d = new Date(isoStr);
-                        return d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-                    };
-
-                    tr.innerHTML = `
-                        <td style="padding: 15px 20px;">${r.date}</td>
-                        <td style="padding: 15px 20px;">${r.dept}</td>
-                        <td style="padding: 15px 20px;">${r.name}</td>
-                        <td style="padding: 15px 20px; font-weight: 800;">${formatTime(r.checkInTime)}</td>
-                        <td style="padding: 15px 20px; color: var(--primary); font-weight: 800;">${formatTime(r.checkOutTime)}</td>
-                        <td style="padding: 15px 20px;">${r.purpose}</td>
-                        <td style="padding: 8px 20px;"><img src="${r.signature}" style="height: 35px; border: 1px solid #eee; border-radius: 4px;"></td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
+            document.getElementById('deptDirectInput').style.display = 'none';
+            document.getElementById('posDirectInput').style.display = 'none';
+            document.getElementById('name').value = '';
+            document.getElementById('idNum').value = '';
+            document.getElementById('idNum').disabled = false;
+            document.getElementById('idNum').style.backgroundColor = '#ffffff';
+            document.getElementById('idNumNa').checked = false;
+            document.getElementById('naContainer').style.display = 'none';
+            document.getElementById('purpose').value = '';
+            
+            currentSignature = null;
+            document.getElementById('signatureImage').style.display = 'none';
+            document.getElementById('signatureHint').style.display = 'block';
+            
+            checkForm();
         }
 
         function startTimer(startTimeStr) {
-            stopTimer();
+            if (timerInterval) clearInterval(timerInterval);
             const startTime = new Date(startTimeStr).getTime();
-
             function update() {
-                const now = new Date().getTime();
-                const diff = now - startTime;
-
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById('statusTimer').innerText =
-                    `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                const diff = new Date().getTime() - startTime;
+                const hh = Math.floor(diff / 3600000).toString().padStart(2, '0');
+                const mm = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+                const ss = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+                document.getElementById('statusTimer').innerText = `${hh}:${mm}:${ss}`;
             }
-
             update();
             timerInterval = setInterval(update, 1000);
         }
 
-        function stopTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-        }
+        function stopTimer() { if (timerInterval) clearInterval(timerInterval); }
 
         function saveRecord() {
             const date = document.getElementById('date').value;
-            const deptDropdown = document.querySelector('#deptSelect .custom-select-trigger').innerText;
+            const deptText = document.querySelector('#deptSelect .custom-select-trigger').innerText;
             const deptDirect = document.getElementById('deptDirectInput').value;
-            const posDropdown = document.querySelector('#posSelect .custom-select-trigger').innerText;
+            const posText = document.querySelector('#posSelect .custom-select-trigger').innerText;
             const posDirect = document.getElementById('posDirectInput').value;
             const name = document.getElementById('name').value;
             const idNum = document.getElementById('idNum').value;
-            const idNumNa = document.getElementById('idNumNa').checked;
             const purpose = document.getElementById('purpose').value;
 
-            const finalDept = deptDropdown === '기타 직접입력' ? deptDirect : deptDropdown;
-            const finalPos = posDropdown === '기타 직접입력' ? posDirect : posDropdown;
-            const finalId = idNumNa ? '사원번호 없음' : idNum;
+            const finalDept = (deptText === '기타 직접입력') ? deptDirect : deptText;
+            const finalPos = (posText === '기타 직접입력') ? posDirect : posText;
 
-            // 추가된 확인 대화상자
-            const confirmMsg = `[입실 정보 확인]\n일자: ${date}\n소속: ${finalDept} ${finalPos} ${name}(${finalId})\n\n위의 정보가 정확합니까?`;
-            if (!confirm(confirmMsg)) return;
+            if (!confirm(`[입실 확인]\n소속: ${finalDept}\n직급: ${finalPos}\n성명: ${name}\n\n입실하시겠습니까?`)) return;
 
             const newRecord = {
                 id: Date.now(),
@@ -1369,361 +513,129 @@
                 dept: finalDept,
                 position: finalPos,
                 name,
-                idNum: finalId,
+                idNum,
                 purpose,
                 checkInTime: new Date().toISOString(),
-                signature: currentSignature
+                signature: currentSignature,
+                checkOutTime: null
             };
 
             const records = JSON.parse(localStorage.getItem('access_records') || '[]');
             records.push(newRecord);
             localStorage.setItem('access_records', JSON.stringify(records));
-
             renderUI();
         }
 
         function saveCheckout() {
             if (!confirm("퇴실하시겠습니까?")) return;
-
             const records = JSON.parse(localStorage.getItem('access_records') || '[]');
             const activeIdx = records.findIndex(r => !r.checkOutTime);
             if (activeIdx !== -1) {
                 records[activeIdx].checkOutTime = new Date().toISOString();
                 localStorage.setItem('access_records', JSON.stringify(records));
-                alert("퇴실처리 되었습니다.");
+                alert("퇴실이 완료되었습니다.");
                 renderUI();
             }
         }
 
-        function showPublicLogs(isAdmin = false) {
-            document.getElementById('entrySection').style.display = 'none';
-            document.getElementById('statusSection').style.display = 'none';
-            document.getElementById('adminSection').style.display = 'block';
-
-            // 상단 관리자 메뉴 버튼 토글
-            document.getElementById('adminToggleBtn').style.display = 'none';
-
-            if (isAdmin) {
-                document.getElementById('adminNavBtns').style.display = 'flex';
-                document.getElementById('adminEditDeleteBtns').style.display = 'flex';
-                document.getElementById('adminCheckboxHeader').style.display = 'table-cell';
-                document.getElementById('publicBackBtn').style.display = 'none';
-                document.getElementById('publicTitle').style.display = 'none';
-            } else {
-                document.getElementById('adminNavBtns').style.display = 'none';
-                document.getElementById('adminEditDeleteBtns').style.display = 'none';
-                document.getElementById('adminCheckboxHeader').style.display = 'none';
-                document.getElementById('publicBackBtn').style.display = 'inline-block';
-                document.getElementById('publicTitle').style.display = 'flex';
-            }
-
-            // isAdmin 플래그를 전역에 저장하여 loadAdminLogs에서 활용
-            window._isAdminMode = isAdmin;
-
-            currentAdminPage = 1;
-            initFilterOptions();
-            loadAdminLogs();
-        }
-
         function requestAdminAccess() {
-            const pw = prompt('비밀번호를 입력하세요:');
-            if (pw === '1234') {
-                showPublicLogs(true);
-            } else if (pw !== null) alert('비밀번호가 올바르지 않습니다.');
+            location.href = 'admin.html';
         }
 
-        function exitAdmin() {
-            if (!confirm("첫 화면으로 돌아가시겠습니까?")) return;
-
-            document.getElementById('adminSection').style.display = 'none';
-
-            // 상단 관리자 메뉴 버튼 토글 복구
-            document.getElementById('adminToggleBtn').style.display = 'inline-block';
-            document.getElementById('adminNavBtns').style.display = 'none';
-
-            renderUI();
+        // Dropdown Handlers
+        function toggleDeptDropdown() { closeOthers('deptOptions'); toggle('deptOptions'); }
+        function togglePosDropdown() { closeOthers('posOptions'); toggle('posOptions'); }
+        function toggle(id) {
+            const el = document.getElementById(id);
+            const isVisible = el.style.display === 'block';
+            el.style.display = isVisible ? 'none' : 'block';
+        }
+        function closeOthers(id) {
+            ['deptOptions', 'posOptions'].forEach(oid => { if (oid !== id) document.getElementById(oid).style.display = 'none'; });
         }
 
-        function initFilterOptions() {
-            const startYearSelect = document.getElementById('filterStartYear');
-            const endYearSelect = document.getElementById('filterEndYear');
-            startYearSelect.innerHTML = '';
-            endYearSelect.innerHTML = '';
-
-            const currentYear = new Date().getFullYear();
-            for (let y = currentYear; y >= currentYear - 5; y--) {
-                const opt1 = document.createElement('option');
-                opt1.value = y;
-                opt1.text = y + '년';
-                startYearSelect.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = y;
-                opt2.text = y + '년';
-                endYearSelect.appendChild(opt2);
-            }
-            const currentMonthStr = (new Date().getMonth() + 1).toString().padStart(2, '0');
-            document.getElementById('filterStartMonth').value = currentMonthStr;
-            document.getElementById('filterEndMonth').value = currentMonthStr;
-        }
-
-        let currentAdminPage = 1;
-        const ADMIN_ITEMS_PER_PAGE = 19;
-
-        function onFilterChange() {
-            currentAdminPage = 1;
-            loadAdminLogs();
-        }
-
-        function loadAdminLogs() {
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const startYear = document.getElementById('filterStartYear').value;
-            const startMonth = document.getElementById('filterStartMonth').value;
-            const endYear = document.getElementById('filterEndYear').value;
-            const endMonth = document.getElementById('filterEndMonth').value;
-
-            const filterStart = `${startYear}-${startMonth}`;
-            const filterEnd = `${endYear}-${endMonth}`;
-
-            let filtered = records.filter(r => {
-                const rMonthPrefix = r.date.substring(0, 7);
-                return rMonthPrefix >= filterStart && rMonthPrefix <= filterEnd;
-            });
-            filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
-
-            const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_ITEMS_PER_PAGE));
-            if (currentAdminPage > totalPages) currentAdminPage = totalPages;
-
-            const startIndex = (currentAdminPage - 1) * ADMIN_ITEMS_PER_PAGE;
-            const pageData = filtered.slice(startIndex, startIndex + ADMIN_ITEMS_PER_PAGE);
-
-            const tableContent = document.getElementById('adminTableContent');
-            tableContent.innerHTML = '';
-            document.getElementById('noDataMsg').style.display = filtered.length ? 'none' : 'block';
-
-            const paginationEl = document.getElementById('adminPagination');
-            if (filtered.length > 0) {
-                paginationEl.style.display = 'flex';
-                renderPagination(totalPages);
+        function selectDept(val) {
+            const trigger = document.querySelector('#deptSelect .custom-select-trigger');
+            trigger.innerText = (val === '기타') ? '기타 직접입력' : val;
+            trigger.classList.remove('placeholder');
+            document.getElementById('deptOptions').style.display = 'none';
+            
+            const direct = document.getElementById('deptDirectInput');
+            const naCont = document.getElementById('naContainer');
+            if (val === '기타') {
+                direct.style.display = 'block';
+                naCont.style.display = 'flex';
+                direct.focus();
             } else {
-                paginationEl.style.display = 'none';
+                direct.style.display = 'none';
+                naCont.style.display = 'none';
+                document.getElementById('idNumNa').checked = false;
+                toggleIdNumNa();
             }
-
-            pageData.forEach((r, idx) => {
-                const seqNo = startIndex + idx + 1;
-                const globalIdx = records.indexOf(r);
-                const row = document.createElement('tr');
-                row.dataset.globalIdx = globalIdx;
-                const inDate = new Date(r.date);
-                const formattedDate = `${inDate.getMonth() + 1}월 ${inDate.getDate()}일`;
-
-                const inT = new Date(r.checkInTime);
-                const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
-
-                const inStr = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
-                let outStr = outT ? `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}` : '<span style="color:var(--primary);">입실중</span>';
-
-                const checkboxCell = window._isAdminMode
-                    ? `<td><input type="checkbox" class="row-checkbox" data-idx="${globalIdx}" onchange="onRowCheckbox(this)" style="width:15px;height:15px;accent-color:var(--primary);"></td>`
-                    : `<td style="display:none;"></td>`;
-
-                row.innerHTML = `
-                    ${checkboxCell}
-                    <td style="font-weight: 800; color: #6b7280;">${seqNo}</td>
-                    <td>${formattedDate}</td>
-                    <td>${r.dept}</td>
-                    <td style="font-weight: 700;">${r.position} ${r.name} (${r.idNum})</td>
-                    <td>${inStr} ~ ${outStr}</td>
-                `;
-                tableContent.appendChild(row);
-            });
+            checkForm();
         }
 
-        function onRowCheckbox(cb) {
-            const allCbs = document.querySelectorAll('.row-checkbox');
-            const checkedCbs = Array.from(allCbs).filter(c => c.checked);
-            if (checkedCbs.length > 1) {
-                cb.checked = false;
-                alert('한 번에 하나씩 선택해 주세요.');
+        function selectPos(val) {
+            const trigger = document.querySelector('#posSelect .custom-select-trigger');
+            trigger.innerText = (val === '기타') ? '기타 직접입력' : val;
+            trigger.classList.remove('placeholder');
+            document.getElementById('posOptions').style.display = 'none';
+            
+            const direct = document.getElementById('posDirectInput');
+            if (val === '기타') { direct.style.display = 'block'; direct.focus(); }
+            else { direct.style.display = 'none'; }
+            checkForm();
+        }
+
+        function toggleIdNumNa() {
+            const isNa = document.getElementById('idNumNa').checked;
+            const input = document.getElementById('idNum');
+            input.disabled = isNa;
+            if (isNa) { input.value = '해당없음'; input.style.background = '#f3f4f6'; }
+            else { input.value = ''; input.style.background = '#fff'; }
+            checkForm();
+        }
+
+        function checkForm() {
+            const name = document.getElementById('name').value.trim();
+            const idVal = document.getElementById('idNum').value.trim();
+            const purpose = document.getElementById('purpose').value.trim();
+            const deptText = document.querySelector('#deptSelect .custom-select-trigger').innerText;
+            const posText = document.querySelector('#posSelect .custom-select-trigger').innerText;
+            
+            const isDeptOk = (deptText !== '소속부서를 선택하세요' && (deptText !== '기타 직접입력' || document.getElementById('deptDirectInput').value.trim()));
+            const isPosOk = (posText !== '직급을 선택하세요' && (posText !== '기타 직접입력' || document.getElementById('posDirectInput').value.trim()));
+            const isIdOk = (document.getElementById('idNumNa').checked || idVal.length === 6);
+            
+            document.getElementById('submitBtn').disabled = !(name && purpose && isDeptOk && isPosOk && isIdOk && currentSignature);
+        }
+
+        // Signature Pad
+        function openSignatureModal() {
+            document.getElementById('signatureModal').classList.add('active');
+            if (!signaturePad) {
+                const canvas = document.getElementById('signatureCanvas');
+                signaturePad = new SignaturePad(canvas, { backgroundColor: '#f9fafb' });
+                window.addEventListener('resize', () => {
+                    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                    canvas.width = canvas.offsetWidth * ratio;
+                    canvas.height = canvas.offsetHeight * ratio;
+                    canvas.getContext("2d").scale(ratio, ratio);
+                    signaturePad.clear();
+                });
             }
-        }
-
-        function getSelectedIndices() {
-            return Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => parseInt(cb.dataset.idx));
-        }
-
-        function deleteSelected() {
-            const indices = getSelectedIndices();
-            if (indices.length === 0) { alert('삭제할 항목을 선택해 주세요.'); return; }
-            if (!confirm(`선택한 ${indices.length}건을 삭제하시겠습니까?`)) return;
-            let records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            // 인덱스 내림차순 정렬 후 제거
-            indices.sort((a, b) => b - a).forEach(i => records.splice(i, 1));
-            localStorage.setItem('access_records', JSON.stringify(records));
-            document.getElementById('selectAll').checked = false;
-            loadAdminLogs();
-        }
-
-        let _editIdx = null;
-
-        function editSelected() {
-            const indices = getSelectedIndices();
-            if (indices.length === 0) { alert('수정할 항목을 선택해 주세요.'); return; }
-            if (indices.length > 1) { alert('수정은 1건씩 선택 후 진행해 주세요.'); return; }
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const r = records[indices[0]];
-            if (!r) return;
-            _editIdx = indices[0];
-
-            document.getElementById('editDate').value = r.date || '';
-            document.getElementById('editDept').value = r.dept || '';
-            document.getElementById('editPosition').value = r.position || '';
-            document.getElementById('editName').value = r.name || '';
-            document.getElementById('editIdNum').value = r.idNum || '';
-
-            const inT = new Date(r.checkInTime);
-            document.getElementById('editCheckIn').value = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
-            if (r.checkOutTime) {
-                const outT = new Date(r.checkOutTime);
-                document.getElementById('editCheckOut').value = `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}`;
-            } else {
-                document.getElementById('editCheckOut').value = '';
-            }
-
-            document.getElementById('editModal').style.display = 'flex';
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-            _editIdx = null;
-        }
-
-        function saveEdit() {
-            if (_editIdx === null) return;
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const r = records[_editIdx];
-            if (!r) return;
-
-            const newDate = document.getElementById('editDate').value;
-            const newDept = document.getElementById('editDept').value.trim();
-            const newPosition = document.getElementById('editPosition').value.trim();
-            const newName = document.getElementById('editName').value.trim();
-            const newIdNum = document.getElementById('editIdNum').value.trim();
-            const checkInVal = document.getElementById('editCheckIn').value;
-            const checkOutVal = document.getElementById('editCheckOut').value;
-
-            // 입실시간 반영: 날짜 + 시간 결합
-            const baseDate = newDate || r.date;
-            const newCheckInTime = checkInVal ? new Date(`${baseDate}T${checkInVal}:00`).toISOString() : r.checkInTime;
-            const newCheckOutTime = checkOutVal ? new Date(`${baseDate}T${checkOutVal}:00`).toISOString() : (r.checkOutTime || null);
-
-            records[_editIdx] = { ...r, date: baseDate, dept: newDept, position: newPosition, name: newName, idNum: newIdNum, checkInTime: newCheckInTime, checkOutTime: newCheckOutTime };
-            localStorage.setItem('access_records', JSON.stringify(records));
-            closeEditModal();
-            loadAdminLogs();
-        }
-
-        function renderPagination(totalPages) {
-            const paginationEl = document.getElementById('adminPagination');
-            paginationEl.innerHTML = '';
-
-            const btnStyle = "padding: 6px 12px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; font-weight: 700; font-size: 0.85rem; color: #4b5563; cursor: pointer; transition: all 0.2s;";
-            const disabledStyle = "padding: 6px 12px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; font-weight: 700; font-size: 0.85rem; color: #d1d5db; cursor: not-allowed;";
-            const activeStyle = "padding: 6px 12px; background: var(--primary); border: 1px solid var(--primary); border-radius: 6px; font-weight: 700; font-size: 0.85rem; color: #fff; cursor: default; box-shadow: 0 2px 4px rgba(227, 6, 19, 0.2);";
-
-            const prevBtn = document.createElement('button');
-            prevBtn.innerText = '이전';
-            prevBtn.style.cssText = currentAdminPage === 1 ? disabledStyle : btnStyle;
-            prevBtn.disabled = currentAdminPage === 1;
-            prevBtn.onclick = () => {
-                if (currentAdminPage > 1) {
-                    currentAdminPage--;
-                    loadAdminLogs();
-                }
-            };
-            paginationEl.appendChild(prevBtn);
-
-            const pageNumbersContainer = document.createElement('div');
-            pageNumbersContainer.style.cssText = "display: flex; gap: 6px;";
-
-            for (let p = 1; p <= totalPages; p++) {
-                const pBtn = document.createElement('button');
-                pBtn.innerText = p;
-                if (p === currentAdminPage) {
-                    pBtn.style.cssText = activeStyle;
-                } else {
-                    pBtn.style.cssText = btnStyle;
-                    pBtn.onclick = () => {
-                        currentAdminPage = p;
-                        loadAdminLogs();
-                    };
-                }
-                pageNumbersContainer.appendChild(pBtn);
-            }
-            paginationEl.appendChild(pageNumbersContainer);
-
-            const nextBtn = document.createElement('button');
-            nextBtn.innerText = '다음';
-            nextBtn.style.cssText = currentAdminPage === totalPages ? disabledStyle : btnStyle;
-            nextBtn.disabled = currentAdminPage === totalPages;
-            nextBtn.onclick = () => {
-                if (currentAdminPage < totalPages) {
-                    currentAdminPage++;
-                    loadAdminLogs();
-                }
-            };
-            paginationEl.appendChild(nextBtn);
-        }
-
-        function hideAdminLogs() {
-            document.getElementById('adminView').style.display = 'none';
-            document.getElementById('userView').style.display = 'block';
-            document.getElementById('adminToggleBtn').style.display = 'block';
-            renderUI();
-        }
-
-        // Global state for signature
-        let signaturePad = null;
-        let currentSignature = null;
-
-        function initSignaturePad() {
-            const canvas = document.getElementById('signatureCanvas');
-            signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)',
-                penColor: 'rgb(0, 0, 0)'
-            });
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-        }
-
-        function resizeCanvas() {
-            const canvas = document.getElementById('signatureCanvas');
+            signaturePad.clear();
             const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            const canvas = document.getElementById('signatureCanvas');
             canvas.width = canvas.offsetWidth * ratio;
             canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
-            if (signaturePad) signaturePad.clear();
+            signaturePad.clear();
         }
-
-        function openSignatureModal() {
-            document.getElementById('signatureModal').classList.add('active');
-            if (!signaturePad) initSignaturePad();
-            else signaturePad.clear();
-        }
-
-        function closeSignatureModal() {
-            document.getElementById('signatureModal').classList.remove('active');
-        }
-
-        function clearSignature() {
-            if (signaturePad) signaturePad.clear();
-        }
-
+        function closeSignatureModal() { document.getElementById('signatureModal').classList.remove('active'); }
+        function clearSignature() { signaturePad.clear(); }
         function saveSignature() {
-            if (signaturePad.isEmpty()) {
-                alert("서명이 누락되었습니다. 서명란에 성함을 정자(正字)로 기재해 주세요.");
-                return;
-            }
+            if (signaturePad.isEmpty()) { alert("서명을 해주세요."); return; }
             currentSignature = signaturePad.toDataURL();
             const img = document.getElementById('signatureImage');
             img.src = currentSignature;
@@ -1732,236 +644,13 @@
             closeSignatureModal();
             checkForm();
         }
-
-        function checkForm() {
-            const date = document.getElementById('date').value;
-            const deptTrigger = document.querySelector('#deptSelect .custom-select-trigger');
-            const deptDropdown = deptTrigger ? deptTrigger.innerText : '';
-            const deptDirect = document.getElementById('deptDirectInput').value;
-            const posTrigger = document.querySelector('#posSelect .custom-select-trigger');
-            const posDropdown = posTrigger ? posTrigger.innerText : '';
-            const posDirect = document.getElementById('posDirectInput').value;
-            const name = document.getElementById('name').value;
-            const idInput = document.getElementById('idNum');
-            const idNum = idInput.value;
-            const idNumNa = document.getElementById('idNumNa').checked;
-            const idNumError = idNumNa ? null : document.getElementById('idNumError');
-            const purpose = document.getElementById('purpose').value;
-
-            // ID Number Validation Message
-            if (!idNumNa && idNum.trim().length > 0 && idNum.trim().length < 6) {
-                if (idNumError) idNumError.style.display = 'block';
-                idInput.style.borderColor = 'var(--primary)';
-            } else {
-                if (idNumError) idNumError.style.display = 'none';
-                if (idNumNa || idNum.trim().length === 6 || idNum.trim().length === 0) {
-                    idInput.style.borderColor = '#e5e7eb';
-                }
+        
+        // Close dropdowns when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.custom-select-trigger')) {
+                document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
             }
-
-            const isDeptValid = (deptDropdown !== '소속부서를 선택하세요' && (deptDropdown !== '기타 직접입력' || deptDirect.trim() !== ''));
-            const isPosValid = (posDropdown !== '직급을 선택하세요' && (posDropdown !== '기타 직접입력' || posDirect.trim() !== ''));
-            const isIdValid = idNumNa || idNum.trim().length === 6;
-
-            const isValid = date && isDeptValid && isPosValid && name.trim() && isIdValid && purpose.trim() && currentSignature;
-            document.getElementById('submitBtn').disabled = !isValid;
-        }
-
-        function toggleIdNumNa() {
-            const isNa = document.getElementById('idNumNa').checked;
-            const idInput = document.getElementById('idNum');
-            idInput.disabled = isNa;
-            if (isNa) {
-                idInput.value = '';
-                idInput.style.backgroundColor = '#f3f4f6';
-            } else {
-                idInput.style.backgroundColor = '#ffffff';
-            }
-            checkForm();
-        }
-
-        // Date auto-setting logic is handled in resetForm()
-
-        function toggleDeptDropdown() {
-            const selectContainer = document.getElementById('deptSelect');
-            const opts = document.getElementById('deptOptions');
-            const isOpen = opts.style.display === 'block';
-
-            // Close other dropdowns first
-            closeAllDropdowns();
-
-            opts.style.display = isOpen ? 'none' : 'block';
-            if (!isOpen) { selectContainer.classList.add('open'); }
-        }
-
-        function selectDept(val) {
-            const trigger = document.querySelector('#deptSelect .custom-select-trigger');
-            const directInput = document.getElementById('deptDirectInput');
-            const opts = document.getElementById('deptOptions');
-            const selectContainer = document.getElementById('deptSelect');
-
-            trigger.innerText = val === '기타' ? '기타 직접입력' : val;
-            trigger.classList.remove('placeholder');
-            opts.style.display = 'none';
-            selectContainer.classList.remove('open');
-
-            if (val === '기타') {
-                directInput.style.setProperty('display', 'block', 'important');
-                document.getElementById('naContainer').style.display = 'flex';
-                directInput.focus();
-            } else {
-                directInput.style.setProperty('display', 'none', 'important');
-                document.getElementById('naContainer').style.display = 'none';
-                document.getElementById('idNumNa').checked = false;
-                document.getElementById('idNum').disabled = false;
-                idInput.style.backgroundColor = '#ffffff';
-                directInput.value = '';
-            }
-
-            checkForm();
-        }
-
-        function togglePosDropdown() {
-            const selectContainer = document.getElementById('posSelect');
-            const opts = document.getElementById('posOptions');
-            const isOpen = opts.style.display === 'block';
-
-            // Close other dropdowns first
-            closeAllDropdowns();
-
-            opts.style.display = isOpen ? 'none' : 'block';
-            if (!isOpen) { selectContainer.classList.add('open'); }
-        }
-
-        function closeAllDropdowns() {
-            const dropdowns = document.querySelectorAll('.custom-options');
-            const containers = document.querySelectorAll('.custom-select');
-            dropdowns.forEach(d => d.style.display = 'none');
-            containers.forEach(c => c.classList.remove('open'));
-        }
-
-        function selectPos(val) {
-            const trigger = document.querySelector('#posSelect .custom-select-trigger');
-            const directInput = document.getElementById('posDirectInput');
-            const opts = document.getElementById('posOptions');
-            const selectContainer = document.getElementById('posSelect');
-
-            trigger.innerText = val === '기타' ? '기타 직접입력' : val;
-            trigger.classList.remove('placeholder');
-            opts.style.display = 'none';
-            selectContainer.classList.remove('open');
-
-            if (val === '기타') {
-                directInput.style.setProperty('display', 'block', 'important');
-                directInput.focus();
-            } else {
-                directInput.style.setProperty('display', 'none', 'important');
-                directInput.value = '';
-            }
-
-            checkForm();
-        }
-
-        // Initialize UI
-        renderUI();
-
-        function printLogReport() {
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const startYear = document.getElementById('filterStartYear').value;
-            const startMonth = document.getElementById('filterStartMonth').value;
-            const endYear = document.getElementById('filterEndYear').value;
-            const endMonth = document.getElementById('filterEndMonth').value;
-
-            const filterStart = `${startYear}-${startMonth}`;
-            const filterEnd = `${endYear}-${endMonth}`;
-
-            let filtered = records.filter(r => {
-                const rMonthPrefix = r.date.substring(0, 7);
-                return rMonthPrefix >= filterStart && rMonthPrefix <= filterEnd;
-            });
-            filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
-
-            const printArea = document.getElementById('printArea');
-            printArea.innerHTML = '';
-
-            // 1페이지당 표출할 최대 행 개수를 19줄로 고정
-            const MAX_ROWS = 19;
-            const totalPages = Math.max(1, Math.ceil(filtered.length / MAX_ROWS));
-
-            for (let page = 0; page < totalPages; page++) {
-                const pageData = filtered.slice(page * MAX_ROWS, (page + 1) * MAX_ROWS);
-                const pageDiv = document.createElement('div');
-
-                // 마지막 페이지가 아니면 강제 페이지 넘김 추가
-                if (page < totalPages - 1) {
-                    pageDiv.style.pageBreakAfter = 'always';
-                }
-
-                let tbodyHTML = '';
-                for (let i = 0; i < MAX_ROWS; i++) {
-                    if (i < pageData.length) {
-                        const r = pageData[i];
-                        const inDate = new Date(r.date);
-                        const dayStr = `${inDate.getFullYear()}-${String(inDate.getMonth() + 1).padStart(2, '0')}-${String(inDate.getDate()).padStart(2, '0')}`;
-
-                        const inT = new Date(r.checkInTime);
-                        const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
-                        const inTime = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
-                        const outTime = outT ? `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}` : '-';
-
-                        tbodyHTML += `
-                            <tr>
-                                <td>${dayStr}</td>
-                                <td>${r.dept}</td>
-                                <td>${r.position}</td>
-                                <td>${r.name}</td>
-                                <td>${r.idNum}</td>
-                                <td>${r.purpose}</td>
-                                <td>${inTime}</td>
-                                <td>${outTime}</td>
-                                <td></td><td></td><td></td>
-                            </tr>
-                        `;
-                    } else {
-                        // 남은 공간을 빈 행으로 채움
-                        tbodyHTML += `<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
-                    }
-                }
-
-                pageDiv.innerHTML = `
-                    <div class="print-sub-no">[별지 제16호서식]</div>
-                    <div class="print-header">
-                        <div class="print-title">제한 · 통제구역 출입자 명부</div>
-                    </div>
-                    <div class="print-zone">구역명: ____________________</div>
-                    <table class="print-table">
-                        <thead>
-                            <tr>
-                                <th rowspan="2" style="width: 10%;">일 자</th>
-                                <th rowspan="2" style="width: 12%;">소 속<br>(기관명)</th>
-                                <th rowspan="2" style="width: 10%;">직 위<br>(직급)</th>
-                                <th rowspan="2" style="width: 10%;">성 명</th>
-                                <th rowspan="2" style="width: 12%;">사원번호</th>
-                                <th rowspan="2" style="width: 18%;">용 무</th>
-                                <th rowspan="2" style="width: 8%;">입실<br>시각</th>
-                                <th rowspan="2" style="width: 8%;">퇴실<br>시각</th>
-                                <th colspan="3">승 인</th>
-                            </tr>
-                            <tr>
-                                <th style="width: 4%;">담당</th>
-                                <th style="width: 4%;">팀장</th>
-                                <th style="width: 4%;">부장</th>
-                            </tr>
-                        </thead>
-                        <tbody>${tbodyHTML}</tbody>
-                    </table>
-                `;
-                printArea.appendChild(pageDiv);
-            }
-
-            window.print();
-        }
+        };
     </script>
 </body>
-
 </html>
