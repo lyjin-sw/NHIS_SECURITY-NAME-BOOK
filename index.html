@@ -49,9 +49,17 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         .pulsing {
@@ -225,7 +233,10 @@
         /* Modal Styles */
         .modal {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             display: none;
@@ -234,7 +245,9 @@
             padding: 20px;
         }
 
-        .modal.active { display: flex; }
+        .modal.active {
+            display: flex;
+        }
 
         .modal-content {
             background: #fff;
@@ -255,21 +268,41 @@
             touch-action: none;
         }
 
-        canvas { width: 100%; height: 100%; border-radius: 16px; }
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+        }
 
-        .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .modal-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
 
         .btn-secondary {
-            height: 48px; border-radius: 100px; border: 1.5px solid #e5e7eb; background: #fff;
-            font-weight: 700; color: #6b7280; cursor: pointer;
+            height: 48px;
+            border-radius: 100px;
+            border: 1.5px solid #e5e7eb;
+            background: #fff;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
         }
 
         .btn-primary {
-            height: 48px; border-radius: 100px; border: none; background: var(--primary);
-            color: #fff; font-weight: 700; cursor: pointer;
+            height: 48px;
+            border-radius: 100px;
+            border: none;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
         }
 
-        .placeholder { color: #9ca3af !important; }
+        .placeholder {
+            color: #9ca3af !important;
+        }
 
         .na-option {
             display: none;
@@ -279,7 +312,7 @@
             font-weight: 700;
             cursor: pointer;
         }
-        
+
         .id-container input:disabled {
             background-color: #f3f4f6 !important;
             cursor: not-allowed;
@@ -293,7 +326,8 @@
             <img src="./logo.png" alt="NHIS Logo" style="height: 38px; width: auto; object-fit: contain;">
         </div>
         <div style="flex: 2.5; text-align: center;">
-            <h1 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap; letter-spacing: -0.5px;">
+            <h1
+                style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap; letter-spacing: -0.5px;">
                 제한·통제 구역 출입 명부
             </h1>
         </div>
@@ -307,25 +341,31 @@
 
     <div id="userView" class="container">
         <!-- Status View (In-progress) -->
-        <div id="statusSection" class="card" style="display: none; text-align: center; border: 2.5px solid var(--primary);">
+        <div id="statusSection" class="card"
+            style="display: none; text-align: center; border: 2.5px solid var(--primary);">
             <div class="pulsing"
                 style="display: inline-block; padding: 6px 14px; background: var(--primary); color: #fff; border-radius: 8px; font-weight: 800; font-size: 0.95rem; margin-bottom: 20px;">
                 결재 대기중</div>
-            <h2 id="statusWho" style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-bottom: 12px;">...</h2>
-            <div id="statusTimer" style="font-size: 1.5rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 24px;">
+            <h2 id="statusWho"
+                style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-bottom: 12px;">...</h2>
+            <div id="statusTimer"
+                style="font-size: 1.5rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 24px;">
                 00:00:00</div>
             <button class="btn-submit" onclick="saveCheckout()" style="font-size: 1.1rem;">퇴실하기</button>
         </div>
 
         <!-- Entry Form View -->
         <div id="entrySection">
-            <p style="text-align: center; color: var(--text-sub); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px;">입실 정보를 정확히 입력해 주세요.</p>
+            <p
+                style="text-align: center; color: var(--text-sub); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px;">
+                입실 정보를 정확히 입력해 주세요.</p>
             <div class="card">
                 <div class="form-group">
                     <label class="input-label">일자</label>
-                    <input type="text" id="date" class="form-input" readonly style="background-color: #f9fafb; font-weight: 800; text-align: center;">
+                    <input type="text" id="date" class="form-input" readonly
+                        style="background-color: #f9fafb; font-weight: 800; text-align: center;">
                 </div>
-                
+
                 <div class="form-group">
                     <label class="input-label">소속(부서명)</label>
                     <div class="custom-select" id="deptSelect">
@@ -347,7 +387,8 @@
                             <div class="custom-option" onclick="selectDept('기타')">기타 직접입력</div>
                         </div>
                     </div>
-                    <input type="text" id="deptDirectInput" class="form-input" style="display: none; margin-top: 10px;" placeholder="직접 입력" oninput="checkForm()">
+                    <input type="text" id="deptDirectInput" class="form-input" style="display: none; margin-top: 10px;"
+                        placeholder="직접 입력" oninput="checkForm()">
                 </div>
 
                 <div class="form-group">
@@ -365,7 +406,8 @@
                             <div class="custom-option" onclick="selectPos('기타')">기타 직접입력</div>
                         </div>
                     </div>
-                    <input type="text" id="posDirectInput" class="form-input" style="display: none; margin-top: 10px;" placeholder="직접 입력" oninput="checkForm()">
+                    <input type="text" id="posDirectInput" class="form-input" style="display: none; margin-top: 10px;"
+                        placeholder="직접 입력" oninput="checkForm()">
                 </div>
 
                 <div class="form-group">
@@ -374,14 +416,17 @@
                 </div>
 
                 <div class="form-group">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <label class="input-label" style="margin-bottom: 0;">사원번호</label>
                         <label id="naContainer" class="na-option">
-                            <input type="checkbox" id="idNumNa" style="accent-color: var(--primary);" onchange="toggleIdNumNa()"> 해당없음
+                            <input type="checkbox" id="idNumNa" style="accent-color: var(--primary);"
+                                onchange="toggleIdNumNa()"> 해당없음
                         </label>
                     </div>
                     <div class="id-container">
-                        <input type="text" id="idNum" class="form-input" placeholder="사원번호 6자리를 입력하세요" maxlength="6" inputmode="numeric" oninput="checkForm()">
+                        <input type="text" id="idNum" class="form-input" placeholder="사원번호 6자리를 입력하세요" maxlength="6"
+                            inputmode="numeric" oninput="checkForm()">
                     </div>
                 </div>
 
@@ -407,7 +452,9 @@
     <div id="signatureModal" class="modal">
         <div class="modal-content">
             <h3 style="font-weight: 800; text-align: center; margin-bottom: 4px;">자필 서명</h3>
-            <p style="font-size: 0.8rem; color: var(--primary); text-align: center; font-weight: 700; margin-bottom: 12px;">※ 성함을 정자(正字)로 기재해 주세요.</p>
+            <p
+                style="font-size: 0.8rem; color: var(--primary); text-align: center; font-weight: 700; margin-bottom: 12px;">
+                ※ 성함을 정자(正字)로 기재해 주세요.</p>
             <div class="canvas-container">
                 <canvas id="signatureCanvas"></canvas>
             </div>
@@ -415,7 +462,8 @@
                 <button class="btn-secondary" onclick="clearSignature()">다시 쓰기</button>
                 <button class="btn-primary" onclick="saveSignature()">서명 완료</button>
             </div>
-            <button onclick="closeSignatureModal()" style="width: 100%; margin-top: 15px; border: none; background: none; color: #9ca3af; font-size: 0.9rem; font-weight: 700; cursor: pointer;">닫기</button>
+            <button onclick="closeSignatureModal()"
+                style="width: 100%; margin-top: 15px; border: none; background: none; color: #9ca3af; font-size: 0.9rem; font-weight: 700; cursor: pointer;">닫기</button>
         </div>
     </div>
 
@@ -423,8 +471,22 @@
         let timerInterval = null;
         let signaturePad = null;
         let currentSignature = null;
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbw3eAtazK7-JDMmuR_2Gn794lrd93J8Z1FAKPgvRufpWEbti-wO7upKbXi42kkJrxLh/exec";
 
-        window.onload = function() {
+        async function sendToGoogleSheet(action, record) {
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, record })
+                });
+            } catch (e) {
+                console.error("Google Sheet Sync Error:", e);
+            }
+        }
+
+        window.onload = function () {
             renderUI();
             resetForm();
         };
@@ -451,7 +513,7 @@
 
         function resetForm() {
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
-            
+
             // Dropdowns reset
             const triggers = document.querySelectorAll('.custom-select-trigger');
             triggers[0].innerText = '소속부서를 선택하세요';
@@ -468,11 +530,11 @@
             document.getElementById('idNumNa').checked = false;
             document.getElementById('naContainer').style.display = 'none';
             document.getElementById('purpose').value = '';
-            
+
             currentSignature = null;
             document.getElementById('signatureImage').style.display = 'none';
             document.getElementById('signatureHint').style.display = 'block';
-            
+
             checkForm();
         }
 
@@ -505,7 +567,7 @@
             const finalDept = (deptText === '기타 직접입력') ? deptDirect : deptText;
             const finalPos = (posText === '기타 직접입력') ? posDirect : posText;
 
-            if (!confirm(`[입실 확인]\n소속: ${finalDept}\n직급: ${finalPos}\n성명: ${name}\n\n입실하시겠습니까?`)) return;
+            if (!confirm(`[결재 정보 확인]\n소속: ${finalDept}\n직급: ${finalPos}\n성명: ${name}\n\n입실하시겠습니까?`)) return;
 
             const newRecord = {
                 id: Date.now(),
@@ -523,6 +585,10 @@
             const records = JSON.parse(localStorage.getItem('access_records') || '[]');
             records.push(newRecord);
             localStorage.setItem('access_records', JSON.stringify(records));
+
+            // 구글 시트 전송 추가
+            sendToGoogleSheet("insert", newRecord);
+
             renderUI();
         }
 
@@ -533,13 +599,22 @@
             if (activeIdx !== -1) {
                 records[activeIdx].checkOutTime = new Date().toISOString();
                 localStorage.setItem('access_records', JSON.stringify(records));
+
+                // 구글 시트 업데이트 전송 추가
+                sendToGoogleSheet("update", records[activeIdx]);
+
                 alert("퇴실이 완료되었습니다.");
                 renderUI();
             }
         }
 
         function requestAdminAccess() {
-            location.href = 'admin.html';
+            const pw = prompt('관리자 비밀번호를 입력하세요:');
+            if (pw === '1234') {
+                location.href = 'admin.html';
+            } else if (pw !== null) {
+                alert('비밀번호가 올바르지 않습니다.');
+            }
         }
 
         // Dropdown Handlers
@@ -559,7 +634,7 @@
             trigger.innerText = (val === '기타') ? '기타 직접입력' : val;
             trigger.classList.remove('placeholder');
             document.getElementById('deptOptions').style.display = 'none';
-            
+
             const direct = document.getElementById('deptDirectInput');
             const naCont = document.getElementById('naContainer');
             if (val === '기타') {
@@ -580,7 +655,7 @@
             trigger.innerText = (val === '기타') ? '기타 직접입력' : val;
             trigger.classList.remove('placeholder');
             document.getElementById('posOptions').style.display = 'none';
-            
+
             const direct = document.getElementById('posDirectInput');
             if (val === '기타') { direct.style.display = 'block'; direct.focus(); }
             else { direct.style.display = 'none'; }
@@ -602,11 +677,11 @@
             const purpose = document.getElementById('purpose').value.trim();
             const deptText = document.querySelector('#deptSelect .custom-select-trigger').innerText;
             const posText = document.querySelector('#posSelect .custom-select-trigger').innerText;
-            
+
             const isDeptOk = (deptText !== '소속부서를 선택하세요' && (deptText !== '기타 직접입력' || document.getElementById('deptDirectInput').value.trim()));
             const isPosOk = (posText !== '직급을 선택하세요' && (posText !== '기타 직접입력' || document.getElementById('posDirectInput').value.trim()));
             const isIdOk = (document.getElementById('idNumNa').checked || idVal.length === 6);
-            
+
             document.getElementById('submitBtn').disabled = !(name && purpose && isDeptOk && isPosOk && isIdOk && currentSignature);
         }
 
@@ -644,13 +719,14 @@
             closeSignatureModal();
             checkForm();
         }
-        
+
         // Close dropdowns when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (!event.target.matches('.custom-select-trigger')) {
                 document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
             }
         };
     </script>
 </body>
+
 </html>
