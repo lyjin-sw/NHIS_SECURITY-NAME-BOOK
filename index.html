@@ -31,6 +31,24 @@
             --radius-sm: 16px;
         }
 
+        /* Loading Overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none; align-items: center; justify-content: center;
+            z-index: 9999; flex-direction: column; gap: 12px;
+            backdrop-filter: blur(4px);
+        }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid var(--primary-light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         /* Prevent Layout Shift */
         html,
         body {
@@ -323,6 +341,11 @@
 </head>
 
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <div style="font-weight: 800; color: var(--primary); font-size: 0.9rem;">데이터 동기화 중...</div>
+    </div>
     <header>
         <div style="flex: 1; display: flex; align-items: center;">
             <img src="./logo.png" alt="NHIS Logo" style="height: 38px; width: auto; object-fit: contain;">
@@ -473,31 +496,59 @@
         let timerInterval = null;
         let signaturePad = null;
         let currentSignature = null;
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbydYXcBa6O4WC-FRtmdICDRQux-dlergJFZQjKNoN86ZDnaH9q1RezyfycozLxBE4Qx/exec";
+        let cachedRecords = []; // 로컬스토리지 대신 클라우드에서 가져온 데이터 캐시
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyEluRh4kVfAjrM7td8b22suLsEnN1_NMh_sCRotnE5840RvDagsDyTS_6V4fVLWp98/exec";
+
+        // 로딩 제어
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+        }
+
+        /**
+         * 구글 시트에서 전체 기록을 가져옵니다 (GET)
+         */
+        async function fetchRecords() {
+            showLoading(true);
+            try {
+                const res = await fetch(GAS_URL);
+                if (res.ok) {
+                    cachedRecords = await res.json();
+                    renderUI();
+                }
+            } catch (e) {
+                console.error("데이터 로드 실패:", e);
+                // 네트워크 오류 등으로 실패 시 로컬에서 작업이 불가능하므로 알림
+                // alert("데이터를 불러오지 못했습니다. 네트워크 연결을 확인하세요.");
+            } finally {
+                showLoading(false);
+            }
+        }
 
         async function sendToGoogleSheet(action, record) {
+            showLoading(true);
             try {
                 await fetch(GAS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    // CORS 사전 검사를 피하기 위해 text/plain을 사용합니다. 
-                    // 본문은 여전히 JSON 문자열입니다.
                     headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify({ action, record })
                 });
+                // POST 직후 약간의 지연 후 최신 상태 패치 (시트 반영 시간 고려)
+                setTimeout(fetchRecords, 1000);
             } catch (e) {
-                console.error("Google Sheet Sync Error:", e);
+                console.error("전송 오류:", e);
+                showLoading(false);
             }
         }
 
         window.onload = function () {
-            renderUI();
+            fetchRecords(); // 시작 시 클라우드 데이터 로드
             resetForm();
         };
 
         function renderUI() {
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const activeEntry = records.find(r => !r.checkOutTime);
+            // localStorage 대신 캐시된 데이터 사용
+            const activeEntry = cachedRecords.find(r => !r.checkOutTime);
 
             const entrySection = document.getElementById('entrySection');
             const statusSection = document.getElementById('statusSection');
@@ -558,7 +609,7 @@
 
         function stopTimer() { if (timerInterval) clearInterval(timerInterval); }
 
-        function saveRecord() {
+        async function saveRecord() {
             const date = document.getElementById('date').value;
             const deptText = document.querySelector('#deptSelect .custom-select-trigger').innerText;
             const deptDirect = document.getElementById('deptDirectInput').value;
@@ -587,29 +638,20 @@
                 isApproved: false
             };
 
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            records.push(newRecord);
-            localStorage.setItem('access_records', JSON.stringify(records));
-
-            // 구글 시트 전송 추가
-            sendToGoogleSheet("insert", newRecord);
-
-            renderUI();
+            // 구글 시트 전송 (새로운 저장 방식: 로컬스토리지는 더이상 쓰지 않음)
+            await sendToGoogleSheet("insert", newRecord);
+            alert("입실 신청이 전송되었습니다.");
         }
 
-        function saveCheckout() {
+        async function saveCheckout() {
             if (!confirm("퇴실하시겠습니까?")) return;
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const activeIdx = records.findIndex(r => !r.checkOutTime);
-            if (activeIdx !== -1) {
-                records[activeIdx].checkOutTime = new Date().toISOString();
-                localStorage.setItem('access_records', JSON.stringify(records));
+            const activeEntry = cachedRecords.find(r => !r.checkOutTime);
+            if (activeEntry) {
+                activeEntry.checkOutTime = new Date().toISOString();
 
-                // 구글 시트 업데이트 전송 추가
-                sendToGoogleSheet("update", records[activeIdx]);
-
-                alert("퇴실이 완료되었습니다.");
-                renderUI();
+                // 구글 시트 업데이트 전송
+                await sendToGoogleSheet("checkout", activeEntry);
+                alert("퇴실 처리가 요청되었습니다.");
             }
         }
 

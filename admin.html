@@ -25,6 +25,24 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Loading Overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none; align-items: center; justify-content: center;
+            z-index: 9999; flex-direction: column; gap: 12px;
+            backdrop-filter: blur(4px);
+        }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
@@ -318,6 +336,11 @@
 </head>
 
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <div style="font-weight: 800; color: var(--primary); font-size: 0.9rem;">데이터 동기화 중...</div>
+    </div>
     <header>
         <div style="flex: 1; display: flex; align-items: center; gap: 12px;">
             <img src="./logo.png" alt="NHIS" class="logo-img">
@@ -518,14 +541,52 @@
     <div id="printArea" style="display: none;"></div>
 
     <script>
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyEluRh4kVfAjrM7td8b22suLsEnN1_NMh_sCRotnE5840RvDagsDyTS_6V4fVLWp98/exec";
+        let cachedRecords = []; // 로컬스토리지 대신 클라우드에서 가져온 데이터 캐시
+        let currentAdminPage = 1;
+        const ADMIN_ITEMS_PER_PAGE = 19;
+
         window.onload = function () {
             initAdminPage();
         };
 
         function initAdminPage() {
-            initFilterOptions();
-            loadAdminLogs();
-            initLargeSignaturePad();
+            initFilters();
+            fetchAdminRecords();
+        }
+
+        async function fetchAdminRecords() {
+            showLoading(true);
+            try {
+                const res = await fetch(GAS_URL);
+                if (res.ok) {
+                    cachedRecords = await res.json();
+                    renderAdminLogs();
+                }
+            } catch (e) {
+                console.error("데이터 로드 실패:", e);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function sendToGoogleSheet(action, record) {
+            showLoading(true);
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action, record })
+                });
+                
+                // 구글 시트 서버 반영 시간을 위해 1.5초 대기 후 데이터 최신화
+                await new Promise(r => setTimeout(r, 1500));
+                await fetchAdminRecords();
+            } catch (e) {
+                console.error("전송 오류:", e);
+                showLoading(false);
+            }
         }
 
         let largeSigPad = null;
@@ -665,20 +726,6 @@
 
         let currentAdminPage = 1;
         const ADMIN_ITEMS_PER_PAGE = 19;
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbydYXcBa6O4WC-FRtmdICDRQux-dlergJFZQjKNoN86ZDnaH9q1RezyfycozLxBE4Qx/exec";
-
-        async function sendToGoogleSheet(action, record) {
-            try {
-                await fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action, record })
-                });
-            } catch (e) {
-                console.error("Google Sheet Sync Error:", e);
-            }
-        }
 
         function onFilterChange() {
             currentAdminPage = 1;
@@ -686,8 +733,12 @@
         }
 
         function loadAdminLogs() {
+            fetchAdminRecords();
+        }
+
+        function renderAdminLogs() {
             updateEditDeleteButtons();
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const records = cachedRecords;
 
             // 미결건수 총 건수 업데이트
             const unapprovedCount = records.filter(r => r.isApproved === false).length;
@@ -765,9 +816,8 @@
             const deleteBtn = document.getElementById('adminDeleteBtn');
 
             if (checkedCb) {
-                const records = JSON.parse(localStorage.getItem('access_records') || '[]');
                 const idx = parseInt(checkedCb.dataset.idx);
-                const r = records[idx];
+                const r = cachedRecords[idx];
 
                 // 승인 버튼 활성화 여부
                 if (r && !r.isApproved) {
@@ -793,43 +843,37 @@
             return cb ? parseInt(cb.dataset.idx) : null;
         }
 
-        function deleteSelected() {
+        async function deleteSelected() {
             const idx = getSelectedIdx();
             if (idx === null) return alert('삭제할 항목을 선택하세요.');
-            if (!confirm('정말 삭제하시겠습니까?')) return;
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            records.splice(idx, 1);
-            localStorage.setItem('access_records', JSON.stringify(records));
-            loadAdminLogs();
+            if (!confirm('해당 기록을 삭제하시겠습니까? 구글 시트에서도 즉시 삭제됩니다.')) return;
+
+            const r = cachedRecords[idx];
+            await sendToGoogleSheet("delete", r);
+            alert('삭제 및 데이터 갱신이 완료되었습니다.');
         }
 
         async function approveSelected() {
             const idx = getSelectedIdx();
             if (idx === null) return alert('승인할 항목을 선택하세요.');
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const records = cachedRecords;
             const r = records[idx];
             if (r.isApproved) return alert('이미 승인된 항목입니다.');
 
             if (!confirm(`[${r.name}] 님의 입실 기록을 승인하시겠습니까?`)) return;
 
             r.isApproved = true;
-            r.approvedAt = new Date().toISOString();
 
-            localStorage.setItem('access_records', JSON.stringify(records));
-
-            // 구글 시트 연동 (approve 액션)
+            // 구글 시트 연동
             await sendToGoogleSheet("approve", r);
-
-            alert('승인이 완료되었습니다.');
-            loadAdminLogs();
+            alert('승인이 요청되었습니다.');
         }
 
         let _editIdx = null;
         function editSelected() {
             const idx = getSelectedIdx();
             if (idx === null) return alert('수정할 항목을 선택하세요.');
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const r = records[idx];
+            const r = cachedRecords[idx];
             _editIdx = idx;
 
             document.getElementById('editDate').value = r.date;
@@ -894,9 +938,10 @@
 
         function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
 
-        function saveEdit() {
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
-            const r = records[_editIdx];
+        async function saveEdit() {
+            const r = cachedRecords[_editIdx];
+            if (!r) return;
+
             const newDate = document.getElementById('editDate').value;
             const checkInV = document.getElementById('editCheckIn').value;
             const checkOutV = document.getElementById('editCheckOut').value;
@@ -905,7 +950,7 @@
             const finalDept = (selectedEditDept === '기타') ? document.getElementById('editDeptDirect').value : selectedEditDept;
             const finalPos = (selectedEditPos === '기타') ? document.getElementById('editPosDirect').value : selectedEditPos;
 
-            records[_editIdx] = {
+            const updatedRecord = {
                 ...r,
                 date: newDate,
                 dept: finalDept,
@@ -914,11 +959,12 @@
                 idNum: document.getElementById('editIdNumNa').checked ? '해당없음' : document.getElementById('editIdNum').value,
                 checkInTime: new Date(`${newDate}T${checkInV}:00`).toISOString(),
                 checkOutTime: checkOutV ? new Date(`${newDate}T${checkOutV}:00`).toISOString() : null,
-                signature: _currentEditSig, // 이미 _isSigModified가 발생하면 _currentEditSig가 대형모달에서 반영됨
-                isApproved: r.isApproved
+                signature: _currentEditSig
             };
-            localStorage.setItem('access_records', JSON.stringify(records));
-            closeEditModal(); loadAdminLogs();
+
+            await sendToGoogleSheet("edit", updatedRecord);
+            alert('기록 수정이 전송되었습니다.');
+            closeEditModal();
         }
 
         function renderPagination(totalPages) {
@@ -936,7 +982,7 @@
         }
 
         function printLogReport() {
-            const records = JSON.parse(localStorage.getItem('access_records') || '[]');
+            const records = cachedRecords;
             const startYear = document.getElementById('filterStartYear').value;
             const startMonth = document.getElementById('filterStartMonth').value;
             const endYear = document.getElementById('filterEndYear').value;
@@ -945,7 +991,7 @@
             const filterEnd = `${endYear}-${endMonth}`;
 
             let filtered = records.filter(r => {
-                const rMonth = r.date.substring(0, 7);
+                const rMonth = (r.date || "").substring(0, 7);
                 return rMonth >= filterStart && rMonth <= filterEnd;
             });
             filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
