@@ -337,6 +337,20 @@
             background-color: #f3f4f6 !important;
             cursor: not-allowed;
         }
+
+        /* 브라우저 자동완성 및 사원번호 입력 시 배경색 고정 */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px white inset !important;
+            -webkit-text-fill-color: var(--text-main) !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        #idNum:not(:disabled) {
+            background-color: #fff !important;
+        }
     </style>
 </head>
 
@@ -358,8 +372,8 @@
         </div>
         <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center;">
             <button id="adminToggleBtn" onclick="requestAdminAccess()"
-                style="background: #fff; border: 1.8px solid var(--primary); padding: 8px 16px; border-radius: 100px; color: var(--primary); font-weight: 900; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-                관리자
+                style="background: #fff; border: 1.5px solid var(--primary); padding: 4px 12px; border-radius: 100px; color: var(--primary); font-weight: 900; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+                관리자 페이지
             </button>
         </div>
     </header>
@@ -368,15 +382,18 @@
         <!-- Status View (In-progress) -->
         <div id="statusSection" class="card"
             style="display: none; text-align: center; border: 2.5px solid var(--primary);">
-            <div class="pulsing"
+            <div id="statusBadge" class="pulsing"
                 style="display: inline-block; padding: 6px 14px; background: var(--primary); color: #fff; border-radius: 8px; font-weight: 800; font-size: 0.95rem; margin-bottom: 20px;">
                 결재 대기중</div>
             <h2 id="statusWho"
-                style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-bottom: 12px;">...</h2>
+                style="font-size: 1.4rem; font-weight: 900; color: var(--text-main); margin-bottom: 8px;">...</h2>
+            <div id="statusTimerLabel" style="font-size: 0.85rem; font-weight: 700; color: var(--text-sub); margin-bottom: 4px;">
+                입실 신청 후 경과 시간
+            </div>
             <div id="statusTimer"
                 style="font-size: 1.5rem; font-weight: 900; color: var(--primary); font-variant-numeric: tabular-nums; margin-bottom: 24px;">
                 00:00:00</div>
-            <button class="btn-submit" onclick="saveCheckout()" style="font-size: 1.1rem;">퇴실하기</button>
+            <button id="checkoutBtn" class="btn-submit" onclick="saveCheckout()" style="font-size: 1.1rem;">퇴실하기</button>
         </div>
 
         <!-- Entry Form View -->
@@ -441,6 +458,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="input-label">자필 서명</label>
+                    <div id="signatureContainer" class="signature-placeholder" onclick="openSignatureModal()">
+                        <span id="signatureHint">여기를 눌러 서명해 주세요</span>
+                        <img id="signatureImage" class="signature-img" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <label class="input-label" style="margin-bottom: 0;">사원번호</label>
@@ -460,13 +485,6 @@
                     <input type="text" id="purpose" class="form-input" placeholder="목적을 입력하세요" oninput="checkForm()">
                 </div>
 
-                <div class="form-group">
-                    <label class="input-label">자필 서명</label>
-                    <div id="signatureContainer" class="signature-placeholder" onclick="openSignatureModal()">
-                        <span id="signatureHint">여기를 눌러 서명해 주세요</span>
-                        <img id="signatureImage" class="signature-img" style="display: none;">
-                    </div>
-                </div>
 
                 <button id="submitBtn" class="btn-submit" onclick="saveRecord()" disabled>승인 요청</button>
             </div>
@@ -497,7 +515,7 @@
         let signaturePad = null;
         let currentSignature = null;
         let cachedRecords = []; // 로컬스토리지 대신 클라우드에서 가져온 데이터 캐시
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbyEluRh4kVfAjrM7td8b22suLsEnN1_NMh_sCRotnE5840RvDagsDyTS_6V4fVLWp98/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycby6DoXvNKe1D80Q0J8nP6I2RjWIYJFBvteyu8epoeUnJ1MPt41ocG7Zi9q_CPhE1e6M/exec";
 
         // 로딩 제어
         function showLoading(show) {
@@ -557,7 +575,37 @@
                 entrySection.style.display = 'none';
                 statusSection.style.display = 'block';
                 document.getElementById('statusWho').innerText = `${activeEntry.dept} ${activeEntry.name}(${activeEntry.idNum}) 님`;
-                startTimer(activeEntry.checkInTime);
+
+                const badge = document.getElementById('statusBadge');
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                const statusTimerLabel = document.getElementById('statusTimerLabel');
+                const statusTimer = document.getElementById('statusTimer');
+                const statusWho = document.getElementById('statusWho');
+
+                if (activeEntry.isApproved) {
+                    badge.innerText = '입실 중 (승인됨)';
+                    badge.style.background = '#1e40af';
+                    badge.classList.remove('pulsing');
+                    statusSection.style.borderColor = '#1e40af';
+                    checkoutBtn.style.display = 'flex';
+                    checkoutBtn.innerText = '퇴실하기';
+                    statusTimer.style.color = '#1e40af';
+                    statusTimerLabel.style.display = 'block';
+                    statusTimerLabel.innerText = '입실 후 경과 시간';
+                    statusWho.style.display = 'block';
+                } else {
+                    badge.innerText = '결재 대기중';
+                    badge.style.background = 'var(--primary)';
+                    badge.classList.add('pulsing');
+                    statusSection.style.borderColor = 'var(--primary)';
+                    checkoutBtn.style.display = 'flex';
+                    checkoutBtn.innerText = '퇴실 신청';
+                    statusTimer.style.color = 'var(--primary)';
+                    statusTimerLabel.style.display = 'none';
+                    statusWho.style.display = 'block';
+                }
+
+                startTimer(activeEntry.checkInTime, activeEntry.date);
             } else {
                 entrySection.style.display = 'block';
                 statusSection.style.display = 'none';
@@ -593,11 +641,25 @@
             checkForm();
         }
 
-        function startTimer(startTimeStr) {
+        function startTimer(startTimeStr, dateStr) {
             if (timerInterval) clearInterval(timerInterval);
-            const startTime = new Date(startTimeStr).getTime();
+            let t = new Date(startTimeStr);
+            
+            // 구글 시트에서 시간형식으로 인해 1899년 등 과거로 파싱되는 경우 날짜 보정
+            if (!isNaN(t.getTime()) && t.getFullYear() < 2000 && dateStr) {
+                let d = new Date(dateStr);
+                // "YYYY-MM-DD" 형태를 파싱할 때 로컬 타임존의 날짜를 가져오기 위해 하이픈을 슬래시로 변경 (Safari 등 호환)
+                if (typeof dateStr === 'string' && dateStr.length === 10) {
+                    d = new Date(dateStr.replace(/-/g, '/'));
+                }
+                if (!isNaN(d.getTime())) {
+                    t.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
+                }
+            }
+            
+            const startTime = t.getTime();
             function update() {
-                const diff = new Date().getTime() - startTime;
+                const diff = Math.max(0, new Date().getTime() - startTime);
                 const hh = Math.floor(diff / 3600000).toString().padStart(2, '0');
                 const mm = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
                 const ss = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
@@ -619,12 +681,22 @@
             const idNum = document.getElementById('idNum').value;
             const purpose = document.getElementById('purpose').value;
 
+            // 중복 입실 체크 로직 추가
+            let duplicationNotice = "";
+            if (idNum && idNum !== '해당없음') {
+                const todayRecords = cachedRecords.filter(r => r.date === date && r.idNum === idNum);
+                if (todayRecords.length >= 2) {
+                    duplicationNotice = `\n\n※ 오늘이 ${todayRecords.length + 1}번째 입실입니다.`;
+                }
+            }
+
             const finalDept = (deptText === '기타 직접입력') ? deptDirect : deptText;
             const finalPos = (posText === '기타 직접입력') ? posDirect : posText;
 
-            if (!confirm(`[결재 정보 확인]\n소속: ${finalDept}\n직급: ${finalPos}\n성명: ${name}\n\n입실하시겠습니까?`)) return;
+            if (!confirm(`[결재 정보 확인]\n소속: ${finalDept}\n직급: ${finalPos}\n성명: ${name}${duplicationNotice}\n\n입실하시겠습니까?`)) return;
 
             const newRecord = {
+                no: cachedRecords.length + 1, // 순번 추가 (1, 2, 3...)
                 id: Date.now(),
                 date,
                 dept: finalDept,
