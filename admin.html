@@ -28,20 +28,38 @@
         /* Loading Overlay */
         #loadingOverlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(255, 255, 255, 0.8);
-            display: none; align-items: center; justify-content: center;
-            z-index: 9999; flex-direction: column; gap: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 12px;
             backdrop-filter: blur(4px);
         }
+
         .spinner {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border: 4px solid #f3f4f6;
             border-top: 4px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
         body {
             background-color: var(--bg-main);
@@ -123,6 +141,16 @@
             padding: 10px 4px;
             border-bottom: 1px solid #f3f4f6;
             vertical-align: middle;
+        }
+
+        .topic-group-header {
+            background: #fff5f5 !important;
+            color: var(--primary) !important;
+            font-weight: 900 !important;
+            text-align: left !important;
+            padding: 12px 16px !important;
+            font-size: 0.95rem !important;
+            border-bottom: 2px solid var(--primary) !important;
         }
 
         /* Custom Dropdown Styles */
@@ -364,12 +392,10 @@
             </div>
 
             <div class="filter-group">
-                <span style="font-size: 0.85rem; font-weight: 800;">기간 선택:</span>
-                <select id="filterStartYear" class="filter-select" onchange="onFilterChange()"></select>
-                <select id="filterStartMonth" class="filter-select" onchange="onFilterChange()"></select>
-                <span>~</span>
-                <select id="filterEndYear" class="filter-select" onchange="onFilterChange()"></select>
-                <select id="filterEndMonth" class="filter-select" onchange="onFilterChange()"></select>
+                <span style="font-size: 0.85rem; font-weight: 800;">조회 월:</span>
+                <input type="month" id="filterMonth" class="filter-select">
+                <button onclick="onFilterChange()" class="btn-primary"
+                    style="height: 36px; margin-left: 4px; padding: 0 16px;">조회</button>
             </div>
 
             <div style="display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-bottom: 8px;">
@@ -388,13 +414,13 @@
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th style="width: 36px;"></th>
+                            <th style="width: 36px;"><input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()"></th>
                             <th style="width: 40px;">순번</th>
-                            <th style="width: 80px;">일자</th>
-                            <th style="width: 80px;">상태</th>
-                            <th>소속</th>
-                            <th>성명(사번)</th>
-                            <th>시간</th>
+                            <th style="width: 100px;">일자</th>
+                            <th style="width: 100px;">이름</th>
+                            <th style="width: 100px;">사번</th>
+                            <th style="width: 100px;">입실</th>
+                            <th style="width: 100px;">퇴실</th>
                         </tr>
                     </thead>
                     <tbody id="adminTableContent"></tbody>
@@ -541,7 +567,7 @@
     <div id="printArea" style="display: none;"></div>
 
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbyEluRh4kVfAjrM7td8b22suLsEnN1_NMh_sCRotnE5840RvDagsDyTS_6V4fVLWp98/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycby6DoXvNKe1D80Q0J8nP6I2RjWIYJFBvteyu8epoeUnJ1MPt41ocG7Zi9q_CPhE1e6M/exec";
         let cachedRecords = []; // 로컬스토리지 대신 클라우드에서 가져온 데이터 캐시
         let currentAdminPage = 1;
         const ADMIN_ITEMS_PER_PAGE = 19;
@@ -551,7 +577,7 @@
         };
 
         function initAdminPage() {
-            initFilters();
+            initFilterOptions();
             fetchAdminRecords();
         }
 
@@ -562,9 +588,15 @@
                 if (res.ok) {
                     cachedRecords = await res.json();
                     renderAdminLogs();
+                } else {
+                    console.error("Fetch failed with status:", res.status);
+                    document.getElementById('noDataMsg').style.display = 'block';
+                    document.getElementById('noDataMsg').innerText = '서버 통신 오류가 발생했습니다. (상태 코드: ' + res.status + ')';
                 }
             } catch (e) {
                 console.error("데이터 로드 실패:", e);
+                document.getElementById('noDataMsg').style.display = 'block';
+                document.getElementById('noDataMsg').innerText = '데이터를 불러오는데 실패했습니다. 시트 연결을 확인해주세요.';
             } finally {
                 showLoading(false);
             }
@@ -579,7 +611,7 @@
                     headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify({ action, record })
                 });
-                
+
                 // 구글 시트 서버 반영 시간을 위해 1.5초 대기 후 데이터 최신화
                 await new Promise(r => setTimeout(r, 1500));
                 await fetchAdminRecords();
@@ -694,34 +726,10 @@
         };
 
         function initFilterOptions() {
-            const currentYear = new Date().getFullYear();
-            const sY = document.getElementById('filterStartYear');
-            const eY = document.getElementById('filterEndYear');
-            const sM = document.getElementById('filterStartMonth');
-            const eM = document.getElementById('filterEndMonth');
-
-            // Year options (-2 to +1)
-            [sY, eY].forEach(select => {
-                select.innerHTML = '';
-                for (let y = currentYear - 2; y <= currentYear + 1; y++) {
-                    const opt = document.createElement('option');
-                    opt.value = y; opt.text = y + '년';
-                    select.appendChild(opt);
-                }
-                select.value = currentYear;
-            });
-
-            // Month options
-            [sM, eM].forEach(select => {
-                select.innerHTML = '';
-                for (let m = 1; m <= 12; m++) {
-                    const opt = document.createElement('option');
-                    const val = m.toString().padStart(2, '0');
-                    opt.value = val; opt.text = m + '월';
-                    select.appendChild(opt);
-                }
-                select.value = (new Date().getMonth() + 1).toString().padStart(2, '0');
-            });
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            document.getElementById('filterMonth').value = `${yyyy}-${mm}`;
         }
 
         let currentAdminPage = 1;
@@ -738,68 +746,98 @@
 
         function renderAdminLogs() {
             updateEditDeleteButtons();
-            const records = cachedRecords;
 
-            // 미결건수 총 건수 업데이트
+            // Ensure records is an array, in case the JSON is wrapped in an object
+            let records = Array.isArray(cachedRecords) ? cachedRecords : (cachedRecords.data || cachedRecords.value || cachedRecords.records || []);
+
+            // 월별 필터링 적용
+            const filterMonth = document.getElementById('filterMonth').value;
+            if (filterMonth) {
+                const [fYear, fMonth] = filterMonth.split('-');
+                records = records.filter(r => {
+                    if (!r.date) return false;
+                    const d = new Date(r.date);
+                    if (isNaN(d.getTime())) return false;
+                    return String(d.getFullYear()) === fYear && String(d.getMonth() + 1).padStart(2, '0') === fMonth;
+                });
+            }
+
             const unapprovedCount = records.filter(r => r.isApproved === false).length;
             const badge = document.getElementById('unapprovedCountBadge');
             badge.innerText = `미결건수 ${unapprovedCount}`;
-            badge.style.display = 'inline-block';
-
-            const startYear = document.getElementById('filterStartYear').value;
-            const startMonth = document.getElementById('filterStartMonth').value;
-            const endYear = document.getElementById('filterEndYear').value;
-            const endMonth = document.getElementById('filterEndMonth').value;
-            const filterStart = `${startYear}-${startMonth}`;
-            const filterEnd = `${endYear}-${endMonth}`;
-
-            let filtered = records.filter(r => {
-                const rMonth = r.date.substring(0, 7);
-                return rMonth >= filterStart && rMonth <= filterEnd;
-            });
-
-            // 승인 요청 시간(checkInTime)이 빠른 순서대로 정렬 (오름차순)
-            filtered.sort((a, b) => new Date(a.checkInTime) - new Date(b.checkInTime));
-
-            const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_ITEMS_PER_PAGE));
-            if (currentAdminPage > totalPages) currentAdminPage = totalPages;
-
-            const startIndex = (currentAdminPage - 1) * ADMIN_ITEMS_PER_PAGE;
-            const pageData = filtered.slice(startIndex, startIndex + ADMIN_ITEMS_PER_PAGE);
+            badge.style.display = unapprovedCount > 0 ? 'inline-block' : 'none';
 
             const tableContent = document.getElementById('adminTableContent');
             tableContent.innerHTML = '';
-            document.getElementById('noDataMsg').style.display = filtered.length ? 'none' : 'block';
+            document.getElementById('noDataMsg').style.display = records.length ? 'none' : 'block';
 
-            pageData.forEach((r, idx) => {
-                const seqNo = startIndex + idx + 1;
-                const globalIdx = records.indexOf(r);
-                const row = document.createElement('tr');
+            // 날짜별로 그룹화하여 표시 (과거 데이터부터)
+            const groupedData = new Map();
+            records.forEach(r => {
+                let topic = "미지정 일자";
+                if (r.date) {
+                    const d = new Date(r.date);
+                    if (!isNaN(d.getTime())) {
+                        topic = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+                    } else {
+                        topic = r.date;
+                    }
+                }
 
-                const inDate = new Date(r.date);
-                const formattedDate = `${inDate.getMonth() + 1}/${inDate.getDate()}`;
-                const inT = new Date(r.checkInTime);
-                const outT = r.checkOutTime ? new Date(r.checkOutTime) : null;
-                const inStr = `${String(inT.getHours()).padStart(2, '0')}:${String(inT.getMinutes()).padStart(2, '0')}`;
-                let outStr = outT ? `${String(outT.getHours()).padStart(2, '0')}:${String(outT.getMinutes()).padStart(2, '0')}` : '<span style="color:var(--primary);">대기중</span>';
-
-                const isApproved = r.isApproved === true;
-                const statusBadge = isApproved
-                    ? '<span style="color:#1e40af; font-weight:800; font-size:0.7rem;">[승인완료]</span>'
-                    : '<span style="color:#f59e0b; font-weight:800; font-size:0.7rem;">[승인대기]</span>';
-
-                row.innerHTML = `
-                    <td><input type="checkbox" class="row-checkbox" data-idx="${globalIdx}" onchange="onRowCheckbox(this)"></td>
-                    <td style="color: #6b7280; font-weight: 700;">${seqNo}</td>
-                    <td>${formattedDate}</td>
-                    <td>${statusBadge}</td>
-                    <td style="font-size: 0.75rem;">${r.dept}</td>
-                    <td style="font-weight: 700;">${r.name} (${r.idNum})</td>
-                    <td style="font-size: 0.75rem;">${inStr}~${outStr}</td>
-                `;
-                tableContent.appendChild(row);
+                if (!groupedData.has(topic)) {
+                    groupedData.set(topic, []);
+                }
+                groupedData.get(topic).push(r);
             });
-            renderPagination(totalPages);
+
+            groupedData.forEach((items, topic) => {
+                // 헤더 행 (날짜/주제)
+                const groupRow = document.createElement('tr');
+                groupRow.innerHTML = `<td colspan="7" class="topic-group-header" style="background:#f9fafb; font-weight:900; color:#1f2937; text-align:left; padding-left:16px;">📅 ${topic}</td>`;
+                tableContent.appendChild(groupRow);
+
+                // 세부 데이터 행
+                items.forEach((item, idx) => {
+                    const globalIdx = records.indexOf(item);
+                    const row = document.createElement('tr');
+
+                    const timeFormat = (time) => {
+                        if (!time) return '-';
+                        if (typeof time === 'string' && time.includes('T')) {
+                            const d = new Date(time);
+                            if (isNaN(d.getTime())) return time;
+                            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                        }
+                        return time;
+                    };
+
+                    const dateFormat = (date) => {
+                        if (!date) return '-';
+                        const d = new Date(date);
+                        if (isNaN(d.getTime())) return date;
+                        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                    };
+
+                    row.innerHTML = `
+                        <td><input type="checkbox" class="row-checkbox" data-idx="${globalIdx}" onchange="onRowCheckbox(this)"></td>
+                        <td style="color: #6b7280; font-weight: 700;">${idx + 1}</td>
+                        <td style="font-size: 0.85rem; font-weight: 600;">${dateFormat(item.date)}</td>
+                        <td style="font-weight: 800;">${item.name === undefined || item.name === null ? '-' : item.name}</td>
+                        <td style="font-size: 0.85rem; font-weight: 600; color: #4b5563;">${item.idNum || '-'}</td>
+                        <td style="font-size: 0.85rem; font-weight: 700;">${timeFormat(item.checkInTime)}</td>
+                        <td style="font-size: 0.85rem; font-weight: 700;">${timeFormat(item.checkOutTime)}</td>
+                    `;
+                    tableContent.appendChild(row);
+                });
+            });
+
+            document.getElementById('adminPagination').innerHTML = '';
+        }
+
+        // 서명 보기 임시 함수 (목업용)
+        function viewSignature(src) {
+            // 실제 구현에서는 모달을 띄워 서명을 크게 보여줄 수 있습니다.
+            console.log("View signature", src);
         }
 
         function onRowCheckbox(cb) {
